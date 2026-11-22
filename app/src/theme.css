@@ -152,3 +152,32 @@ h1, p { margin: 0; }
   .btn, .progress__fill { transition: none; }
   .banner, .notif { animation: none; }
 }
+
+/* Desktop (Duolingo-style): wide screen, 600px content column, 1000px bars */
+@media (min-width: 768px) {
+  :root { --col: 600px; --bar: 1000px; }
+  .screen { max-width: none; }
+
+  .screen__body > * { width: 100%; max-width: var(--col); margin-left: auto; margin-right: auto; }
+  .screen__body > .passage { max-width: min(var(--col), 65ch); }
+  .screen__body--center { padding-top: 48px; padding-bottom: 48px; }
+  .screen__body--center > svg { zoom: 1.3; width: auto; }
+  .screen__body--center > .pill { width: auto; }
+  .screen__body--center .title, .screen__body--center .h2 { font-size: 32px; }
+  .screen__body--center .h2 { font-size: 26px; }
+
+  .topbar { padding-left: max(8px, calc((100% - var(--bar)) / 2)); padding-right: max(20px, calc((100% - var(--bar)) / 2 + 20px)); }
+
+  .screen__foot,
+  .banner {
+    padding: 20px max(20px, calc((100% - var(--bar)) / 2)) 24px;
+  }
+  .screen__foot { border-top: 2px solid var(--line); align-items: flex-end; }
+  .screen__foot .small { align-self: stretch; }
+  .btn { width: auto; min-width: 200px; padding: 0 24px; }
+
+  .banner { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }
+  .banner__row { font-size: 19px; }
+
+  .notif { left: max(12px, calc(50% - var(--col) / 2 + 12px)); right: auto; width: min(calc(100% - 24px), calc(var(--col) - 24px)); }
+}
