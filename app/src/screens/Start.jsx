@@ -16,7 +16,7 @@ export default function Start({ onNext, saved, onResume, onRestart, onSecret, co
   return (
     <div className="screen">
       <div className="screen__body screen__body--center">
-        <div onClick={tap} style={{ display: 'flex', cursor: 'default' }} data-secret="logo"><Mascot mood="calm" size={200} /></div>
+        <div onClick={tap} style={{ display: 'flex', justifyContent: 'center', cursor: 'default' }} data-secret="logo"><Mascot mood="calm" size={200} /></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <h1 className="title">{c.title}</h1>
           <p className="sub">{c.sub}</p>
