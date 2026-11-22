@@ -2,8 +2,8 @@ import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
 import { level2 } from '../content.js'
 
-export default function Celebrate({ onReplay }) {
-  const c = level2.celebrate
+export default function Celebrate({ onNext, data }) {
+  const c = data ?? level2.celebrate
   return (
     <div className="screen" style={{ background: 'var(--bg-soft)' }}>
       <div className="screen__body screen__body--center">
@@ -14,7 +14,7 @@ export default function Celebrate({ onReplay }) {
         </div>
       </div>
       <div className="screen__foot">
-        <Button onClick={onReplay}>{c.cta}</Button>
+        <Button onClick={onNext}>{c.cta}</Button>
       </div>
     </div>
   )

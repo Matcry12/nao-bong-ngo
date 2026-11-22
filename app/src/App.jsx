@@ -13,7 +13,13 @@ import Scenario from './screens/Scenario.jsx'
 import Plan from './screens/Plan.jsx'
 import Coach from './screens/Coach.jsx'
 import Celebrate from './screens/Celebrate.jsx'
-import { content, level2, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
+import Challenge from './screens/Challenge.jsx'
+import DayTask from './screens/DayTask.jsx'
+import Retest from './screens/Retest.jsx'
+import Compare from './screens/Compare.jsx'
+import { SPEED } from './speed.js'
+import { toDateKey, createChallenge, tasksFor, nextDay, completeDay, recordRetest, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
+import { content, level2, challengeEnd, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
 import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan, levelFor } from './scoring.js'
 
 const QCOUNT = content.read.questions.length
@@ -32,7 +38,15 @@ function results(rec) {
   }
 }
 
+const store = () => { try { return window.localStorage } catch { return null } }
+const FAST = SPEED > 1 // ?fast=1 lets testers play several days in one sitting
+
 export default function App() {
+  const [ch, setCh] = useState(() => { const st = store(); return st ? loadChallenge(st) : null })
+  const [mode, setMode] = useState('first') // 'first' | 'retest'
+  const [coachBack, setCoachBack] = useState('plan')
+  const [coachDay, setCoachDay] = useState(null)
+  const [day, setDay] = useState(1)
   const [screen, setScreen] = useState('start')
   const [idx, setIdx] = useState(0) // question / self-report index
   const [run, setRun] = useState(0) // remount key for replays
@@ -41,25 +55,40 @@ export default function App() {
   const [plan, setPlan] = useState(null) // { top, plan }
   const [, setSaved] = useState(null)
 
-  const home = () => setScreen('start')
+  const opts = { allowSameDay: FAST }
+  const persist = (next) => { setCh(next); const st = store(); if (st) saveChallenge(st, next) }
+  const home = () => setScreen(mode === 'retest' && ch ? 'challenge' : 'start')
   const merge = (patch, next) => { setRec((r) => ({ ...r, ...patch })); setScreen(next) }
-  const replay = () => { setRec(EMPTY); setChoices([]); setPlan(null); setSaved(null); setIdx(0); setRun((r) => r + 1); setScreen('start') }
+  const replay = () => { setMode('first'); setRec(EMPTY); setChoices([]); setPlan(null); setSaved(null); setIdx(0); setRun((r) => r + 1); setScreen('start') }
 
   const coachContext = () => {
-    const r = results(rec)
+    // Saved challenge (survives reload) wins; before saving, use the in-memory run
+    const src = ch
+      ? { score: ch.day1.score, bars: ch.day1.bars, top: ch.top, ids: ch.plan }
+      : (() => { const r = results(rec); return { score: r.total, bars: r.bars, top: plan.top, ids: plan.plan } })()
     return {
-      score: r.total,
-      level: levelFor(r.total).label,
-      bars: r.bars,
-      reasons: plan.top.map((k) => REASON_LABELS[k]),
-      plan: plan.plan.map((id) => ({ title: SOLUTIONS[id].title, group: GROUP_LABELS[SOLUTIONS[id].group] })),
-      challengeDay: null,
+      score: src.score,
+      level: levelFor(src.score).label,
+      bars: src.bars,
+      reasons: src.top.map((k) => REASON_LABELS[k]),
+      plan: src.ids.map((id) => ({ title: SOLUTIONS[id].title, group: GROUP_LABELS[SOLUTIONS[id].group] })),
+      challengeDay: coachDay,
     }
   }
+  const askCoachFrom = (back, d) => { setCoachBack(back); setCoachDay(d); setScreen('coach') }
+  const finished = ch ? nextDay(ch) === null : false
 
   const common = { onClose: home }
   switch (screen) {
-    case 'start': return <Start onNext={() => { setRec(EMPTY); setRun((r) => r + 1); setScreen('intro1') }} />
+    case 'start':
+      return (
+        <Start
+          saved={ch ? (finished ? 'finished' : 'active') : null}
+          onNext={() => { setMode('first'); setRec(EMPTY); setRun((r) => r + 1); setScreen('intro1') }}
+          onResume={() => setScreen(finished ? 'compare' : 'challenge')}
+          onRestart={() => { const st = store(); if (st) clearChallenge(st); setCh(null); setScreen('intro1'); setMode('first'); setRec(EMPTY); setRun((r) => r + 1) }}
+        />
+      )
     case 'intro1': return <GameIntro index={0} progress={4} onNext={() => setScreen('read')} {...common} />
     case 'read':
       return <ReadGame key={run} {...common} onFinish={({ notifTaps, readingSeconds }) => { setIdx(0); merge({ notifTaps, readingSeconds, correct: 0 }, 'question') }} />
@@ -82,7 +111,11 @@ export default function App() {
         <SelfReport key={idx} index={idx} progress={68 + idx * 5} {...common} onAnswer={(a) => {
           setRec((r) => ({ ...r, selfAnswers: [...r.selfAnswers, a] }))
           if (idx + 1 < NSELF) setIdx(idx + 1)
-          else setScreen('result1')
+          else if (mode === 'retest') {
+            const r = results({ ...rec, selfAnswers: [...rec.selfAnswers, a] })
+            persist(recordRetest(ch, { score: r.total, bars: r.bars }, toDateKey(), opts))
+            setScreen('compare')
+          } else setScreen('result1')
         }} />
       )
     case 'result1': return <Result1 score={results(rec).total} onNext={() => setScreen('result2')} {...common} />
@@ -100,8 +133,33 @@ export default function App() {
           setScreen('plan')
         }} />
       )
-    case 'plan': return <Plan top={plan.top} plan={plan.plan} onSave={() => { setSaved(plan); setScreen('celebrate') }} onAsk={() => setScreen('coach')} {...common} />
-    case 'coach': return <Coach context={coachContext()} onClose={() => setScreen('plan')} />
-    default: return <Celebrate onReplay={replay} />
+    case 'plan':
+      return <Plan top={plan.top} plan={plan.plan} {...common} onAsk={() => askCoachFrom('plan', null)} onSave={() => {
+        const r = results(rec)
+        setSaved(plan)
+        setMode('first')
+        persist(createChallenge({ plan: plan.plan, top: plan.top, score: r.total, bars: r.bars, today: toDateKey() }))
+        setScreen('celebrate')
+      }} />
+    case 'planview': return <Plan top={ch.top} plan={ch.plan} readOnly onBack={() => setScreen('challenge')} onClose={() => setScreen('challenge')} />
+    case 'coach': return <Coach context={coachContext()} onClose={() => setScreen(coachBack)} />
+    case 'challenge':
+      return (
+        <Challenge state={ch} today={toDateKey()} allowSameDay={FAST} onClose={() => setScreen('start')}
+          onAsk={() => askCoachFrom('challenge', nextDay(ch) ?? 7)} onPlan={() => setScreen('planview')} onResult={() => setScreen('compare')}
+          onStart={() => { const n = nextDay(ch); setDay(n); setMode('first'); setScreen(n === 7 ? 'retestIntro' : 'daytask') }} />
+      )
+    case 'daytask':
+      return (
+        <DayTask day={day} text={tasksFor(ch.plan, SOLUTIONS)[day - 1].text}
+          onBack={() => setScreen('challenge')} onNotYet={() => setScreen('challenge')}
+          onTell={() => askCoachFrom('daytask', day)}
+          onDone={() => { persist(completeDay(ch, day, toDateKey(), opts)); setScreen('challenge') }} />
+      )
+    case 'retestIntro':
+      return <Retest onBack={() => setScreen('challenge')} onNext={() => { setMode('retest'); setRec(EMPTY); setIdx(0); setRun((r) => r + 1); setScreen('intro1') }} />
+    case 'compare': return <Compare state={ch} onDone={() => { setScreen(mode === 'retest' ? 'end' : 'start'); setMode('first') }} />
+    case 'end': return <Celebrate data={challengeEnd} onNext={() => setScreen('start')} />
+    default: return <Celebrate onNext={() => setScreen('challenge')} />
   }
 }

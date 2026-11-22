@@ -2,7 +2,7 @@ import Button from '../components/Button.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import { GROUP_LABELS, REASON_INFO, REASON_LABELS, SOLUTIONS, level2 } from '../content.js'
 
-export default function Plan({ top, plan, onSave, onAsk, onClose }) {
+export default function Plan({ top, plan, onSave, onAsk, onClose, readOnly, onBack }) {
   const c = level2.plan
   return (
     <div className="screen">
@@ -30,8 +30,12 @@ export default function Plan({ top, plan, onSave, onAsk, onClose }) {
         </div>
       </div>
       <div className="screen__foot screen__foot--line">
-        <Button onClick={onSave}>{c.save}</Button>
-        <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
+        {readOnly ? <Button onClick={onBack}>{c.back}</Button> : (
+          <>
+            <Button onClick={onSave}>{c.save}</Button>
+            <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
+          </>
+        )}
       </div>
     </div>
   )

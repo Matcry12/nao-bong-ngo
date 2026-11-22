@@ -152,8 +152,88 @@ export const level2 = {
     second: 'Lý do thứ hai:',
     save: 'LƯU KẾ HOẠCH',
     ask: 'HỎI HẠT BẮP',
+    back: 'QUAY LẠI THỬ THÁCH',
   },
-  celebrate: { title: 'Kế hoạch đã sẵn sàng!', sub: 'Mỗi ngày một việc nhỏ, bạn làm được.', cta: 'CHƠI LẠI' },
+  celebrate: { title: 'Kế hoạch đã sẵn sàng!', sub: 'Mỗi ngày một việc nhỏ, bạn làm được.', cta: 'BẮT ĐẦU THỬ THÁCH' },
+}
+
+export const challenge = {
+  title: 'Thử thách 7 ngày',
+  counter: (n) => `${n}/7 ngày`,
+  counterAria: (n) => `Đã xong ${n} trên 7 ngày`,
+  today: 'HÔM NAY',
+  retestLabel: 'Ngày 7 · Kiểm tra lại',
+  nodeAria: (day, state) => `Ngày ${day}${state === 'done' ? ', đã xong' : state === 'today' ? ', hôm nay' : ', chưa mở'}`,
+  todayTask: 'Nhiệm vụ:',
+  retestTask: 'Chơi lại Cấp 1 để xem bạn đã tiến bộ thế nào.',
+  start: 'LÀM NHIỆM VỤ',
+  startRetest: 'KIỂM TRA LẠI',
+  tomorrow: 'Quay lại vào ngày mai nhé!',
+  tomorrowBtn: 'HẸN NGÀY MAI',
+  finished: 'Bạn đã đi hết 7 ngày. Giỏi lắm!',
+  seeResult: 'XEM KẾT QUẢ',
+  ask: 'HỎI HẠT BẮP',
+  viewPlan: 'Xem kế hoạch',
+  close: 'Về màn hình chính',
+}
+
+export const dayTask = {
+  eyebrow: (d) => `NGÀY ${d}/7`,
+  title: 'Nhiệm vụ hôm nay',
+  questions: [
+    'Hôm nay bạn đã làm được chưa?',
+    'Bạn đã thử việc nhỏ hôm nay chưa?',
+    'Hôm nay mình làm được việc này chưa nhỉ?',
+    'Bạn có làm được việc nhỏ hôm nay không?',
+    'Gần xong rồi, hôm nay bạn làm được chưa?',
+    'Hôm nay là ngày cuối cùng của nhiệm vụ. Bạn làm được chưa?',
+  ],
+  yes: 'ĐÃ LÀM ĐƯỢC',
+  no: 'CHƯA, MAI MÌNH THỬ LẠI',
+  tell: 'Kể cho Hạt Bắp',
+  noNote: 'Không sao cả, mai thử lại cũng được.',
+  done: { title: 'Giỏi lắm!', sub: 'Bạn vừa hoàn thành thêm một ngày.', cta: 'TIẾP TỤC' },
+  back: 'Quay lại',
+}
+
+export const retest = {
+  eyebrow: 'NGÀY 7 · KIỂM TRA LẠI',
+  title: 'Chơi lại 4 trò nhỏ để xem bạn tiến bộ chưa nhé.',
+  sub: 'Không có đúng sai. Cứ chơi như lần đầu.',
+  cta: 'SẴN SÀNG',
+}
+
+export const compare = {
+  eyebrow: 'SO SÁNH NGÀY 1 VÀ NGÀY 7',
+  title: 'Bạn đã đi một chặng dài',
+  before: 'NGÀY 1',
+  after: 'NGÀY 7',
+  scoreSuffix: '/100',
+  better: (n) => `Bạn đã giảm ${n} điểm!`,
+  betterSub: 'Điểm càng thấp thì não càng ít “nổ”. Chúc mừng bạn!',
+  same: 'Điểm của bạn vẫn giữ nguyên.',
+  sameSub: 'Thay đổi thói quen cần thời gian. Bạn đã kiên trì 7 ngày, thế là rất tuyệt rồi.',
+  worse: 'Lần này điểm cao hơn một chút.',
+  worseSub: 'Điều đó rất bình thường, mỗi ngày mỗi khác. Bạn đã thử, và mình có thể thử tiếp cùng nhau.',
+  barsTitle: 'Từng chỉ số',
+  arrow: 'sang',
+  disclaimer: 'Đây là trò chơi tự đánh giá, không phải chẩn đoán y khoa.',
+  done: 'HOÀN THÀNH',
+}
+
+export const challengeEnd = {
+  title: 'Bạn đã hoàn thành 7 ngày!',
+  sub: 'Mỗi việc nhỏ đều đáng tự hào. Hạt Bắp rất vui vì được đồng hành cùng bạn.',
+  cta: 'VỀ MÀN HÌNH CHÍNH',
+}
+
+export const resume = {
+  cta: 'TIẾP TỤC THỬ THÁCH',
+  restart: 'CHƠI LẠI TỪ ĐẦU',
+  confirm: 'Chơi lại từ đầu sẽ xóa tiến độ thử thách. Bạn chắc chứ?',
+  yes: 'XÓA VÀ CHƠI LẠI',
+  no: 'GIỮ LẠI',
+  seeResult: 'XEM KẾT QUẢ 7 NGÀY',
 }
 
 export const scenarios = [
