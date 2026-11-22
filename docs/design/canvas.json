@@ -1,0 +1,204 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "01 Start",
+      "is_interactive": true
+    },
+    {
+      "file": "Kernel.dc.html",
+      "x": 2160,
+      "y": 0,
+      "w": 160,
+      "h": 160,
+      "title": "Kernel (component)"
+    },
+    {
+      "file": "Tokens.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1000,
+      "h": 1100,
+      "title": "Design system"
+    },
+    {
+      "file": "Mascot.dc.html",
+      "x": 1080,
+      "y": 0,
+      "w": 1000,
+      "h": 560,
+      "title": "Hạt Bắp — 5 moods"
+    },
+    {
+      "file": "Info.dc.html",
+      "x": 470,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "02 Info",
+      "is_interactive": true
+    },
+    {
+      "file": "Intro.dc.html",
+      "x": 940,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "03 Game intro",
+      "is_interactive": true
+    },
+    {
+      "file": "Read.dc.html",
+      "x": 1410,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "04 Game 1 – Read",
+      "is_interactive": true
+    },
+    {
+      "file": "Question.dc.html",
+      "x": 1880,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "05 Question + feedback",
+      "is_interactive": true
+    },
+    {
+      "file": "Patience.dc.html",
+      "x": 2350,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "06 Game 2 – Patience",
+      "is_interactive": true
+    },
+    {
+      "file": "Skip.dc.html",
+      "x": 2820,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "07 Game 3 – Skip urge",
+      "is_interactive": true
+    },
+    {
+      "file": "PhoneDown.dc.html",
+      "x": 3290,
+      "y": 1520,
+      "w": 390,
+      "h": 844,
+      "title": "08 Game 4 – Phone-down",
+      "is_interactive": true
+    },
+    {
+      "file": "SelfReport.dc.html",
+      "x": 0,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "09 Self-report",
+      "is_interactive": true
+    },
+    {
+      "file": "Celebrate.dc.html",
+      "x": 470,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "10 Celebration",
+      "is_interactive": true
+    },
+    {
+      "file": "Result1.dc.html",
+      "x": 940,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "11 Result ①",
+      "is_interactive": true
+    },
+    {
+      "file": "Result2.dc.html",
+      "x": 1410,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "12 Result ②",
+      "is_interactive": true
+    },
+    {
+      "file": "Scenario.dc.html",
+      "x": 1880,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "13 Scenario 3/8",
+      "is_interactive": true
+    },
+    {
+      "file": "Plan.dc.html",
+      "x": 2350,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "14 Plan",
+      "is_interactive": true
+    },
+    {
+      "file": "Challenge.dc.html",
+      "x": 2820,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "15 7-day challenge",
+      "is_interactive": true
+    },
+    {
+      "file": "Demo.dc.html",
+      "x": 3290,
+      "y": 2784,
+      "w": 390,
+      "h": 844,
+      "title": "16 Demo (judges)",
+      "is_interactive": true
+    }
+  ],
+  "annotations": [
+    {
+      "id": "t1",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 2320,
+      "text": "Design system — Não bỏng ngô",
+      "kind": "title1"
+    },
+    {
+      "id": "t2",
+      "x": 0,
+      "y": 1220,
+      "w": 240,
+      "maxW": 3680,
+      "text": "Level 1 — Measurement flow",
+      "kind": "title1"
+    },
+    {
+      "id": "t3",
+      "x": 0,
+      "y": 2484,
+      "w": 240,
+      "maxW": 3680,
+      "text": "Results, Level 2 & 7-day challenge",
+      "kind": "title1"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

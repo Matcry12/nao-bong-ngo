@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản nháp giao diện — Não bỏng ngô</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --yellow:#FFC93C; --yellow-deep:#F5A623; --yellow-soft:#FFE9A8;
+  --red:#E8432E; --red-deep:#C2321F; --red-soft:#FFD9D1;
+  --cream:#FFF6E0; --cream-2:#FFEBC2; --paper:#FFFDF6;
+  --ink:#3A2418; --ink-2:#6B4A38; --ink-3:#9A7C68;
+  --green:#4FA36B; --green-soft:#D6F0DE; --blue:#3E7BD6; --blue-soft:#DCE8FB; --purple:#8A5CC8; --purple-soft:#EADFF8;
+  --r-lg:24px; --r-md:16px; --r-sm:12px;
+  --shadow-s:0 2px 0 rgba(120,70,20,.12),0 6px 14px rgba(120,70,20,.10);
+  --shadow-l:0 24px 50px -12px rgba(90,45,10,.35),0 8px 18px rgba(90,45,10,.15);
+  --font-h:'Baloo 2','Be Vietnam Pro',system-ui,sans-serif;
+  --font-b:'Be Vietnam Pro',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{font-family:var(--font-b);color:var(--ink);background:#F3E3C3;
+  background-image:radial-gradient(circle at 20% 10%,#FFF1CC 0,transparent 40%),radial-gradient(circle at 90% 80%,#FFDCCF 0,transparent 40%);
+  min-height:100vh;line-height:1.45}
+.page-head{text-align:center;padding:36px 16px 8px}
+.page-head h1{font-family:var(--font-h);font-size:clamp(26px,5vw,40px);font-weight:800;color:var(--red-deep)}
+.page-head p{color:var(--ink-2);margin-top:4px;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:40px 24px;justify-items:center;max-width:1400px;margin:0 auto;padding:28px 16px 64px}
+@media(max-width:420px){.grid{grid-template-columns:minmax(0,1fr)}}
+figure{display:flex;flex-direction:column;align-items:center;gap:14px;max-width:100%}
+figcaption{font-family:var(--font-h);font-weight:700;font-size:17px;color:var(--ink);text-align:center}
+figcaption span{display:block;font-family:var(--font-b);font-weight:500;font-size:13px;color:var(--ink-3)}
+
+/* phone */
+.phone{width:360px;height:740px;max-width:100%;border-radius:44px;background:var(--cream);border:8px solid #2B1A10;box-shadow:var(--shadow-l);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.status{height:30px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:6px 22px 0;font-size:12px;font-weight:600;color:var(--ink);position:relative;z-index:6}
+.status::after{content:"";position:absolute;left:50%;top:6px;width:84px;height:18px;margin-left:-42px;border-radius:12px;background:#2B1A10}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column;padding:10px 20px 22px;position:relative;overflow:hidden}
+.bg-dots{background:radial-gradient(circle,rgba(245,166,35,.18) 2px,transparent 3px) 0 0/26px 26px,var(--cream)}
+
+/* buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border:0;border-radius:18px;font-family:var(--font-h);font-weight:800;font-size:20px;color:#fff;background:var(--red);box-shadow:0 5px 0 var(--red-deep),0 10px 18px rgba(194,50,31,.3);cursor:pointer;transition:transform .12s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--red-deep)}
+.btn.yellow{background:var(--yellow);color:var(--ink);box-shadow:0 5px 0 var(--yellow-deep),0 10px 18px rgba(245,166,35,.3)}
+.btn.sm{min-height:44px;font-size:16px;border-radius:14px;box-shadow:0 3px 0 var(--red-deep)}
+.card{background:var(--paper);border-radius:var(--r-lg);box-shadow:var(--shadow-s);border:2px solid #fff}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:var(--paper);border:2px solid var(--cream-2);font-size:13px;font-weight:600;color:var(--ink-2);box-shadow:var(--shadow-s)}
+.chip.on{background:var(--yellow-soft);border-color:var(--yellow);color:var(--ink)}
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.t-self{background:var(--red-soft);color:var(--red-deep)} .t-fam{background:var(--green-soft);color:#2D7A49}
+.t-friend{background:var(--blue-soft);color:#2A5BA8} .t-school{background:var(--purple-soft);color:#6B3FA8}
+
+/* mascot */
+.mascot{display:block}
+.m-bounce{animation:bounce 1.6s ease-in-out infinite;transform-origin:50% 100%}
+.m-shake{animation:shake .5s ease-in-out infinite}
+.m-pulse{animation:pulse 1.1s ease-in-out infinite;transform-origin:50% 60%}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-14px) scale(.97,1.04)}60%{transform:translateY(0) scale(1.05,.94)}}
+@keyframes shake{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.kpop{animation:kpop 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.kpop.d2{animation-delay:.4s}.kpop.d3{animation-delay:.9s}.kpop.d4{animation-delay:1.3s}
+@keyframes kpop{0%{opacity:0;transform:translateY(8px) scale(.3)}25%{opacity:1;transform:translateY(-6px) scale(1.15)}60%{opacity:1;transform:translateY(-14px) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(.8)}}
+
+/* 1 start */
+.start{align-items:center;text-align:center;justify-content:space-between}
+.start h2{font-family:var(--font-h);font-size:32px;line-height:1.1;font-weight:800;color:var(--red-deep);margin-top:6px}
+.start h2 em{font-style:normal;color:var(--yellow-deep)}
+.start .sub{color:var(--ink-2);font-size:15px;margin:8px 4px 0}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}
+.small-note{font-size:12px;color:var(--ink-3);margin-top:12px;display:flex;gap:6px;align-items:center;justify-content:center}
+
+/* progress */
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{width:38px;height:38px;border-radius:12px;background:var(--paper);box-shadow:var(--shadow-s);display:grid;place-items:center;font-weight:800;flex:none}
+.prog{flex:1}
+.prog small{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:4px}
+.bar{height:12px;border-radius:99px;background:var(--cream-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--yellow),var(--red))}
+.badge-game{display:inline-flex;align-items:center;gap:6px;background:var(--red-soft);color:var(--red-deep);font-weight:700;font-size:12px;padding:5px 12px;border-radius:99px;align-self:flex-start}
+
+/* 2 reading */
+.read{padding:18px 18px 20px;margin-top:10px;flex:1;min-height:0;overflow:hidden;position:relative}
+.read h3{font-family:var(--font-h);font-size:21px;font-weight:800;margin-bottom:8px;color:var(--red-deep)}
+.read p{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:10px}
+.read .fade{position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(transparent,var(--paper))}
+.timer{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-top:12px;font-weight:600}
+.notif{position:absolute;left:12px;right:12px;top:34px;z-index:8;background:rgba(255,255,255,.96);border-radius:20px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 28px rgba(60,30,10,.28);border:1px solid #f0e2c8;animation:slidein 6s cubic-bezier(.2,.9,.3,1.2) infinite}
+.notif.n2{animation-delay:3s;top:34px}
+@keyframes slidein{0%{transform:translateY(-130px);opacity:0}8%{transform:translateY(0);opacity:1}14%{transform:translateY(-4px)}18%,48%{transform:translateY(0);opacity:1}58%,100%{transform:translateY(-130px);opacity:0}}
+.app-ic{width:44px;height:44px;border-radius:13px;flex:none;display:grid;place-items:center}
+.notif b{font-size:13.5px;display:block}
+.notif span{font-size:12.5px;color:var(--ink-2);display:block;line-height:1.3}
+.notif time{font-size:11px;color:var(--ink-3);align-self:flex-start}
+
+/* 3 phone down */
+.pd{align-items:center;text-align:center}
+.ringwrap{position:relative;width:250px;height:250px;margin:8px 0 6px;display:grid;place-items:center}
+.ringwrap svg.ring{position:absolute;inset:0}
+.glow{position:absolute;inset:26px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,60,.75),rgba(232,67,46,.0) 70%);animation:glow 1.2s ease-in-out infinite}
+@keyframes glow{0%,100%{transform:scale(.9);opacity:.6}50%{transform:scale(1.12);opacity:1}}
+.bigphone{width:96px;height:164px;border-radius:20px;background:linear-gradient(160deg,#3b2a22,#1f130d);border:4px solid #120b07;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 14px 26px rgba(40,10,0,.45);animation:buzz .6s linear infinite}
+.bigphone::before{content:"";position:absolute;top:6px;width:30px;height:5px;border-radius:5px;background:#000}
+.bigphone .scr{width:80px;height:132px;border-radius:12px;background:linear-gradient(170deg,#FFE29A,#FF8A5C);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin-top:6px}
+.bigphone .msg{width:60px;height:14px;border-radius:7px;background:rgba(255,255,255,.85)}
+.bigphone .msg.s{width:44px;background:rgba(255,255,255,.6)}
+@keyframes buzz{0%,100%{transform:translate(0,0) rotate(0)}20%{transform:translate(-3px,1px) rotate(-3deg)}40%{transform:translate(3px,-1px) rotate(3deg)}60%{transform:translate(-3px,-1px) rotate(-2deg)}80%{transform:translate(3px,1px) rotate(2deg)}}
+.vib{position:absolute;z-index:1;border:3px solid var(--red);border-radius:50%;opacity:.0;animation:wave 1.4s ease-out infinite}
+.vib.v2{animation-delay:.7s}
+@keyframes wave{0%{width:110px;height:110px;opacity:.7}100%{width:240px;height:240px;opacity:0}}
+.count{position:absolute;z-index:3;bottom:20px;font-family:var(--font-h);font-weight:800;font-size:30px;color:var(--red-deep);background:var(--paper);padding:0 14px;border-radius:14px;box-shadow:var(--shadow-s)}
+.dont{font-family:var(--font-h);font-weight:800;font-size:34px;color:var(--red);line-height:1;margin-top:8px;animation:pulse 1s ease-in-out infinite}
+.pd .hint{font-size:14px;color:var(--ink-2);margin:8px 6px 12px}
+.strip{display:flex;gap:10px;width:100%;margin-top:auto}
+.strip div{flex:1;padding:10px 6px;border-radius:16px;background:var(--paper);box-shadow:var(--shadow-s);font-size:11.5px;color:var(--ink-3);font-weight:600}
+.strip b{display:block;font-family:var(--font-h);font-size:22px;color:var(--ink)}
+
+/* 4 result */
+.res{align-items:center;text-align:center;overflow:hidden}
+.res .badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-family:var(--font-h);font-weight:800;font-size:16px;padding:5px 16px;border-radius:99px;box-shadow:0 3px 0 var(--red-deep)}
+.res h2{font-family:var(--font-h);font-size:28px;font-weight:800;line-height:1.1;color:var(--red-deep);margin:6px 0 0}
+.score{font-family:var(--font-h);font-weight:800;font-size:15px;color:var(--ink-2)}
+.score b{font-size:34px;color:var(--ink)}
+.meter{width:100%;margin:6px 0 10px}
+.meter .track{height:16px;border-radius:99px;background:linear-gradient(90deg,#FFE9A8 0 39%,#FFC93C 39% 69%,#E8432E 69% 100%);position:relative;box-shadow:inset 0 2px 4px rgba(0,0,0,.12)}
+.meter .track::after{content:"";position:absolute;left:74%;top:-5px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#fff;border:5px solid var(--red-deep);box-shadow:var(--shadow-s)}
+.meter .lbl{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ink-3);margin-top:6px}
+.bd{width:100%;padding:12px 14px;text-align:left;display:grid;gap:8px}
+.bd .row{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:12.5px;font-weight:600}
+.bd .row em{font-style:normal;font-weight:800;color:var(--ink)}
+.bd .row .bar{grid-column:1/-1;height:9px}
+.survey{margin:10px 0 8px;font-size:12.5px;color:var(--ink-2);background:var(--yellow-soft);border-radius:14px;padding:9px 12px;text-align:left}
+.disc{font-size:11px;color:var(--ink-3);margin-bottom:8px}
+
+/* 5 scenario */
+.scene{height:190px;border-radius:var(--r-lg);overflow:hidden;position:relative;box-shadow:var(--shadow-s);border:2px solid #fff}
+.scene svg{display:block;width:100%;height:100%}
+.q{font-family:var(--font-h);font-weight:800;font-size:21px;line-height:1.2;margin:14px 2px 12px}
+.q small{display:block;font-family:var(--font-b);font-weight:500;font-size:13px;color:var(--ink-2);margin-top:4px}
+.choices{display:grid;gap:10px}
+.choice{display:flex;gap:12px;align-items:center;min-height:58px;padding:10px 14px;background:var(--paper);border:3px solid var(--cream-2);border-radius:18px;font-weight:600;font-size:14.5px;box-shadow:0 3px 0 var(--cream-2);line-height:1.3}
+.choice .l{width:30px;height:30px;border-radius:10px;background:var(--yellow);display:grid;place-items:center;font-family:var(--font-h);font-weight:800;flex:none}
+.choice.sel{border-color:var(--red);box-shadow:0 3px 0 var(--red-soft);background:#FFF0EC}
+.choice.sel .l{background:var(--red);color:#fff}
+
+/* 6 plan */
+.plan{overflow:hidden;padding-top:6px}
+.plan h2{font-family:var(--font-h);font-size:24px;font-weight:800;color:var(--red-deep);line-height:1.1}
+.plan h4{font-family:var(--font-h);font-size:15px;font-weight:700;margin:10px 0 6px;color:var(--ink)}
+.sol{padding:10px 12px;display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.sol .ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex:none}
+.sol b{display:block;font-size:13.5px;line-height:1.3;margin-top:3px}
+.sol p{font-size:12px;color:var(--ink-2);line-height:1.35}
+.days{display:flex;gap:6px;justify-content:space-between}
+.day{flex:1;text-align:center;font-size:10.5px;font-weight:700;color:var(--ink-3)}
+.day i{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:50%;margin-bottom:3px;font-style:normal;font-size:14px;background:var(--cream-2);border:2px solid var(--cream-2)}
+.day.done i{background:var(--green);color:#fff;border-color:var(--green)}
+.day.cur i{background:var(--paper);border:3px solid var(--red);color:var(--red);animation:pulse 1.2s infinite}
+.day.cur{color:var(--red-deep)}
+.task{margin-top:8px;padding:9px 12px;font-size:12.5px;display:flex;gap:10px;align-items:center;background:var(--red-soft);border-radius:14px;font-weight:600}
+
+/* 7 demo */
+.demo{overflow:hidden;background:#2B1A10;color:#FFEFD0;padding-top:6px}
+.demo h2{font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--yellow);display:flex;align-items:center;gap:8px}
+.demo .lock{font-size:11px;font-weight:700;background:rgba(255,201,60,.18);color:var(--yellow);padding:3px 10px;border-radius:99px}
+.demo h5{font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#C9A98A;margin:12px 0 6px}
+.jump{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.jb{background:#3F2819;border:2px solid #5A3A25;border-radius:14px;padding:9px 11px;font-size:12.5px;font-weight:600;color:#FFEFD0;min-height:44px;display:flex;gap:8px;align-items:center}
+.jb b{font-family:var(--font-h);color:var(--yellow);font-size:15px}
+.nums{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.nums span{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;background:#3F2819;border:2px solid #5A3A25;font-family:var(--font-h);font-weight:700;font-size:14px;color:var(--yellow)}
+.chart{background:#3F2819;border-radius:18px;padding:12px 14px}
+.chart .t{font-size:12px;color:#E9CDB0;margin-bottom:8px;font-weight:600}
+.hb{display:grid;grid-template-columns:96px 1fr 50px;align-items:center;gap:8px;margin:7px 0;font-size:11.5px;line-height:1.25;font-weight:600}
+.hb .tr{height:16px;background:#2B1A10;border-radius:99px;overflow:hidden}
+.hb .tr i{display:block;height:100%;border-radius:99px}
+.hb b{font-family:var(--font-h);font-size:14px;text-align:right;color:#fff}
+.tabs{display:flex;gap:8px;margin-top:10px}
+.tabs .btn{min-height:42px;font-size:14px;border-radius:13px;box-shadow:0 3px 0 var(--red-deep)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- Mascot symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <radialGradient id="gKernel" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#FFE27A"/><stop offset=".55" stop-color="#FFC93C"/><stop offset="1" stop-color="#EE9A1B"/></radialGradient>
+  <radialGradient id="gPuff" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#FFF6DF"/><stop offset="1" stop-color="#FBDDA0"/></radialGradient>
+  <radialGradient id="gPuff2" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#FFF1CF"/><stop offset="1" stop-color="#F6C879"/></radialGradient>
+
+  <!-- LOW: calm kernel -->
+  <symbol id="m-low" viewBox="0 0 200 200">
+    <ellipse cx="100" cy="182" rx="50" ry="8" fill="#3A2418" opacity=".12"/>
+    <path d="M100 30C138 30 156 68 154 112C152 152 128 176 100 176C72 176 48 152 46 112C44 68 62 30 100 30Z" fill="url(#gKernel)" stroke="#D98A12" stroke-width="3"/>
+    <path d="M100 26c-8 0-14 4-17 10 6 8 28 8 34 0-3-6-9-10-17-10z" fill="#F5B22A" opacity=".0"/>
+    <path d="M70 52c10-12 26-16 36-12" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".7"/>
+    <path d="M68 118c0 20 14 40 32 44" stroke="#EE9A1B" stroke-width="5" stroke-linecap="round" fill="none" opacity=".5"/>
+    <!-- face -->
+    <path d="M72 100q9-9 18 0" stroke="#3A2418" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M110 100q9-9 18 0" stroke="#3A2418" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <ellipse cx="68" cy="120" rx="10" ry="6.5" fill="#FF7A59" opacity=".55"/>
+    <ellipse cx="132" cy="120" rx="10" ry="6.5" fill="#FF7A59" opacity=".55"/>
+    <path d="M89 123q11 11 22 0" stroke="#3A2418" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <!-- Z -->
+    <text x="150" y="40" font-family="Baloo 2" font-weight="800" font-size="20" fill="#9A7C68" opacity=".8">z</text>
+    <text x="164" y="26" font-family="Baloo 2" font-weight="800" font-size="14" fill="#9A7C68" opacity=".6">z</text>
+  </symbol>
+
+  <!-- MID: half-popped -->
+  <symbol id="m-mid" viewBox="0 0 200 200">
+    <ellipse cx="100" cy="184" rx="54" ry="8" fill="#3A2418" opacity=".12"/>
+    <!-- puffs peeking out -->
+    <g stroke="#E9B861" stroke-width="2.5">
+      <circle cx="68" cy="58" r="26" fill="url(#gPuff)"/>
+      <circle cx="132" cy="56" r="27" fill="url(#gPuff2)"/>
+      <circle cx="100" cy="38" r="28" fill="url(#gPuff)"/>
+      <circle cx="84" cy="74" r="20" fill="url(#gPuff2)"/>
+      <circle cx="120" cy="76" r="20" fill="url(#gPuff)"/>
+    </g>
+    <path d="M52 92C52 82 72 74 100 74C128 74 148 82 148 92C152 154 128 178 100 178C72 178 48 154 52 92Z" fill="url(#gKernel)" stroke="#D98A12" stroke-width="3"/>
+    <path d="M56 90c14-9 30-10 44-3 16-8 32-6 44 3" stroke="#D98A12" stroke-width="3" fill="none" stroke-linejoin="round"/>
+    <path d="M66 112c0 22 12 44 28 54" stroke="#EE9A1B" stroke-width="5" stroke-linecap="round" fill="none" opacity=".45"/>
+    <!-- face -->
+    <ellipse cx="80" cy="116" rx="8" ry="10" fill="#3A2418"/><ellipse cx="120" cy="116" rx="8" ry="10" fill="#3A2418"/>
+    <circle cx="83" cy="112" r="3" fill="#fff"/><circle cx="123" cy="112" r="3" fill="#fff"/>
+    <ellipse cx="66" cy="134" rx="9" ry="6" fill="#FF7A59" opacity=".6"/><ellipse cx="134" cy="134" rx="9" ry="6" fill="#FF7A59" opacity=".6"/>
+    <ellipse cx="100" cy="142" rx="7" ry="8" fill="#7A2B1A"/>
+    <path d="M148 98c6 4 8 12 2 18-6-4-8-12-2-18z" fill="#7FC8F8" stroke="#4A9AD8" stroke-width="2"/>
+    <path d="M60 36l-8-10M140 30l8-10M100 14v-10" stroke="#F5A623" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- HIGH: exploding -->
+  <symbol id="m-high" viewBox="0 0 200 200">
+    <ellipse cx="100" cy="188" rx="58" ry="8" fill="#3A2418" opacity=".14"/>
+    <!-- burst rays -->
+    <g stroke="#E8432E" stroke-width="5" stroke-linecap="round">
+      <path d="M16 70l16 6M10 104h18M20 138l16-8M184 70l-16 6M190 104h-18M180 138l-16-8"/>
+    </g>
+    <g stroke="#F5A623" stroke-width="5" stroke-linecap="round"><path d="M44 18l8 14M100 6v16M156 18l-8 14"/></g>
+    <!-- fluffy explosion -->
+    <g stroke="#E9B861" stroke-width="2.5">
+      <circle cx="46" cy="84" r="24" fill="url(#gPuff2)"/>
+      <circle cx="154" cy="84" r="24" fill="url(#gPuff2)"/>
+      <circle cx="62" cy="48" r="26" fill="url(#gPuff)"/>
+      <circle cx="140" cy="46" r="27" fill="url(#gPuff)"/>
+      <circle cx="100" cy="32" r="30" fill="url(#gPuff2)"/>
+      <circle cx="82" cy="70" r="26" fill="url(#gPuff)"/>
+      <circle cx="122" cy="72" r="26" fill="url(#gPuff2)"/>
+      <circle cx="100" cy="94" r="26" fill="url(#gPuff)"/>
+    </g>
+    <path d="M62 104C64 98 80 96 100 96C120 96 136 98 138 104C142 156 124 180 100 180C76 180 58 156 62 104Z" fill="url(#gKernel)" stroke="#D98A12" stroke-width="3"/>
+    <!-- face shocked -->
+    <ellipse cx="84" cy="122" rx="9" ry="11" fill="#fff" stroke="#3A2418" stroke-width="3"/><circle cx="85" cy="124" r="4" fill="#3A2418"/>
+    <ellipse cx="116" cy="122" rx="9" ry="11" fill="#fff" stroke="#3A2418" stroke-width="3"/><circle cx="115" cy="124" r="4" fill="#3A2418"/>
+    <path d="M74 106l16 5M126 106l-16 5" stroke="#3A2418" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="72" cy="142" rx="8" ry="5" fill="#E8432E" opacity=".6"/><ellipse cx="128" cy="142" rx="8" ry="5" fill="#E8432E" opacity=".6"/>
+    <path d="M90 146q10 18 20 0z" fill="#7A2B1A" stroke="#3A2418" stroke-width="3" stroke-linejoin="round"/>
+    <!-- flying bits -->
+    <circle class="kpop" cx="22" cy="40" r="6" fill="#FFC93C"/><circle class="kpop d2" cx="178" cy="40" r="5" fill="#FFC93C"/>
+    <circle class="kpop d3" cx="30" cy="160" r="5" fill="#FFE9A8"/><circle class="kpop d4" cx="172" cy="162" r="6" fill="#FFE9A8"/>
+  </symbol>
+
+  <!-- icons -->
+  <symbol id="i-msg" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#3E7BD6"/><path d="M10 13a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-6l-6 5v-5h0a4 4 0 0 1-4-4z" fill="#fff"/><circle cx="16" cy="17" r="1.8" fill="#3E7BD6"/><circle cx="21" cy="17" r="1.8" fill="#3E7BD6"/><circle cx="26" cy="17" r="1.8" fill="#3E7BD6"/></symbol>
+  <symbol id="i-vid" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#1F1F2E"/><path d="M16 12l14 8-14 8z" fill="#FF4D79"/><path d="M14 12l14 8-14 8z" fill="#2EE6D6" opacity=".85" transform="translate(-1.5 0)"/><path d="M15 12l14 8-14 8z" fill="#fff"/></symbol>
+</defs>
+</svg>
+
+<header class="page-head">
+  <h1>Bản nháp giao diện — Não bỏng ngô</h1>
+  <p>7 màn hình mô phỏng · chỉ phần nhìn, chưa có logic game</p>
+</header>
+
+<main class="grid">
+
+<!-- 1 START -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen start bg-dots">
+  <div style="width:100%">
+    <svg class="mascot m-bounce" width="220" height="220" viewBox="0 0 200 200" style="margin:6px auto 0"><use href="#m-low"/></svg>
+    <h2>Não bạn có đang <em>'nổ bỏng ngô'</em>?</h2>
+    <p class="sub">Chơi 4 thử thách nhỏ trong khoảng 4 phút để biết mức độ lướt điện thoại của bạn, rồi nhận kế hoạch riêng.</p>
+  </div>
+  <div style="width:100%">
+    <div class="chips"><span class="chip">🏫 Trường</span><span class="chip">🎓 Lớp</span><span class="chip">🙂 Giới tính</span></div>
+    <div style="font-size:11.5px;color:var(--ink-3);margin:-6px 0 12px">Thông tin không bắt buộc · không cần tên</div>
+    <button class="btn">Bắt đầu <span>▶</span></button>
+    <div class="small-note">ⓘ Không phải chẩn đoán y khoa</div>
+  </div>
+</div></div>
+<figcaption>1 · Màn bắt đầu<span>Linh vật ở trạng thái bình tĩnh</span></figcaption>
+</figure>
+
+<!-- 2 GAME 1 -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen bg-dots">
+  <div class="notif">
+    <svg class="app-ic" viewBox="0 0 40 40"><use href="#i-msg"/></svg>
+    <div style="flex:1"><b>Tin nhắn mới</b><span>Lớp mình: "Ai làm bài tập chưa vậy?"</span></div><time>bây giờ</time>
+  </div>
+  <div class="notif n2">
+    <svg class="app-ic" viewBox="0 0 40 40"><use href="#i-vid"/></svg>
+    <div style="flex:1"><b>Video đang hot</b><span>12 triệu lượt xem hôm nay. Xem ngay!</span></div><time>bây giờ</time>
+  </div>
+  <div class="topbar"><div class="back">‹</div>
+    <div class="prog"><small>Màn 1 · Thử thách 1/4</small><div class="bar"><i style="width:25%"></i></div></div></div>
+  <span class="badge-game">📖 Đọc dài + thông báo</span>
+  <div class="card read">
+    <h3>Vì sao ngô nổ thành bỏng?</h3>
+    <p>Mỗi hạt ngô chứa một chút nước nhỏ xíu bên trong lớp vỏ cứng. Khi bị nung nóng, nước hóa thành hơi và nén chặt lại.</p>
+    <p>Đến khoảng 180 độ C, áp suất đủ lớn để vỏ nứt ra. Phần tinh bột mềm bên trong phình ra thật nhanh và lật ngược thành đóa bỏng trắng xốp.</p>
+    <p>Chỉ những hạt có vỏ đủ kín mới nổ được, còn hạt nứt vỏ sẽ để hơi nước thoát ra ngoài nên không bao giờ nở.</p>
+    <div class="fade"></div>
+  </div>
+  <div class="timer"><span>⏱ Đang đọc… 0:42</span><span>Cuộn xuống để đọc tiếp ↓</span></div>
+  <button class="btn sm" style="margin-top:10px">Đọc xong, trả lời câu hỏi</button>
+</div></div>
+<figcaption>2 · Màn 1 · Game 1<span>Đọc dài + thông báo trượt từ trên xuống</span></figcaption>
+</figure>
+
+<!-- 3 GAME 4 -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen pd bg-dots">
+  <div class="topbar" style="width:100%"><div class="back">‹</div>
+    <div class="prog" style="text-align:left"><small>Màn 1 · Thử thách 4/4</small><div class="bar"><i style="width:100%"></i></div></div></div>
+  <span class="badge-game" style="align-self:center">📵 Đặt điện thoại xuống</span>
+  <div class="ringwrap">
+    <div class="glow"></div>
+    <span class="vib" style="position:absolute"></span><span class="vib v2" style="position:absolute"></span>
+    <svg class="ring" viewBox="0 0 250 250"><circle cx="125" cy="125" r="112" fill="none" stroke="#FFEBC2" stroke-width="14"/>
+      <circle cx="125" cy="125" r="112" fill="none" stroke="#E8432E" stroke-width="14" stroke-linecap="round" stroke-dasharray="703.7" stroke-dashoffset="211" transform="rotate(-90 125 125)"/></svg>
+    <div class="bigphone"><div class="scr"><div class="msg"></div><div class="msg s"></div><div class="msg"></div></div></div>
+    <div class="count">0:42</div>
+  </div>
+  <div class="dont">Đừng chạm vào!</div>
+  <p class="hint">Điện thoại sẽ rung và sáng liên tục. Hãy để yên 60 giây nhé.</p>
+  <div class="strip"><div><b>0</b>lần chạm</div><div><b>18s</b>đã cầm cự</div><div><b>🍿</b>cố lên!</div></div>
+</div></div>
+<figcaption>3 · Màn 1 · Game 4<span>Đếm ngược 60 giây, điện thoại rung và phát sáng</span></figcaption>
+</figure>
+
+<!-- 4 RESULT -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen res bg-dots" style="padding-top:2px">
+  <svg class="mascot m-shake" width="132" height="132" viewBox="0 0 200 200"><use href="#m-high"/></svg>
+  <span class="badge">💥 Cao · mức độ</span>
+  <h2>Bắp rang nổ liên tục</h2>
+  <div class="score"><b>74</b>/100 điểm</div>
+  <div class="meter"><div class="track"></div>
+    <div class="lbl"><span>🌽 Thấp</span><span>🍿 Vừa</span><span>💥 Cao</span></div></div>
+  <div class="card bd">
+    <div class="row"><span>Tập trung khi bị xao nhãng</span><em>82</em><div class="bar"><i style="width:82%"></i></div></div>
+    <div class="row"><span>Kiên nhẫn</span><em>61</em><div class="bar"><i style="width:61%"></i></div></div>
+    <div class="row"><span>Muốn chuyển nội dung</span><em>77</em><div class="bar"><i style="width:77%"></i></div></div>
+    <div class="row"><span>Gắn bó với điện thoại</span><em>90</em><div class="bar"><i style="width:90%"></i></div></div>
+  </div>
+  <div class="survey">📊 Giống <b>57,1%</b> trong 450 học sinh được khảo sát ở Tuyên Quang.</div>
+  <div class="disc">Đây không phải chẩn đoán y khoa.</div>
+  <button class="btn" style="margin-top:auto;font-size:18px">Sang Màn 2: Tìm giải pháp →</button>
+</div></div>
+<figcaption>4 · Kết quả<span>Mức Cao · linh vật nổ hết cỡ</span></figcaption>
+</figure>
+
+<!-- 5 SCENARIO -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen bg-dots">
+  <div class="topbar"><div class="back">‹</div>
+    <div class="prog"><small>Màn 2 · Tình huống 3/8</small><div class="bar"><i style="width:37.5%"></i></div></div></div>
+  <div class="scene">
+    <svg viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice">
+      <rect width="320" height="190" fill="#FFE9A8"/>
+      <circle cx="262" cy="40" r="22" fill="#FFC93C"/><circle cx="262" cy="40" r="32" fill="#FFC93C" opacity=".25"/>
+      <rect x="0" y="140" width="320" height="50" fill="#C98B55"/>
+      <rect x="30" y="98" width="150" height="14" rx="5" fill="#8A5A36"/><rect x="48" y="112" width="8" height="40" fill="#8A5A36"/><rect x="154" y="112" width="8" height="40" fill="#8A5A36"/>
+      <!-- book + lamp -->
+      <rect x="60" y="82" width="62" height="16" rx="3" fill="#E8432E"/><rect x="64" y="76" width="58" height="8" rx="2" fill="#fff"/>
+      <rect x="140" y="52" width="6" height="46" fill="#3A2418"/><path d="M126 52h34l-6-18h-22z" fill="#F5A623"/>
+      <!-- phone buzzing -->
+      <g class="m-shake" style="transform-origin:200px 90px">
+        <rect x="190" y="70" width="34" height="58" rx="7" fill="#2B1A10" transform="rotate(-8 207 99)"/>
+        <rect x="194" y="76" width="26" height="44" rx="4" fill="#FF8A5C" transform="rotate(-8 207 99)"/>
+      </g>
+      <path d="M232 70q10 6 8 20M240 62q16 10 12 34" stroke="#E8432E" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M176 66q-10 6-8 20M168 58q-16 10-12 34" stroke="#E8432E" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- kid -->
+      <circle cx="94" cy="58" r="18" fill="#FFD3A8"/><path d="M76 54c2-16 34-18 36 0-10-6-26-6-36 0z" fill="#3A2418"/>
+      <circle cx="88" cy="60" r="2" fill="#3A2418"/><circle cx="100" cy="60" r="2" fill="#3A2418"/>
+      <path d="M90 66q4 3 8 0" stroke="#3A2418" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <rect x="76" y="76" width="36" height="24" rx="10" fill="#3E7BD6"/>
+      <!-- bubble -->
+      <rect x="226" y="108" width="82" height="36" rx="12" fill="#fff"/><path d="M240 144l-6 10 16-10z" fill="#fff"/>
+      <text x="236" y="124" font-family="Be Vietnam Pro" font-weight="700" font-size="11" fill="#3A2418">Ting ting!</text>
+      <text x="236" y="137" font-family="Be Vietnam Pro" font-size="10" fill="#6B4A38">Tin nhắn mới</text>
+    </svg>
+  </div>
+  <div class="q">Đang học bài, điện thoại rung lên…<small>Bạn sẽ làm gì? Chọn cách giống bạn nhất.</small></div>
+  <div class="choices">
+    <div class="choice"><span class="l">A</span>Liếc xem ngay một chút rồi học tiếp</div>
+    <div class="choice sel"><span class="l">B</span>Cầm lên, trả lời luôn và lướt thêm vài video</div>
+    <div class="choice"><span class="l">C</span>Mặc kệ, đợi học xong mới xem</div>
+    <div class="choice"><span class="l">D</span>Lật úp điện thoại hoặc tắt tiếng từ đầu</div>
+  </div>
+</div></div>
+<figcaption>5 · Màn 2 · Tình huống<span>Cảnh minh họa + 4 lựa chọn</span></figcaption>
+</figure>
+
+<!-- 6 PLAN -->
+<figure>
+<div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen plan bg-dots">
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg class="mascot m-bounce" width="64" height="64" viewBox="0 0 200 200"><use href="#m-mid"/></svg>
+    <h2>Kế hoạch riêng của bạn</h2>
+  </div>
+  <h4>Lý do bạn hay cầm điện thoại</h4>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip on">😰 Sợ bỏ lỡ (FOMO)</span><span class="chip on">🔁 Thói quen</span></div>
+  <h4>3 giải pháp dành cho bạn</h4>
+  <div class="card sol"><div class="ico" style="background:var(--red-soft)">🔕</div><div><span class="tag t-self">Bản thân</span><b>Tắt thông báo, chỉ kiểm tra điện thoại vào giờ cố định</b></div></div>
+  <div class="card sol"><div class="ico" style="background:var(--blue-soft)">🤝</div><div><span class="tag t-friend">Bạn bè</span><b>Cùng nhóm bạn đặt luật úp điện thoại khi học</b></div></div>
+  <div class="card sol"><div class="ico" style="background:var(--purple-soft)">📦</div><div><span class="tag t-school">Nhà trường</span><b>Gửi điện thoại vào hộp chung trong giờ học</b></div></div>
+  <h4>Thử thách 7 ngày</h4>
+  <div class="days">
+    <div class="day done"><i>✓</i>Ngày 1</div>
+    <div class="day cur"><i>2</i>Hôm nay</div>
+    <div class="day"><i>🔒</i>Ngày 3</div><div class="day"><i>🔒</i>Ngày 4</div>
+    <div class="day"><i>🔒</i>Ngày 5</div><div class="day"><i>🔒</i>Ngày 6</div><div class="day"><i>🔒</i>Ngày 7</div>
+  </div>
+  <div class="task">🎯 Ngày 2: để điện thoại cách bàn học 2 mét trong 30 phút.</div>
+</div></div>
+<figcaption>6 · Kế hoạch cá nhân<span>Lý do, 3 giải pháp, thử thách 7 ngày</span></figcaption>
+</figure>
+
+<!-- 7 DEMO -->
+<figure>
+<div class="phone"><div class="status" style="color:#FFEFD0"><span>9:41</span><span>●●● 100%</span></div>
+<div class="screen demo">
+  <h2>🛠 Chế độ demo <span class="lock">Giám khảo</span></h2>
+  <h5>Nhảy tới thử thách · Màn 1</h5>
+  <div class="jump">
+    <div class="jb"><b>G1</b>Đọc dài + thông báo</div>
+    <div class="jb"><b>G2</b>Thử thách kiên nhẫn</div>
+    <div class="jb"><b>G3</b>Nút bỏ qua</div>
+    <div class="jb"><b>G4</b>Đặt điện thoại xuống</div>
+  </div>
+  <h5>Nhảy tới tình huống · Màn 2</h5>
+  <div class="nums"><span>1</span><span>2</span><span style="background:var(--yellow);color:var(--ink);border-color:var(--yellow)">3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+  <h5>Khảo sát 450 học sinh</h5>
+  <div class="chart">
+    <div class="t">Mức độ hiểu biết về "não bỏng ngô"</div>
+    <div class="hb"><span>Chưa từng nghe</span><div class="tr"><i style="width:66.67%;background:var(--red)"></i></div><b>66,67%</b></div>
+    <div class="hb"><span>Nghe nhưng chưa hiểu</span><div class="tr"><i style="width:28.89%;background:var(--yellow)"></i></div><b>28,89%</b></div>
+    <div class="hb"><span>Hiểu rõ</span><div class="tr"><i style="width:4.44%;background:#7FD6A0"></i></div><b>4,44%</b></div>
+  </div>
+  <div class="tabs"><button class="btn sm">Kết quả mẫu</button><button class="btn sm yellow" style="box-shadow:0 3px 0 var(--yellow-deep)">Ngày 1 và Ngày 7</button></div>
+</div></div>
+<figcaption>7 · Chế độ demo<span>Bảng điều khiển gọn cho ban giám khảo</span></figcaption>
+</figure>
+
+</main>
+</body>
+</html>

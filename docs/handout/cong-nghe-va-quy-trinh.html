@@ -1,0 +1,233 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Hiểu công nghệ của game Não bỏng ngô</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:16mm}
+:root{--p:#FF9F1C;--lip:#E07F00;--ok:#3CB371;--bad:#F25C54;--info:#3A86FF;--t:#3D3D3D;--mut:#8A8A8A;--line:#E8E8E8;--soft:#FFF8EC}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--t);font-family:'Nunito',sans-serif;font-weight:600;font-size:11pt;line-height:1.5}
+h1,h2,h3{font-weight:800;margin:0}
+h2{font-size:20pt;margin:0 0 4mm;display:flex;align-items:center;gap:3mm}
+h2 .num{background:var(--p);color:#3D2A00;border-radius:50%;width:10mm;height:10mm;display:grid;place-items:center;font-size:13pt;box-shadow:0 1mm 0 var(--lip)}
+h3{font-size:12.5pt}
+p{margin:0 0 2mm}
+section{margin-bottom:10mm}
+.pb{break-before:page}
+.cover{height:263mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;break-after:page}
+.cover h1{font-size:34pt;line-height:1.15;margin:8mm 0 4mm}
+.cover h1 span{color:var(--p)}
+.cover .sub{font-size:15pt;color:var(--mut);margin-bottom:10mm}
+.bar{width:60mm;height:4mm;border-radius:2mm;background:var(--p)}
+.card{border:2px solid var(--line);border-radius:16px;padding:4mm 5mm;break-inside:avoid;background:#fff}
+.card.key{border-color:var(--bad);background:#fff}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:3mm;margin-bottom:2mm}
+.chip{background:var(--soft);color:var(--lip);border-radius:99px;padding:.5mm 3mm;font-size:9pt;font-weight:800;white-space:nowrap}
+.key .chip{background:var(--bad);color:#fff}
+.card p{font-size:10.5pt}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.grid .key{grid-column:1/3}
+pre{background:#F6F6F6;border-radius:10px;padding:2mm 3mm;font-family:'JetBrains Mono',monospace;font-size:8.5pt;margin:2mm 0 0;white-space:pre-wrap;color:var(--t);font-weight:400}
+.warn{background:#FDECEA;border-radius:12px;padding:3mm 4mm;margin-top:2mm;font-size:10.5pt}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin:4mm 0}
+.three .card{text-align:center}
+.three .big{font-size:16pt;font-weight:800;color:var(--lip)}
+.flow{display:flex;align-items:center;gap:3mm;justify-content:center;margin:4mm 0;break-inside:avoid}
+.box{border:2px solid var(--line);border-radius:14px;padding:3mm 4mm;text-align:center;background:#fff;font-weight:800;font-size:10pt;box-shadow:0 1mm 0 var(--line)}
+.box small{display:block;font-weight:600;color:var(--mut);font-size:8.5pt}
+.box.o{background:var(--p);border-color:var(--p);box-shadow:0 1mm 0 var(--lip);color:#3D2A00}
+.box.o small{color:#3D2A00}
+.box.g{background:#EAF7F0;border-color:var(--ok)}
+.box.b{background:#EAF1FF;border-color:var(--info)}
+.arr{color:var(--mut);font-weight:800;font-size:16pt}
+.tree{display:flex;flex-direction:column;align-items:center;gap:2mm;margin:4mm 0;break-inside:avoid}
+.row{display:flex;gap:6mm;justify-content:center;align-items:flex-start}
+.col{display:flex;flex-direction:column;align-items:center;gap:2mm}
+.dn{color:var(--mut);font-weight:800;font-size:14pt;line-height:1}
+.note{background:var(--soft);border-radius:14px;padding:3mm 4mm;margin:3mm 0;break-inside:avoid}
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.who .card ul{margin:0;padding-left:4.5mm;font-size:10pt}
+.path{display:grid;grid-template-columns:1fr 1fr;gap:3mm 6mm;margin:4mm 0}
+.step{display:flex;align-items:center;gap:5mm;padding-left:0;break-inside:avoid}
+.node{width:13mm;height:13mm;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14pt;flex:none;margin-left:var(--x);}
+.node.done{background:var(--ok);color:#fff;box-shadow:0 1mm 0 #2E9159}
+.node.today{background:var(--p);color:#3D2A00;box-shadow:0 1mm 0 var(--lip)}
+.node.lock{background:var(--line);color:var(--mut);box-shadow:0 1mm 0 #D6D6D6}
+.st{display:flex;flex-direction:column;font-size:10.5pt;line-height:1.35}
+.st b{font-size:12pt}
+.st span{color:var(--mut)}
+.check{list-style:none;padding:0;margin:0}
+.check li{display:flex;gap:3mm;align-items:flex-start;margin-bottom:2.5mm}
+.check i{width:5mm;height:5mm;border:2px solid var(--p);border-radius:4px;flex:none;margin-top:1mm}
+table{width:100%;border-collapse:separate;border-spacing:0;border:2px solid var(--line);border-radius:16px;overflow:hidden;font-size:10.5pt}
+th{background:var(--p);color:#3D2A00;text-align:left;padding:2.5mm 4mm;font-weight:800}
+td{padding:2mm 4mm;border-top:2px solid var(--line)}
+tr{break-inside:avoid}
+td:first-child{width:42%}
+svg{display:inline-block}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="kb"><circle cx="42" cy="46" r="22"/><circle cx="78" cy="46" r="22"/><circle cx="60" cy="34" r="24"/><path d="M26 52H94C96 80 86 106 60 108C34 106 24 80 26 52Z"/></clipPath>
+    <clipPath id="kp"><circle cx="34" cy="46" r="20"/><circle cx="86" cy="46" r="20"/><circle cx="60" cy="30" r="26"/><circle cx="42" cy="66" r="22"/><circle cx="78" cy="66" r="22"/><circle cx="60" cy="56" r="28"/></clipPath>
+
+    <!-- Hạt Bắp moods: flat, no outline, 3 colours + dark features -->
+    <symbol id="m-calm" viewBox="0 0 120 120">
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <circle cx="47" cy="63" r="5.5" fill="#3D3D3D"/><circle cx="73" cy="63" r="5.5" fill="#3D3D3D"/>
+      <path d="M51 74Q60 82 69 74" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="m-wobble" viewBox="0 0 120 120">
+      <path d="M10 50Q4 62 10 74M18 44Q13 54 18 64" fill="none" stroke="#E07F00" stroke-width="4" stroke-linecap="round"/>
+      <path d="M108 20C113 28 115 33 108 38C101 33 103 28 108 20Z" fill="#3A86FF"/>
+      <g transform="rotate(-9 60 108)">
+        <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+        <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+        <circle cx="47" cy="62" r="6.5" fill="#3D3D3D"/><circle cx="73" cy="62" r="6.5" fill="#3D3D3D"/>
+        <path d="M49 77Q54.5 71 60 77T71 77" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </symbol>
+
+    <symbol id="m-pop" viewBox="0 0 120 120">
+      <path d="M8 6L17 15M112 6L103 15M60 0V8" fill="none" stroke="#E07F00" stroke-width="4" stroke-linecap="round"/>
+      <g transform="translate(0 8)">
+        <path d="M48 80H72L68 100Q60 104 52 100Z" fill="#E07F00"/>
+        <g clip-path="url(#kp)"><rect width="120" height="120" fill="#FF9F1C"/><circle cx="98" cy="84" r="26" fill="#E07F00"/><circle cx="30" cy="92" r="16" fill="#E07F00"/></g>
+        <circle cx="30" cy="34" r="6" fill="#FFF8EC"/><circle cx="46" cy="18" r="4" fill="#FFF8EC"/>
+        <circle cx="47" cy="48" r="6" fill="#3D3D3D"/><circle cx="73" cy="48" r="6" fill="#3D3D3D"/>
+        <ellipse cx="60" cy="67" rx="6" ry="7" fill="#3D3D3D"/>
+      </g>
+    </symbol>
+
+    <symbol id="m-proud" viewBox="0 0 120 120">
+      <path d="M14 8L17 16L25 19L17 22L14 30L11 22L3 19L11 16Z" fill="#E07F00"/>
+      <path d="M106 4L108.5 10.5L115 13L108.5 15.5L106 22L103.5 15.5L97 13L103.5 10.5Z" fill="#E07F00"/>
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <path d="M41 66Q47 58 53 66M67 66Q73 58 79 66" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round"/>
+      <path d="M48 75H72Q72 89 60 89Q48 89 48 75Z" fill="#3D3D3D"/>
+    </symbol>
+
+    <symbol id="m-talk" viewBox="0 0 120 120">
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <circle cx="47" cy="62" r="5.5" fill="#3D3D3D"/><circle cx="73" cy="62" r="5.5" fill="#3D3D3D"/>
+      <ellipse cx="60" cy="77" rx="7" ry="6.5" fill="#3D3D3D"/>
+    </symbol>
+
+    <!-- Icons: one filled set -->
+    <symbol id="i-x" viewBox="0 0 24 24"><rect x="10.7" y="2" width="2.6" height="20" rx="1.3" transform="rotate(45 12 12)"/><rect x="10.7" y="2" width="2.6" height="20" rx="1.3" transform="rotate(-45 12 12)"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.4 18.6L3.6 12.8l2.3-2.3 3.5 3.5 8.7-8.7 2.3 2.3z"/></symbol>
+    <symbol id="i-checkc" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21zm-1.6 15.3L6 12.4l1.8-1.8 2.6 2.6 5.8-5.8 1.8 1.8z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 22.5a2.6 2.6 0 0 0 2.5-2h-5a2.6 2.6 0 0 0 2.5 2zM19.5 16.5V11a7.5 7.5 0 0 0-5.5-7.2V3a2 2 0 0 0-4 0v.8A7.5 7.5 0 0 0 4.5 11v5.5L2.5 18.5v1.5h19v-1.5z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12.5 1.5c.6 4.2 5.5 6.2 5.5 12.2a6 6 0 0 1-12 0c0-2.8 1.4-4.6 3-6.1.3 1.6 1 2.6 2 3.1-.3-3.4-.6-6.3 1.5-9.2z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zm2.2 0h5.6V7a2.8 2.8 0 0 0-5.6 0z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.6 7.2.9-5.3 4.9 1.4 7.1L12 17.7 5.6 21.3 7 14.2 1.7 9.3l7.2-.9z"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 2h2.4v20H4zM7.4 3h12.6l-3.4 5.2 3.4 5.2H7.4z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M2.5 20.5L22 12 2.5 3.5v6.3L14 12 2.5 14.2z"/></symbol>
+  </defs></svg>
+
+<div class="cover">
+<svg width="150" height="150"><use href="#m-calm"/></svg>
+<h1>Hiểu công nghệ của game <span>Não bỏng ngô</span></h1>
+<div class="sub">Tài liệu cho cả nhóm, không cần biết lập trình</div>
+<div class="bar"></div>
+</div>
+
+<section>
+<h2><span class="num">1</span>Web app hoạt động thế nào?</h2>
+<p>Game của tụi mình là một <b>web app</b>: một trang web chạy ngay trên trình duyệt của điện thoại, không cần tải từ cửa hàng ứng dụng. Mọi trang web đều gồm 3 phần.</p>
+<div class="three">
+<div class="card"><div class="big">HTML</div><p><b>Bộ xương</b><br>Chữ, nút bấm, hình ảnh nằm ở đâu.</p></div>
+<div class="card"><div class="big">CSS</div><p><b>Quần áo</b><br>Màu sắc, kích cỡ, cách sắp xếp.</p></div>
+<div class="card"><div class="big">JavaScript</div><p><b>Bộ não</b><br>Chuyện gì xảy ra khi bạn chạm, tính giờ, tính điểm.</p></div>
+</div>
+<p>Các công cụ ở phần sau chỉ giúp viết ba thứ này nhanh và ít lỗi hơn.</p>
+<div class="flow">
+<div class="box">Điện thoại<small>trình duyệt</small></div>
+<div class="col"><span class="arr">&rarr;</span><small>"Cho mình xin game"</small></div>
+<div class="box o">Máy chủ<small>Vercel</small></div>
+<div class="col"><span class="arr">&rarr;</span><small>gửi HTML + CSS + JS</small></div>
+<div class="box">Game chạy<small>trong điện thoại</small></div>
+</div>
+<div class="note">Sau khi tải xong, game chạy ngay trong điện thoại của bạn. Máy chủ chỉ cần khi gọi trợ lý AI hoặc gửi kết quả.</div>
+</section>
+
+<section>
+<h2><span class="num">2</span>Từng công cụ trong một thẻ</h2>
+<p>Mỗi thẻ gồm: công cụ là gì, ví dụ đời thường, và vì sao tụi mình chọn nó.</p>
+<div class="grid"><div class="card "><div class="ch"><h3>Node.js và npm</h3><span class="chip">Hộp đồ nghề</span></div>
+<p><b>Là gì:</b> Node.js giúp máy tính chạy JavaScript ngoài trình duyệt. npm là "cửa hàng" tải các bộ phận code làm sẵn.</p><p><b>Ví dụ đời thường:</b> Node là xưởng thủ công, npm là tiệm bán linh kiện.</p><p><b>Vì sao dùng:</b> React, Vite và hầu hết công cụ khác đều cài qua npm.</p><pre>npm install   # tải linh kiện
+npm run dev   # chạy thử game</pre></div><div class="card "><div class="ch"><h3>React</h3><span class="chip">Dựng màn hình</span></div>
+<p><b>Là gì:</b> Thư viện giúp ghép giao diện từ những mảnh nhỏ, dùng lại được, gọi là component.</p><p><b>Ví dụ đời thường:</b> LEGO. Làm một viên nút bấm một lần, rồi dùng ở mọi màn hình.</p><p><b>Vì sao dùng:</b> Khi điểm hay màn hình thay đổi, React tự vẽ lại. Không phải làm tay.</p></div><div class="card "><div class="ch"><h3>Vite</h3><span class="chip">Bếp chạy nhanh</span></div>
+<p><b>Là gì:</b> Công cụ chạy thử game ngay trên máy và đóng gói game thành các file nhỏ gọn để đưa lên mạng.</p><p><b>Ví dụ đời thường:</b> Lúc nấu, bạn nếm thử tức thì. Nấu xong, Vite xếp món vào hộp mang đi.</p><p><b>Vì sao dùng:</b> Đơn giản và nhanh nhất để bắt đầu một app React.</p></div><div class="card "><div class="ch"><h3>CSS</h3><span class="chip">Màu sắc và hình dáng</span></div>
+<p><b>Là gì:</b> CSS là phần "quần áo". Tụi mình dùng các biến màu như --primary cho màu cam.</p><p><b>Ví dụ đời thường:</b> Bảng màu của họa sĩ. Đổi một ô màu, cả bức tranh đổi theo.</p><p><b>Vì sao dùng:</b> Không cần học thêm framework. Đổi một màu ở một chỗ, cả app cập nhật.</p></div><div class="card "><div class="ch"><h3>SVG</h3><span class="chip">Hình vẽ bằng toán</span></div>
+<p><b>Là gì:</b> Hình ảnh được mô tả bằng hình tròn, đường cong trong code, không phải các điểm ảnh.</p><p><b>Ví dụ đời thường:</b> Bản vẽ kỹ thuật: phóng to bao nhiêu vẫn nét.</p><p><b>Vì sao dùng:</b> Hạt Bắp luôn sắc nét, file nhẹ, và đổi được tâm trạng (bình tĩnh, nổ tung...) bằng code.</p></div><div class="card "><div class="ch"><h3>content.js và scoring.js</h3><span class="chip">Chữ và phép tính</span></div>
+<p><b>Là gì:</b> content.js chứa toàn bộ chữ tiếng Việt. scoring.js chứa công thức tính điểm.</p><p><b>Ví dụ đời thường:</b> content.js là quyển kịch bản của vở kịch. scoring.js là máy tính bấm điểm.</p><p><b>Vì sao dùng:</b> Nhóm sửa câu chữ trong content.js mà không đụng vào code. Công thức tách riêng nên ít lỗi.</p></div><div class="card "><div class="ch"><h3>localStorage</h3><span class="chip">Sổ tay trong điện thoại</span></div>
+<p><b>Là gì:</b> Một ô nhớ nhỏ trong trình duyệt. Đóng tab rồi mở lại, dữ liệu vẫn còn.</p><p><b>Ví dụ đời thường:</b> Cuốn sổ nằm trong cặp của chính người chơi. Chỉ điện thoại đó đọc được.</p><p><b>Vì sao dùng:</b> Lưu điểm Ngày 1 và tiến độ thử thách mà không cần đăng nhập. Mất khi xóa dữ liệu trình duyệt hoặc đổi máy.</p><pre>localStorage.setItem("day1Score", "74")</pre></div><div class="card "><div class="ch"><h3>Google Sheet và Apps Script</h3><span class="chip">Hòm thư nghiên cứu</span></div>
+<p><b>Là gì:</b> Apps Script là đoạn code chạy trong Google. Game gửi kết quả đến đó, nó ghi thêm một dòng vào Sheet.</p><p><b>Ví dụ đời thường:</b> Hòm thư. Game bỏ thư (kết quả ẩn danh), Google xếp vào bảng tính.</p><p><b>Vì sao dùng:</b> Miễn phí, cả nhóm quen Sheet nên vẽ biểu đồ cho báo cáo rất dễ. Chỉ gửi khi người chơi tích đồng ý, không có tên.</p></div><div class="card key"><div class="ch"><h3>API key và proxy</h3><span class="chip">Quan trọng nhất</span></div>
+<p><b>Là gì:</b> API là cánh cửa để chương trình này nhờ chương trình khác. API key là mật khẩu của cánh cửa đó. Ai có key sẽ tiêu tiền của chúng ta.</p><p><b>Ví dụ đời thường:</b> Học sinh không biết mã két của trường. Muốn lấy đồ thì nhờ văn phòng, văn phòng mở két.</p><p><b>Vì sao dùng:</b> Mọi thứ trong code của app, người chơi đều xem được. Vì vậy key không được để trong app. App chỉ nói chuyện với "văn phòng" của mình (proxy trên Vercel). Chỉ văn phòng giữ key và gọi DeepSeek.</p><div class="warn"><b>Quy tắc vàng:</b> không gửi key trong chat, không dán vào code, không chụp màn hình. Chỉ để trong cài đặt Vercel. Lộ key là người lạ tiêu hết tiền của nhóm.</div></div><div class="card "><div class="ch"><h3>Vercel</h3><span class="chip">Chỗ đặt game trên mạng</span></div>
+<p><b>Là gì:</b> Dịch vụ lưu trữ miễn phí. Nối với GitHub thì mỗi lần cập nhật code, link game tự đổi mới. Có thêm "văn phòng" (serverless function) chạy khi được gọi.</p><p><b>Ví dụ đời thường:</b> Một cửa hàng online tự bày hàng mới khi bạn gửi hàng lên.</p><p><b>Vì sao dùng:</b> Miễn phí, chứa cả game lẫn proxy AI, và cho một link duy nhất để làm mã QR.</p></div><div class="card "><div class="ch"><h3>Trợ lý AI DeepSeek và lớp an toàn</h3><span class="chip">Bộ não của Hạt Bắp</span></div>
+<p><b>Là gì:</b> DeepSeek là mô hình AI giống ChatGPT, tụi mình gọi qua API. App gửi kèm luật riêng ("chỉ nói về tập trung, không chẩn đoán bệnh") và kết quả của người chơi.</p><p><b>Ví dụ đời thường:</b> Hạt Bắp như người cố vấn đã được dặn kỹ trước khi gặp bạn.</p><p><b>Vì sao dùng:</b> Là học sinh dùng nên cần thêm 3 lớp an toàn: (1) có từ khóa khủng hoảng thì không gọi AI mà hiện lời nhắn tìm người lớn và số hỗ trợ; (2) giới hạn chủ đề; (3) tối đa 20 tin nhắn mỗi ngày, trả lời ngắn.</p></div><div class="card "><div class="ch"><h3>PWA</h3><span class="chip">Web như app thật</span></div>
+<p><b>Là gì:</b> Trang web kèm tên, biểu tượng và khả năng lưu sẵn file để chạy khi mất mạng.</p><p><b>Ví dụ đời thường:</b> Một tờ báo bạn cắt dán lên bàn học, mở lúc nào cũng được.</p><p><b>Vì sao dùng:</b> Có thể "Thêm vào màn hình chính", mở toàn màn hình, chạy offline (trừ phần AI). Sau này bọc thành file APK bằng Capacitor nếu cần.</p></div><div class="card "><div class="ch"><h3>Git và GitHub</h3><span class="chip">Điểm lưu và kho chung</span></div>
+<p><b>Là gì:</b> Git ghi lại các "điểm lưu" của code, luôn quay lại được. GitHub là kho trực tuyến để cả nhóm xem.</p><p><b>Ví dụ đời thường:</b> Như nút Save trong game, kèm bản sao lưu trên mây.</p><p><b>Vì sao dùng:</b> Vercel lấy code từ GitHub để đưa lên mạng. Mọi người thấy ai sửa gì.</p></div><div class="card "><div class="ch"><h3>Vitest</h3><span class="chip">Kiểm tra phép tính</span></div>
+<p><b>Là gì:</b> Công cụ chạy các bài kiểm tra tự động nhỏ.</p><p><b>Ví dụ đời thường:</b> Giáo viên chấm đáp án: nhập thử, so với kết quả đúng.</p><p><b>Vì sao dùng:</b> Điểm số là cốt lõi của Màn 1. Test đảm bảo chạm 2 lần ở game đặt điện thoại thì luôn ra nguy cơ 50.</p></div></div>
+</section>
+
+<section>
+<h2><span class="num">3</span>Cách các phần nói chuyện với nhau</h2>
+<p>Người chơi chỉ chạm vào app. Phía sau, các phần trao đổi như sơ đồ dưới đây.</p>
+<div class="tree">
+<div class="box o" style="min-width:55mm">Người chơi<small>chạm trên điện thoại</small></div>
+<div class="dn">&darr;</div>
+<div class="box o" style="min-width:55mm">App React<small>chạy trong trình duyệt</small></div>
+<div class="row" style="gap:5mm;margin-top:1mm">
+<div class="col"><div class="dn">&darr;</div><div class="box g">localStorage<small>nhớ điểm và tiến độ ngay trên máy</small></div></div>
+<div class="col"><div class="dn">&darr;</div><div class="box b">Hàm trên Vercel<small>giữ API key, kiểm tra an toàn</small></div><div class="dn">&darr;</div><div class="box">DeepSeek AI<small>soạn câu trả lời của Hạt Bắp</small></div></div>
+<div class="col"><div class="dn">&darr;</div><div class="box b">Apps Script<small>chỉ khi người chơi đồng ý</small></div><div class="dn">&darr;</div><div class="box g">Google Sheet<small>một dòng kết quả ẩn danh</small></div></div>
+</div></div>
+<div class="note"><b>Hãy nhớ:</b> app không bao giờ nói chuyện thẳng với DeepSeek. Luôn đi qua hàm trên Vercel, vì chỉ ở đó mới giữ được key bí mật.</div>
+<div class="note">Mất mạng thì sao? Hạt Bắp vẫn trả lời bằng những câu soạn sẵn trong content.js, nên demo không bị đứng.</div>
+<p>Chữ tiếng Việt nằm ở một nơi duy nhất, ví dụ:</p>
+<pre>// content.js: sửa chữ ở đây, không cần đụng code khác
+title: "Não bạn nổ đến mức nào?"</pre>
+</section>
+
+<section>
+<h2><span class="num">4</span>Quy trình làm việc của nhóm</h2>
+<h3 style="margin-bottom:3mm">Một thay đổi lên mạng thế nào?</h3>
+<div class="flow">
+<div class="box">Sửa code<small>Claude hoặc nhóm</small></div><span class="arr">&rarr;</span>
+<div class="box">Lưu lên GitHub</div><span class="arr">&rarr;</span>
+<div class="box o">Vercel tự cập nhật<small>khoảng 1 phút</small></div><span class="arr">&rarr;</span>
+<div class="box g">Quét mã QR<small>xem bản mới</small></div>
+</div>
+<h3 style="margin:6mm 0 3mm">Ai làm gì?</h3>
+<div class="who">
+<div class="card"><h3>Claude (AI)</h3><ul><li>Viết code</li><li>Sửa lỗi</li><li>Đưa bản mới lên GitHub</li></ul></div>
+<div class="card"><h3>Cả nhóm</h3><ul><li>Đọc và sửa chữ tiếng Việt trong content.js</li><li>Chơi thử trên điện thoại</li><li>Góp ý</li></ul></div>
+<div class="card"><h3>Trưởng nhóm</h3><ul><li>Giữ API key DeepSeek trong cài đặt Vercel</li><li>Không bao giờ gửi key trong chat</li></ul></div>
+</div>
+<h3 style="margin:7mm 0 2mm">Xây dựng trong 6 bước, bước nào cũng chơi được</h3>
+<p>Làm xong bước nào là chạy thử được bước đó, giống đường thử thách 7 ngày trong game.</p>
+<div class="path"><div class="step"><div class="node done" style="--x:0px">1</div><div class="st"><b>Dựng khung</b><span>Vite + giao diện + Bắt đầu, Game 1, kết quả đơn giản. Đưa lên Vercel.</span></div></div><div class="step"><div class="node today" style="--x:0px">2</div><div class="st"><b>Game 2 đến 4</b><span>Thêm 3 game còn lại, câu hỏi tự đánh giá, tính điểm có test, 2 màn kết quả.</span></div></div><div class="step"><div class="node lock" style="--x:0px">3</div><div class="st"><b>Màn 2 và Kế hoạch</b><span>8 tình huống tìm lý do lướt, ra kế hoạch 3 giải pháp.</span></div></div><div class="step"><div class="node lock" style="--x:0px">4</div><div class="st"><b>Trợ lý AI</b><span>Proxy, khung chat, câu trả lời dự phòng khi mất mạng.</span></div></div><div class="step"><div class="node lock" style="--x:0px">5</div><div class="st"><b>Thử thách 7 ngày</b><span>Đường 7 ngày, chơi lại Màn 1 ở Ngày 7 để so sánh.</span></div></div><div class="step"><div class="node lock" style="--x:0px">6</div><div class="st"><b>Hoàn thiện</b><span>Gửi dữ liệu lên Sheet, chế độ demo, PWA, chỉnh cho đẹp.</span></div></div></div>
+</section>
+
+<section>
+<h3 style="margin-bottom:2mm">Thử nghiệm với bạn bè</h3>
+<div class="card" style="margin-bottom:6mm"><p style="margin:0">Mời <b>10 đến 20 bạn cùng lớp</b> chơi thử. Nhìn xem họ có bị kẹt chỗ nào không, rồi chỉnh các <b>ngưỡng điểm</b> (Thấp dưới 40, Trung bình 40 đến 69, Cao từ 70) cho hợp lý.</p></div>
+<div style="break-inside:avoid"><h3 style="margin-bottom:3mm">Nhóm cần chuẩn bị</h3>
+<ul class="check">
+<li><i></i><span><b>API key DeepSeek</b>, để trong cài đặt Vercel (không để trong code, không gửi qua chat).</span></li>
+<li><i></i><span><b>Tài khoản Google</b> cho Sheet, cùng tài khoản <b>Vercel</b> và <b>GitHub</b> (đều miễn phí).</span></li>
+<li><i></i><span><b>Xem lại chữ tiếng Việt</b> trong content.js: đoạn đọc, câu hỏi, tình huống.</span></li>
+<li><i></i><span><b>10 đến 20 bạn cùng lớp</b> để chơi thử và chỉnh ngưỡng điểm.</span></li>
+</ul></div>
+</section>
+
+<section class="pb">
+<h2><span class="num">5</span>Bảng tóm tắt một trang</h2>
+<table><tr><th>Công cụ</th><th>Hiểu một câu</th></tr><tr><td><b>HTML / CSS / JS</b></td><td>Bộ xương / quần áo / bộ não của trang web.</td></tr><tr><td><b>Node.js + npm</b></td><td>Xưởng làm việc + tiệm bán linh kiện.</td></tr><tr><td><b>React</b></td><td>Ghép màn hình từ những viên LEGO dùng lại được.</td></tr><tr><td><b>Vite</b></td><td>Xem thử ngay khi sửa, và đóng gói game để đưa lên mạng.</td></tr><tr><td><b>CSS</b></td><td>Đổi một màu một chỗ, cả app đổi theo.</td></tr><tr><td><b>SVG</b></td><td>Hạt Bắp và biểu tượng vẽ bằng code, luôn nét.</td></tr><tr><td><b>content.js / scoring.js</b></td><td>Quyển kịch bản chữ / máy tính bấm điểm.</td></tr><tr><td><b>localStorage</b></td><td>Cuốn sổ nằm trong điện thoại người chơi.</td></tr><tr><td><b>Google Sheet + Apps Script</b></td><td>Hòm thư tự xếp kết quả vào bảng tính.</td></tr><tr><td><b>API key + proxy</b></td><td>Mật khẩu chỉ giữ ở "văn phòng" của mình, không để trong app.</td></tr><tr><td><b>Vercel</b></td><td>Chỗ đặt game miễn phí, tự cập nhật khi code đổi.</td></tr><tr><td><b>DeepSeek + lớp an toàn</b></td><td>Bộ não của Hạt Bắp, có rào chắn bảo vệ học sinh.</td></tr><tr><td><b>PWA</b></td><td>Trang web cài lên màn hình chính, chạy được khi mất mạng.</td></tr><tr><td><b>Git / GitHub</b></td><td>Điểm lưu và kho sao lưu chung.</td></tr><tr><td><b>Vitest</b></td><td>Máy tự kiểm tra điểm số có đúng không.</td></tr></table>
+<div style="display:flex;align-items:center;gap:4mm;margin-top:6mm"><svg width="60" height="60"><use href="#m-proud"/></svg><p style="margin:0"><b>Chỉ cần nhớ:</b> key AI là bí mật. Mọi thứ khác, nhóm cứ thoải mái hỏi.</p></div>
+</section>
+</body></html>

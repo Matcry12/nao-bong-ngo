@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hạt Bắp</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{px}}; height: {{px}}; font-family: 'Nunito', sans-serif; color: #3D3D3D">
+<sc-if value="{{isCalm}}" hint-placeholder-val="{{ true }}">
+<svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-label="Hạt Bắp bình tĩnh">
+<path d="M80 18C112 18 132 56 132 92C132 124 108 144 80 144C52 144 28 124 28 92C28 56 48 18 80 18Z" fill="#FF9F1C"></path>
+<path d="M80 18C96 18 109 28 117 42C101 37 59 37 43 42C51 28 64 18 80 18Z" fill="#FFD08A"></path>
+<circle cx="64" cy="88" r="6" fill="#3D2A00"></circle>
+<circle cx="96" cy="88" r="6" fill="#3D2A00"></circle>
+<path d="M68 106Q80 115 92 106" fill="none" stroke="#3D2A00" stroke-width="5" stroke-linecap="round"></path>
+<circle cx="50" cy="104" r="7" fill="#E07F00"></circle>
+<circle cx="110" cy="104" r="7" fill="#E07F00"></circle>
+</svg>
+</sc-if>
+<sc-if value="{{isWobble}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-label="Hạt Bắp đang rung lắc">
+<path d="M14 68Q4 86 14 104" fill="none" stroke="#E07F00" stroke-width="5" stroke-linecap="round"></path>
+<path d="M146 68Q156 86 146 104" fill="none" stroke="#E07F00" stroke-width="5" stroke-linecap="round"></path>
+<g transform="rotate(-8 80 144)">
+<path d="M80 18C112 18 132 56 132 92C132 124 108 144 80 144C52 144 28 124 28 92C28 56 48 18 80 18Z" fill="#FF9F1C"></path>
+<path d="M80 18C96 18 109 28 117 42C101 37 59 37 43 42C51 28 64 18 80 18Z" fill="#FFD08A"></path>
+<circle cx="64" cy="86" r="8" fill="#3D2A00"></circle>
+<circle cx="96" cy="86" r="8" fill="#3D2A00"></circle>
+<path d="M62 110q6-6 12 0t12 0t12 0" fill="none" stroke="#3D2A00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+</g>
+</svg>
+</sc-if>
+<sc-if value="{{isPopped}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-label="Hạt Bắp đã nổ">
+<circle cx="46" cy="72" r="28" fill="#FFD08A"></circle>
+<circle cx="114" cy="72" r="28" fill="#FFD08A"></circle>
+<circle cx="58" cy="40" r="24" fill="#FFD08A"></circle>
+<circle cx="102" cy="40" r="24" fill="#FFD08A"></circle>
+<circle cx="80" cy="62" r="40" fill="#FFD08A"></circle>
+<path d="M28 96C28 128 52 146 80 146C108 146 132 128 132 96Z" fill="#FF9F1C"></path>
+<circle cx="66" cy="64" r="8" fill="#3D2A00"></circle>
+<circle cx="94" cy="64" r="8" fill="#3D2A00"></circle>
+<ellipse cx="80" cy="84" rx="7" ry="9" fill="#3D2A00"></ellipse>
+</svg>
+</sc-if>
+<sc-if value="{{isProud}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-label="Hạt Bắp tự hào">
+<path d="M80 18C112 18 132 56 132 92C132 124 108 144 80 144C52 144 28 124 28 92C28 56 48 18 80 18Z" fill="#FF9F1C"></path>
+<path d="M80 18C96 18 109 28 117 42C101 37 59 37 43 42C51 28 64 18 80 18Z" fill="#FFD08A"></path>
+<path d="M55 90q9-11 18 0M87 90q9-11 18 0" fill="none" stroke="#3D2A00" stroke-width="5" stroke-linecap="round"></path>
+<path d="M60 104Q80 130 100 104Z" fill="#3D2A00"></path>
+<circle cx="48" cy="104" r="7" fill="#E07F00"></circle>
+<circle cx="112" cy="104" r="7" fill="#E07F00"></circle>
+<path d="M138 18l4 10 10 4-10 4-4 10-4-10-10-4 10-4Z" fill="#FFD08A"></path>
+</svg>
+</sc-if>
+<sc-if value="{{isWorried}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 160 160" width="100%" height="100%" role="img" aria-label="Hạt Bắp lo lắng">
+<path d="M80 18C112 18 132 56 132 92C132 124 108 144 80 144C52 144 28 124 28 92C28 56 48 18 80 18Z" fill="#FF9F1C"></path>
+<path d="M80 18C96 18 109 28 117 42C101 37 59 37 43 42C51 28 64 18 80 18Z" fill="#FFD08A"></path>
+<path d="M54 80L72 74M106 80L88 74" fill="none" stroke="#3D2A00" stroke-width="5" stroke-linecap="round"></path>
+<circle cx="64" cy="92" r="6" fill="#3D2A00"></circle>
+<circle cx="96" cy="92" r="6" fill="#3D2A00"></circle>
+<path d="M68 116Q80 106 92 116" fill="none" stroke="#3D2A00" stroke-width="5" stroke-linecap="round"></path>
+<path d="M134 44C140 54 142 59 142 63a8 8 0 0 1-16 0c0-4 2-9 8-19Z" fill="#3A86FF"></path>
+</svg>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mood":{"editor":"enum","options":["calm","wobble","popped","proud","worried"],"default":"calm"},"size":{"editor":"int","min":48,"max":320,"default":160},"$preview":{"width":160,"height":160}}'>
+class Component extends DCLogic {
+renderVals() {
+const m = this.props.mood ?? 'calm';
+const s = this.props.size ?? 160;
+return {
+px: s + 'px',
+isCalm: m === 'calm', isWobble: m === 'wobble', isPopped: m === 'popped',
+isProud: m === 'proud', isWorried: m === 'worried'
+};
+}
+}
+</script>
+</body>
+</html>

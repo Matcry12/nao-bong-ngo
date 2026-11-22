@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hạt Bắp moods</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&amp;display=swap">
+<style>
+body{margin:0;background:#fff}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="width: 1000px; height: 560px; padding: 48px; display: flex; flex-direction: column; gap: 32px; font-family: 'Nunito', sans-serif; font-weight: 600; color: #3D3D3D; background: #FFFFFF">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800">Hạt Bắp — moods = game states</h1>
+<p style="margin: 0; font-size: 17px; color: #6F6F6F">Flat shapes, 3 colors, no outlines. It reacts, it doesn’t decorate.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; align-items: start">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 8px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFF8EC">
+<dc-import name="Kernel" mood="calm" size="140" hint-size="140px,140px"></dc-import>
+<div style="text-align: center"><div style="font-size: 17px; font-weight: 800">Bình tĩnh</div><div style="font-size: 15px; color: #6F6F6F">Start · low risk</div></div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 8px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFF8EC">
+<dc-import name="Kernel" mood="wobble" size="140" hint-size="140px,140px"></dc-import>
+<div style="text-align: center"><div style="font-size: 17px; font-weight: 800">Rung lắc</div><div style="font-size: 15px; color: #6F6F6F">Medium risk</div></div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 8px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFF8EC">
+<dc-import name="Kernel" mood="popped" size="140" hint-size="140px,140px"></dc-import>
+<div style="text-align: center"><div style="font-size: 17px; font-weight: 800">Đã nổ</div><div style="font-size: 15px; color: #6F6F6F">High risk</div></div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 8px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFF8EC">
+<dc-import name="Kernel" mood="proud" size="140" hint-size="140px,140px"></dc-import>
+<div style="text-align: center"><div style="font-size: 17px; font-weight: 800">Tự hào</div><div style="font-size: 15px; color: #6F6F6F">Challenge done</div></div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 8px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFF8EC">
+<dc-import name="Kernel" mood="worried" size="140" hint-size="140px,140px"></dc-import>
+<div style="text-align: center"><div style="font-size: 17px; font-weight: 800">Lo lắng</div><div style="font-size: 15px; color: #6F6F6F">Streak at risk</div></div>
+</div>
+</div>
+<p style="margin: 0; font-size: 15px; color: #6F6F6F">One component (Kernel) with a mood prop. Every screen uses it, so changing the drawing here updates all of them.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":560}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

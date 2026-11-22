@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trò 3 – Muốn bỏ qua</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&amp;display=swap">
+<style>
+body{margin:0;background:#fff}
+*{box-sizing:border-box}
+.btn{transition:transform 100ms ease-out, box-shadow 100ms ease-out}
+.btn:active{transform:translateY(4px);box-shadow:none !important}
+.cloud{animation:drift 20s linear infinite}
+@keyframes drift{from{transform:translateX(-40px)}to{transform:translateX(360px)}}
+@media (prefers-reduced-motion: reduce){.btn{transition:none}.cloud{animation:none}}
+a{color:#2667D9}a:hover{color:#1D4FA8}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; font-family: 'Nunito', sans-serif; font-weight: 600; color: #3D3D3D; background: #FFFFFF">
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 20px 12px 8px">
+<a href="Main.dc.html" aria-label="Đóng" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #6F6F6F"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+<div role="progressbar" aria-label="Tiến độ" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="flex: 1; height: 16px; border-radius: 8px; background: #E8E8E8; overflow: hidden"><div style="width: 55%; height: 100%; border-radius: 8px; background: #FF9F1C"></div></div>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 16px 20px">
+<div style="font-size: 15px; font-weight: 800; color: #6F6F6F; letter-spacing: 0.04em">TRÒ 3/4 · NGỒI YÊN</div>
+<h1 style="margin: 0; font-size: 22px; font-weight: 800; line-height: 1.35">Ngắm cảnh này 30 giây. Muốn bỏ qua thì cứ bấm.</h1>
+<div style="border-radius: 16px; overflow: hidden; background: #FFF8EC">
+<svg width="350" height="360" viewBox="0 0 350 360" style="display: block" role="img" aria-label="Cảnh đồi xanh và mặt trời, mây trôi chậm">
+<circle cx="250" cy="120" r="44" fill="#FFD08A"></circle>
+<g class="cloud"><ellipse cx="40" cy="80" rx="36" ry="14" fill="#FFFFFF"></ellipse><ellipse cx="60" cy="70" rx="22" ry="14" fill="#FFFFFF"></ellipse></g>
+<path d="M0 250C70 200 140 210 210 240C270 266 310 250 350 230V360H0Z" fill="#B9E3C8"></path>
+<path d="M0 300C90 260 180 270 250 296C300 314 330 306 350 300V360H0Z" fill="#8FD0A8"></path>
+</svg>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 22px; font-weight: 800" aria-label="Còn 18 giây">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6F6F6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9.5 2.5h5"></path></svg>
+0:18</div>
+</div>
+<div style="padding: 16px 20px 32px">
+<a class="btn" href="PhoneDown.dc.html" style="display: flex; align-items: center; justify-content: center; height: 52px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFFFFF; box-shadow: 0 4px 0 #E8E8E8; color: #3D3D3D; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; text-decoration: none">BỎ QUA</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Não bỏng ngô - UI draft v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{
+  --primary:#FF9F1C; --lip:#E07F00; --correct:#3CB371; --danger:#F25C54; --info:#3A86FF;
+  --text:#3D3D3D; --muted:#8A8A8A; --line:#E8E8E8; --bg:#FFFFFF; --soft:#FFF8EC;
+  --on-primary:#3D2A00;
+  --info-tint:#EAF2FF; --correct-tint:#E3F5EB; --correct-lip:#2E9559; --correct-text:#1E7B48;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:17px;line-height:1.4;color:var(--text);background:#fff;padding:24px 16px 48px;overflow-x:hidden}
+header{max-width:1240px;margin:0 auto 24px;text-align:center}
+header h1{font-size:22px;font-weight:800}
+header p{font-size:15px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,360px);gap:32px 24px;justify-content:center;max-width:1240px;margin:0 auto}
+.cell{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
+.cap{font-size:15px;font-weight:800;color:var(--muted);text-align:center}
+.phone{width:100%;max-width:360px;height:740px;border:2px solid var(--line);border-radius:28px;background:#fff;display:flex;flex-direction:column;padding:20px 20px 24px;position:relative;overflow:hidden}
+@media (max-width:392px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+/* type */
+.h1{font-size:28px;font-weight:800;line-height:1.2}
+.q{font-size:22px;font-weight:800;line-height:1.3}
+.p{font-size:17px}
+.muted{color:var(--muted)}
+.small{font-size:14px;color:var(--muted)}
+.center{text-align:center}
+
+/* structure */
+.top{display:flex;align-items:center;gap:16px;height:24px;flex:none}
+.progress{flex:1;height:16px;border-radius:8px;background:var(--line);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:8px;background:var(--primary)}
+.ic{width:24px;height:24px;fill:currentColor;flex:none}
+.close{color:var(--muted)}
+.main{flex:1;display:flex;flex-direction:column;padding-top:28px;min-height:0}
+.foot{margin-top:auto;padding-top:16px;flex:none}
+.stack>*+*{margin-top:12px}
+
+/* button */
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border:0;border-radius:16px;font:800 17px/1 'Nunito',sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;background:var(--primary);color:var(--on-primary);box-shadow:0 4px 0 var(--lip);margin-bottom:4px;transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--lip)}
+.btn.sec{background:#fff;color:var(--info);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.sec:active{box-shadow:0 0 0 var(--line)}
+.btn.off{background:var(--line);color:var(--muted);box-shadow:0 4px 0 #D6D6D6;cursor:default}
+.btn+.btn{margin-top:12px}
+
+/* choice card */
+.choice{display:flex;align-items:center;min-height:52px;padding:10px 16px;border:2px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 2px 0 var(--line);font-size:17px;font-weight:600;margin-bottom:12px}
+.choice.sel{border-color:var(--info);background:var(--info-tint);box-shadow:0 2px 0 var(--info);font-weight:800}
+.choice.ok{border-color:var(--correct);background:var(--correct-tint);box-shadow:0 2px 0 var(--correct);font-weight:800}
+.choice.dim{color:var(--muted)}
+
+/* misc */
+.soft{background:var(--soft);border-radius:16px;padding:20px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:2px solid var(--line);border-radius:999px;font-weight:800;font-size:17px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:8px;background:var(--info-tint);color:var(--text);font-size:14px;font-weight:800;margin-bottom:6px}
+
+/* banner + notification */
+.banner{position:absolute;left:0;right:0;bottom:0;padding:20px 20px 24px;background:var(--correct-tint);animation:up .25s ease-out}
+.banner .msg{display:flex;align-items:center;gap:12px;color:var(--correct-text);font-size:22px;font-weight:800;margin-bottom:16px}
+.banner .msg .ic{width:32px;height:32px;color:var(--correct)}
+.notif{position:absolute;left:12px;right:12px;top:12px;display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:2px solid var(--line);border-radius:16px;box-shadow:0 2px 0 var(--line);animation:down .25s ease-out;z-index:2}
+.notif .app{width:40px;height:40px;border-radius:12px;background:var(--text);color:#fff;display:grid;place-items:center;flex:none}
+.notif b{display:block;font-size:17px;font-weight:800;line-height:1.2}
+.notif span{font-size:14px;color:var(--muted)}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes down{from{transform:translateY(-120%)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.banner,.notif{animation:none}.btn{transition:none}}
+
+/* bars */
+.row{margin-bottom:20px}
+.row .l{display:flex;justify-content:space-between;font-size:17px;margin-bottom:8px}
+.row .l b{font-weight:800}
+.bar{height:16px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:8px;background:var(--primary)}
+
+/* chat */
+.head{display:flex;align-items:center;gap:12px}
+.av{width:48px;height:48px;border-radius:50%;background:var(--soft);display:grid;place-items:center;flex:none}
+.head b{font-size:17px;font-weight:800;display:block;line-height:1.2}
+.chat{flex:1;display:flex;flex-direction:column;gap:12px;padding-top:24px}
+.bub{max-width:86%;padding:12px 16px;border:2px solid var(--line);border-radius:16px;font-size:17px;line-height:1.4}
+.bub.m{align-self:flex-start;border-top-left-radius:4px;background:#fff}
+.bub.u{align-self:flex-end;border-top-right-radius:4px;background:var(--soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{padding:8px 14px;border:2px solid var(--line);border-radius:999px;font-size:15px;font-weight:800;background:#fff;color:var(--text)}
+.inp{display:flex;gap:8px;align-items:center}
+.inp .field{flex:1;height:52px;display:flex;align-items:center;padding:0 16px;border:2px solid var(--line);border-radius:16px;color:var(--muted);font-size:17px}
+.inp .send{width:52px;height:52px;border-radius:16px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;box-shadow:0 4px 0 var(--lip);margin-bottom:4px;flex:none}
+.inp .send:active{transform:translateY(4px);box-shadow:none}
+
+/* path */
+.streak{display:flex;align-items:center;gap:8px;flex:1;font-size:22px;font-weight:800}
+.streak .ic{width:32px;height:32px;color:var(--primary)}
+.path{display:flex;flex-direction:column;gap:16px;padding-top:8px}
+.node-row{position:relative;display:flex;justify-content:center;height:64px}
+.node{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;transform:translateX(var(--x))}
+.node .ic{width:30px;height:30px}
+.node.done{background:var(--correct);color:#fff;box-shadow:0 4px 0 var(--correct-lip)}
+.node.today{background:var(--primary);color:var(--on-primary);box-shadow:0 4px 0 var(--lip)}
+.node.lock{background:var(--line);color:var(--muted);box-shadow:0 4px 0 #D6D6D6}
+.nl{position:absolute;top:50%;transform:translateY(-50%);font-size:17px;font-weight:800}
+.nl.r{left:calc(50% - 24px)}
+.nl.l{right:calc(50% - 4px)}
+.mini{position:absolute;left:calc(50% - 30px);top:6px}
+</style>
+</head>
+<body>
+
+<!-- Symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="kb"><circle cx="42" cy="46" r="22"/><circle cx="78" cy="46" r="22"/><circle cx="60" cy="34" r="24"/><path d="M26 52H94C96 80 86 106 60 108C34 106 24 80 26 52Z"/></clipPath>
+    <clipPath id="kp"><circle cx="34" cy="46" r="20"/><circle cx="86" cy="46" r="20"/><circle cx="60" cy="30" r="26"/><circle cx="42" cy="66" r="22"/><circle cx="78" cy="66" r="22"/><circle cx="60" cy="56" r="28"/></clipPath>
+
+    <!-- Hạt Bắp moods: flat, no outline, 3 colours + dark features -->
+    <symbol id="m-calm" viewBox="0 0 120 120">
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <circle cx="47" cy="63" r="5.5" fill="#3D3D3D"/><circle cx="73" cy="63" r="5.5" fill="#3D3D3D"/>
+      <path d="M51 74Q60 82 69 74" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="m-wobble" viewBox="0 0 120 120">
+      <path d="M10 50Q4 62 10 74M18 44Q13 54 18 64" fill="none" stroke="#E07F00" stroke-width="4" stroke-linecap="round"/>
+      <path d="M108 20C113 28 115 33 108 38C101 33 103 28 108 20Z" fill="#3A86FF"/>
+      <g transform="rotate(-9 60 108)">
+        <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+        <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+        <circle cx="47" cy="62" r="6.5" fill="#3D3D3D"/><circle cx="73" cy="62" r="6.5" fill="#3D3D3D"/>
+        <path d="M49 77Q54.5 71 60 77T71 77" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </symbol>
+
+    <symbol id="m-pop" viewBox="0 0 120 120">
+      <path d="M8 6L17 15M112 6L103 15M60 0V8" fill="none" stroke="#E07F00" stroke-width="4" stroke-linecap="round"/>
+      <g transform="translate(0 8)">
+        <path d="M48 80H72L68 100Q60 104 52 100Z" fill="#E07F00"/>
+        <g clip-path="url(#kp)"><rect width="120" height="120" fill="#FF9F1C"/><circle cx="98" cy="84" r="26" fill="#E07F00"/><circle cx="30" cy="92" r="16" fill="#E07F00"/></g>
+        <circle cx="30" cy="34" r="6" fill="#FFF8EC"/><circle cx="46" cy="18" r="4" fill="#FFF8EC"/>
+        <circle cx="47" cy="48" r="6" fill="#3D3D3D"/><circle cx="73" cy="48" r="6" fill="#3D3D3D"/>
+        <ellipse cx="60" cy="67" rx="6" ry="7" fill="#3D3D3D"/>
+      </g>
+    </symbol>
+
+    <symbol id="m-proud" viewBox="0 0 120 120">
+      <path d="M14 8L17 16L25 19L17 22L14 30L11 22L3 19L11 16Z" fill="#E07F00"/>
+      <path d="M106 4L108.5 10.5L115 13L108.5 15.5L106 22L103.5 15.5L97 13L103.5 10.5Z" fill="#E07F00"/>
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <path d="M41 66Q47 58 53 66M67 66Q73 58 79 66" fill="none" stroke="#3D3D3D" stroke-width="4" stroke-linecap="round"/>
+      <path d="M48 75H72Q72 89 60 89Q48 89 48 75Z" fill="#3D3D3D"/>
+    </symbol>
+
+    <symbol id="m-talk" viewBox="0 0 120 120">
+      <g clip-path="url(#kb)"><rect width="120" height="120" fill="#FF9F1C"/><path d="M0 80Q60 96 120 80V120H0Z" fill="#E07F00"/></g>
+      <circle cx="38" cy="36" r="6" fill="#FFF8EC"/><circle cx="52" cy="26" r="4" fill="#FFF8EC"/>
+      <circle cx="47" cy="62" r="5.5" fill="#3D3D3D"/><circle cx="73" cy="62" r="5.5" fill="#3D3D3D"/>
+      <ellipse cx="60" cy="77" rx="7" ry="6.5" fill="#3D3D3D"/>
+    </symbol>
+
+    <!-- Icons: one filled set -->
+    <symbol id="i-x" viewBox="0 0 24 24"><rect x="10.7" y="2" width="2.6" height="20" rx="1.3" transform="rotate(45 12 12)"/><rect x="10.7" y="2" width="2.6" height="20" rx="1.3" transform="rotate(-45 12 12)"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.4 18.6L3.6 12.8l2.3-2.3 3.5 3.5 8.7-8.7 2.3 2.3z"/></symbol>
+    <symbol id="i-checkc" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21zm-1.6 15.3L6 12.4l1.8-1.8 2.6 2.6 5.8-5.8 1.8 1.8z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 22.5a2.6 2.6 0 0 0 2.5-2h-5a2.6 2.6 0 0 0 2.5 2zM19.5 16.5V11a7.5 7.5 0 0 0-5.5-7.2V3a2 2 0 0 0-4 0v.8A7.5 7.5 0 0 0 4.5 11v5.5L2.5 18.5v1.5h19v-1.5z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12.5 1.5c.6 4.2 5.5 6.2 5.5 12.2a6 6 0 0 1-12 0c0-2.8 1.4-4.6 3-6.1.3 1.6 1 2.6 2 3.1-.3-3.4-.6-6.3 1.5-9.2z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zm2.2 0h5.6V7a2.8 2.8 0 0 0-5.6 0z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.6 7.2.9-5.3 4.9 1.4 7.1L12 17.7 5.6 21.3 7 14.2 1.7 9.3l7.2-.9z"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 2h2.4v20H4zM7.4 3h12.6l-3.4 5.2 3.4 5.2H7.4z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M2.5 20.5L22 12 2.5 3.5v6.3L14 12 2.5 14.2z"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <h1>Não bỏng ngô · UI draft v2</h1>
+  <p>11 màn hình · tĩnh · chỉ dùng token §3.1</p>
+</header>
+
+<main class="grid">
+
+<!-- 1 Start -->
+<section class="cell"><div class="phone">
+  <div class="main" style="align-items:center;text-align:center;justify-content:center;padding-top:0">
+    <svg width="190" height="190"><use href="#m-calm"/></svg>
+    <h2 class="h1" style="margin-top:24px">Não bỏng ngô</h2>
+    <p class="p muted" style="margin-top:8px">Não bạn dễ “nổ” đến mức nào?</p>
+  </div>
+  <div class="foot">
+    <button class="btn">Bắt đầu</button>
+    <p class="small center" style="margin-top:12px">Không phải chẩn đoán y khoa</p>
+  </div>
+</div><p class="cap">1 · Bắt đầu</p></section>
+
+<!-- 2 Intro -->
+<section class="cell"><div class="phone">
+  <div class="top"><div class="progress"><i style="width:0"></i></div><svg class="ic close"><use href="#i-x"/></svg></div>
+  <div class="main" style="align-items:center;text-align:center;justify-content:center;padding-top:0">
+    <svg width="150" height="150"><use href="#m-calm"/></svg>
+    <p class="q" style="margin-top:32px">Đọc đoạn văn. Đừng để thông báo làm phiền bạn!</p>
+  </div>
+  <div class="foot"><button class="btn">Sẵn sàng</button></div>
+</div><p class="cap">2 · Giới thiệu game</p></section>
+
+<!-- 3 Game 1 reading -->
+<section class="cell"><div class="phone">
+  <div class="notif">
+    <div class="app"><svg class="ic"><use href="#i-bell"/></svg></div>
+    <div><b>Video mới đang chờ bạn</b><span>Bây giờ</span></div>
+  </div>
+  <div class="top"><div class="progress"><i style="width:20%"></i></div><svg class="ic close"><use href="#i-x"/></svg></div>
+  <div class="main" style="padding-top:72px">
+    <h2 class="q" style="margin-bottom:16px">Đọc đoạn văn</h2>
+    <div class="soft p" style="line-height:1.6">Sáng sớm, Lan ra vườn tưới cây. Sương đọng trên lá như hạt cườm. Bà ngồi bên hiên nhặt đậu. Bỗng Lan dừng lại: một chú sâu bướm đang bò trên cành hồng.</div>
+  </div>
+  <div class="foot"><button class="btn">Xong rồi</button></div>
+</div><p class="cap">3 · Game 1: đọc + thông báo</p></section>
+
+<!-- 4 Self-report -->
+<section class="cell"><div class="phone">
+  <div class="top"><div class="progress"><i style="width:55%"></i></div><svg class="ic close"><use href="#i-x"/></svg></div>
+  <div class="main">
+    <h2 class="q" style="margin-bottom:24px">Khi học, bạn có hay kiểm tra điện thoại dù không cần?</h2>
+    <div class="choice">Không bao giờ</div>
+    <div class="choice">Hiếm khi</div>
+    <div class="choice">Thỉnh thoảng</div>
+    <div class="choice sel">Thường xuyên</div>
+    <div class="choice">Luôn luôn</div>
+  </div>
+  <div class="foot"><button class="btn">Kiểm tra</button></div>
+</div><p class="cap">4 · Tự đánh giá</p></section>
+
+<!-- 5 Feedback banner -->
+<section class="cell"><div class="phone">
+  <div class="top"><div class="progress"><i style="width:30%"></i></div><svg class="ic close"><use href="#i-x"/></svg></div>
+  <div class="main">
+    <h2 class="q" style="margin-bottom:24px">Vì sao Lan dừng lại?</h2>
+    <div class="choice ok">Có một chú sâu bướm trên cành hồng</div>
+    <div class="choice dim">Bà gọi Lan vào nhà</div>
+    <div class="choice dim">Trời bắt đầu mưa</div>
+  </div>
+  <div class="banner">
+    <div class="msg"><svg class="ic"><use href="#i-checkc"/></svg>Chính xác!</div>
+    <button class="btn">Tiếp tục</button>
+  </div>
+</div><p class="cap">5 · Phản hồi đúng</p></section>
+
+<!-- 6 Result 1 -->
+<section class="cell"><div class="phone">
+  <div class="main" style="align-items:center;text-align:center;justify-content:center;padding-top:0">
+    <svg width="200" height="200"><use href="#m-pop"/></svg>
+    <h2 class="h1" style="margin-top:16px">Bắp rang nổ liên tục</h2>
+    <div class="pill" style="margin-top:16px"><span class="dot"></span>Nguy cơ cao</div>
+    <p style="margin-top:20px;font-size:17px"><b style="font-size:56px;font-weight:800;line-height:1">74</b><span class="muted" style="font-weight:800">/100</span></p>
+  </div>
+  <div class="foot"><button class="btn">Tiếp tục</button></div>
+</div><p class="cap">6 · Kết quả 1</p></section>
+
+<!-- 7 Result 2 -->
+<section class="cell"><div class="phone">
+  <div class="main" style="padding-top:8px">
+    <h2 class="q" style="margin-bottom:24px">Chi tiết của bạn</h2>
+    <div class="row"><div class="l"><span>Tập trung khi bị xao nhãng</span><b>82</b></div><div class="bar"><i style="width:82%"></i></div></div>
+    <div class="row"><div class="l"><span>Kiên nhẫn</span><b>61</b></div><div class="bar"><i style="width:61%"></i></div></div>
+    <div class="row"><div class="l"><span>Muốn chuyển nội dung</span><b>77</b></div><div class="bar"><i style="width:77%"></i></div></div>
+    <div class="row"><div class="l"><span>Gắn bó với điện thoại</span><b>90</b></div><div class="bar"><i style="width:90%"></i></div></div>
+    <div class="soft" style="margin-top:8px"><p class="p">Bạn giống <b style="font-weight:800">57,1%</b> trong 450 học sinh được khảo sát: hay kiểm tra điện thoại khi học.</p></div>
+  </div>
+  <div class="foot">
+    <p class="small center" style="margin-bottom:12px">Đây không phải chẩn đoán y khoa.</p>
+    <button class="btn">Sang màn 2</button>
+  </div>
+</div><p class="cap">7 · Kết quả 2</p></section>
+
+<!-- 8 Scenario -->
+<section class="cell"><div class="phone">
+  <div class="top"><div class="progress"><i style="width:37.5%"></i></div><svg class="ic close"><use href="#i-x"/></svg></div>
+  <div class="main" style="padding-top:20px">
+    <p class="small" style="font-weight:800;margin-bottom:12px">Tình huống 3/8</p>
+    <svg viewBox="0 0 320 140" width="100%" style="display:block;border-radius:16px;margin-bottom:20px" role="img" aria-label="Bàn học có điện thoại đang rung">
+      <rect width="320" height="140" fill="#FFF8EC"/>
+      <rect x="0" y="100" width="320" height="40" fill="#8A8A8A"/>
+      <rect x="0" y="100" width="320" height="8" fill="#3D3D3D"/>
+      <path d="M52 100L80 62H156L148 100Z" fill="#FFFFFF"/><path d="M148 100L156 62H232L244 100Z" fill="#E8E8E8"/>
+      <rect x="84" y="72" width="56" height="4" rx="2" fill="#E8E8E8"/><rect x="84" y="82" width="46" height="4" rx="2" fill="#E8E8E8"/>
+      <rect x="166" y="72" width="52" height="4" rx="2" fill="#FFFFFF"/><rect x="168" y="82" width="42" height="4" rx="2" fill="#FFFFFF"/>
+      <rect x="196" y="36" width="8" height="64" rx="4" fill="#FF9F1C" transform="rotate(22 200 100)"/>
+      <g transform="rotate(-8 270 86)"><rect x="252" y="56" width="40" height="64" rx="8" fill="#3D3D3D"/><rect x="257" y="63" width="30" height="46" rx="4" fill="#3A86FF"/><circle cx="272" cy="114" r="2.5" fill="#8A8A8A"/></g>
+      <path d="M236 70Q230 86 236 102M226 76Q222 86 226 96M304 70Q310 86 304 102M314 76Q318 86 314 96" fill="none" stroke="#E07F00" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <h2 class="q" style="margin-bottom:16px">Đang học bài, điện thoại rung lên. Bạn sẽ…</h2>
+    <div class="choice">Nhìn ngay xem ai nhắn</div>
+    <div class="choice">Úp điện thoại xuống, học tiếp</div>
+    <div class="choice">Tắt chuông rồi cất vào cặp</div>
+    <div class="choice">Cầm lên lướt một chút</div>
+  </div>
+  <div class="foot" style="padding-top:8px"><button class="btn off">Tiếp tục</button></div>
+</div><p class="cap">8 · Tình huống</p></section>
+
+<!-- 9 Plan -->
+<section class="cell"><div class="phone">
+  <div class="main" style="padding-top:8px">
+    <h2 class="h1" style="margin-bottom:16px">Kế hoạch của bạn</h2>
+    <div class="soft" style="padding:14px 16px;margin-bottom:20px"><p class="p" style="font-weight:800">Lý do chính: Sợ bỏ lỡ (FOMO)</p></div>
+    <div class="choice" style="display:block"><span class="tag">Bản thân</span><div>Tắt thông báo, chỉ xem điện thoại vào giờ cố định</div></div>
+    <div class="choice" style="display:block"><span class="tag">Bạn bè</span><div>Cả nhóm cùng úp điện thoại khi học chung</div></div>
+    <div class="choice" style="display:block"><span class="tag">Nhà trường</span><div>Gửi điện thoại vào hộp chung đầu giờ</div></div>
+  </div>
+  <div class="foot">
+    <button class="btn">Lưu kế hoạch</button>
+    <button class="btn sec">Hỏi Hạt Bắp</button>
+  </div>
+</div><p class="cap">9 · Kế hoạch</p></section>
+
+<!-- 10 Coach chat -->
+<section class="cell"><div class="phone">
+  <div class="head">
+    <div class="av"><svg width="40" height="40"><use href="#m-talk"/></svg></div>
+    <div style="flex:1"><b>Hạt Bắp</b><span class="small">Bạn đồng hành của bạn</span></div>
+    <svg class="ic close"><use href="#i-x"/></svg>
+  </div>
+  <div class="chat">
+    <div class="bub m">Điểm 74 nghĩa là não bạn hay “nổ” khi có thông báo. Không sao đâu, ai cũng có lúc vậy!</div>
+    <div class="bub m">Lý do chính của bạn là sợ bỏ lỡ. Mình có 3 mẹo nhỏ cho bạn nè.</div>
+    <div class="bub u">Nghe hay đó! Bắt đầu từ đâu?</div>
+  </div>
+  <div class="foot" style="padding-top:8px">
+    <div class="chips">
+      <span class="chip">Mình học buổi tối thì sao?</span>
+      <span class="chip">Tắt thông báo khó quá!</span>
+      <span class="chip">Mẹo cho giờ ra chơi</span>
+    </div>
+    <div class="inp"><div class="field">Nhắn cho Hạt Bắp…</div><div class="send"><svg class="ic"><use href="#i-send"/></svg></div></div>
+    <p class="small center" style="margin-top:8px">AI có thể sai</p>
+  </div>
+</div><p class="cap">10 · Chat với Hạt Bắp</p></section>
+
+<!-- 11 Challenge -->
+<section class="cell"><div class="phone">
+  <div class="top" style="height:32px">
+    <div class="streak"><svg class="ic"><use href="#i-flame"/></svg>3 ngày liên tiếp</div>
+    <svg class="ic close"><use href="#i-x"/></svg>
+  </div>
+  <div class="main" style="padding-top:16px">
+    <div class="path">
+      <div class="node-row"><div class="node done" style="--x:0px"><svg class="ic"><use href="#i-check"/></svg></div></div>
+      <div class="node-row"><div class="node done" style="--x:44px"><svg class="ic"><use href="#i-check"/></svg></div></div>
+      <div class="node-row"><svg class="mini" width="52" height="52"><use href="#m-proud"/></svg><div class="node done" style="--x:64px"><svg class="ic"><use href="#i-check"/></svg></div></div>
+      <div class="node-row"><span class="nl l">Hôm nay</span><div class="node today" style="--x:44px"><svg class="ic"><use href="#i-star"/></svg></div></div>
+      <div class="node-row"><div class="node lock" style="--x:0px"><svg class="ic"><use href="#i-lock"/></svg></div></div>
+      <div class="node-row"><div class="node lock" style="--x:-44px"><svg class="ic"><use href="#i-lock"/></svg></div></div>
+      <div class="node-row"><div class="node lock" style="--x:-64px"><svg class="ic"><use href="#i-flag"/></svg></div><span class="nl r">Kiểm tra lại</span></div>
+    </div>
+  </div>
+  <div class="foot" style="padding-top:8px"><button class="btn">Làm nhiệm vụ</button></div>
+</div><p class="cap">11 · Thử thách 7 ngày</p></section>
+
+</main>
+</body>
+</html>

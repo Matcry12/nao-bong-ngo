@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design system</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&amp;display=swap">
+<style>
+body{margin:0;background:#fff}
+*{box-sizing:border-box}
+.btn{transition:transform 100ms ease-out, box-shadow 100ms ease-out}
+.btn:active{transform:translateY(4px);box-shadow:none !important}
+@media (prefers-reduced-motion: reduce){.btn{transition:none}}
+a{color:#2667D9}a:hover{color:#1D4FA8}
+</style>
+</helmet>
+<div style="width: 1000px; height: 1100px; padding: 48px; display: flex; flex-direction: column; gap: 40px; font-family: 'Nunito', sans-serif; font-weight: 600; color: #3D3D3D; background: #FFFFFF">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800">Design system</h1>
+<p style="margin: 0; font-size: 17px; color: #6F6F6F">Flat surfaces · one rounded font · color = meaning · 4px lip on everything you can tap</p>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">COLOR</h2>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #FF9F1C"></div><div style="font-size: 15px; font-weight: 800">primary</div><div style="font-size: 14px; color: #6F6F6F">#FF9F1C</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #E07F00"></div><div style="font-size: 15px; font-weight: 800">primary-lip</div><div style="font-size: 14px; color: #6F6F6F">#E07F00</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #3CB371"></div><div style="font-size: 15px; font-weight: 800">correct</div><div style="font-size: 14px; color: #6F6F6F">#3CB371</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #F25C54"></div><div style="font-size: 15px; font-weight: 800">danger</div><div style="font-size: 14px; color: #6F6F6F">#F25C54</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #3A86FF"></div><div style="font-size: 15px; font-weight: 800">info</div><div style="font-size: 14px; color: #6F6F6F">#3A86FF</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #3D3D3D"></div><div style="font-size: 15px; font-weight: 800">text</div><div style="font-size: 14px; color: #6F6F6F">#3D3D3D</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #6F6F6F"></div><div style="font-size: 15px; font-weight: 800">muted</div><div style="font-size: 14px; color: #6F6F6F">#6F6F6F *</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 16px; background: #E8E8E8"></div><div style="font-size: 15px; font-weight: 800">line</div><div style="font-size: 14px; color: #6F6F6F">#E8E8E8</div></div>
+</div>
+<p style="margin: 0; font-size: 14px; color: #6F6F6F">* muted darkened from #8A8A8A to pass 4.5:1 on white. Text on tints uses dark shades: green #1F7A4A, red #A3261F, link blue #2667D9.</p>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px">
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">TYPE · NUNITO 600 / 800</h2>
+<div style="font-size: 28px; font-weight: 800; line-height: 1.2">Tiêu đề 28 — Não bỏng ngô</div>
+<div style="font-size: 22px; font-weight: 800; line-height: 1.3">Câu hỏi 22 — Bạn sẽ làm gì?</div>
+<div style="font-size: 17px; line-height: 1.5">Nội dung 17 — Đọc đoạn văn, đừng để thông báo làm phiền nhé.</div>
+<div style="font-size: 15px; line-height: 1.4; color: #6F6F6F">Phụ 15 — Thông tin thêm, gợi ý nhỏ.</div>
+<div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em">NÚT 17 · CAPS · 1–3 TỪ</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">BUTTONS · TAP TO PRESS</h2>
+<button class="btn" type="button" style="height: 52px; border: 0; border-radius: 16px; background: #FF9F1C; box-shadow: 0 4px 0 #E07F00; color: #3D2A00; font-family: inherit; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">BẮT ĐẦU</button>
+<button class="btn" type="button" style="height: 52px; border: 2px solid #E8E8E8; border-radius: 16px; background: #FFFFFF; box-shadow: 0 4px 0 #E8E8E8; color: #3D3D3D; font-family: inherit; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">BỎ QUA</button>
+<button type="button" style="height: 52px; border: 0; border-radius: 16px; background: transparent; color: #2667D9; font-family: inherit; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">ĐỂ SAU</button>
+<p style="margin: 0; font-size: 14px; color: #6F6F6F">Radius 16 · height 52 · lip 0 4px 0 · pressed: translateY(4px), lip 0, 100ms</p>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px">
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">CHOICE CARD · PROGRESS</h2>
+<div style="display: flex; align-items: center; min-height: 56px; padding: 12px 16px; border: 2px solid #E8E8E8; border-radius: 16px; box-shadow: 0 2px 0 #E8E8E8; font-size: 17px">Thỉnh thoảng</div>
+<div style="display: flex; align-items: center; min-height: 56px; padding: 12px 16px; border: 2px solid #3A86FF; border-radius: 16px; box-shadow: 0 2px 0 #3A86FF; background: #EAF2FF; color: #1D4FA8; font-size: 17px; font-weight: 800">Thường xuyên · selected</div>
+<div style="height: 16px; border-radius: 8px; background: #E8E8E8; overflow: hidden"><div style="width: 60%; height: 100%; border-radius: 8px; background: #FF9F1C"></div></div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">FEEDBACK BANNER · 250MS SLIDE-UP</h2>
+<div style="display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 16px; background: #E6F6EC; color: #1F7A4A; font-size: 17px; font-weight: 800">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+Chính xác! Bạn vẫn tập trung tốt.</div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 16px; background: #FDECEB; color: #A3261F; font-size: 17px; font-weight: 800">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+Chưa đúng. Đọc lại đoạn 2 nhé!</div>
+</section>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: #6F6F6F">ICONS · ONE STROKE SET, 2.5PX, ROUND · NO EMOJI</h2>
+<div style="display: flex; gap: 32px; color: #3D3D3D">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" role="img" aria-label="Close"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Check"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Notification"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z"></path><path d="M10 21h4"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Phone"><rect x="6.5" y="2.5" width="11" height="19" rx="3"></rect><path d="M11 18h2"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Streak"><path d="M12 3c1 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-4 3-6 1 2 2 2.5 3 2.5 0-3-1-5 0-7.5Z"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Locked"><rect x="5" y="11" width="14" height="10" rx="2.5"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Timer"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9.5 2.5h5"></path></svg>
+</div>
+<p style="margin: 0; font-size: 14px; color: #6F6F6F">Spacing 8 / 16 / 24 / 32 · side gutter 20 · cards use a 2px border, never a blur shadow · max 1 mascot per screen</p>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":1100}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
