@@ -9,8 +9,11 @@ import PhoneDown from './screens/PhoneDown.jsx'
 import SelfReport from './screens/SelfReport.jsx'
 import Result1 from './screens/Result1.jsx'
 import Result2 from './screens/Result2.jsx'
-import { content } from './content.js'
-import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown } from './scoring.js'
+import Scenario from './screens/Scenario.jsx'
+import Plan from './screens/Plan.jsx'
+import Celebrate from './screens/Celebrate.jsx'
+import { content, level2, scenarios, reasonSolutions, barSolutions, SOLUTIONS } from './content.js'
+import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan } from './scoring.js'
 
 const QCOUNT = content.read.questions.length
 const NSELF = content.self.items.length
@@ -33,10 +36,13 @@ export default function App() {
   const [idx, setIdx] = useState(0) // question / self-report index
   const [run, setRun] = useState(0) // remount key for replays
   const [rec, setRec] = useState(EMPTY)
+  const [choices, setChoices] = useState([]) // level 2 weight objects
+  const [plan, setPlan] = useState(null) // { top, plan }
+  const [, setSaved] = useState(null)
 
   const home = () => setScreen('start')
   const merge = (patch, next) => { setRec((r) => ({ ...r, ...patch })); setScreen(next) }
-  const replay = () => { setRec(EMPTY); setIdx(0); setRun((r) => r + 1); setScreen('start') }
+  const replay = () => { setRec(EMPTY); setChoices([]); setPlan(null); setSaved(null); setIdx(0); setRun((r) => r + 1); setScreen('start') }
 
   const common = { onClose: home }
   switch (screen) {
@@ -67,6 +73,21 @@ export default function App() {
         }} />
       )
     case 'result1': return <Result1 score={results(rec).total} onNext={() => setScreen('result2')} {...common} />
-    default: return <Result2 bars={results(rec).bars} onBack={() => setScreen('result1')} onReplay={replay} />
+    case 'result2': return <Result2 bars={results(rec).bars} onBack={() => setScreen('result1')} onNext={() => setScreen('intro5')} />
+    case 'intro5': return <GameIntro data={level2.intro} progress={0} onNext={() => { setChoices([]); setIdx(0); setScreen('scenario') }} {...common} />
+    case 'scenario':
+      return (
+        <Scenario key={idx} index={idx} {...common} onAnswer={(w) => {
+          const all = [...choices, w]
+          setChoices(all)
+          if (idx + 1 < scenarios.length) { setIdx(idx + 1); return }
+          const top = topReasons(tallyReasons(all))
+          const worst = worstBar(results(rec).bars)
+          setPlan({ top, plan: buildPlan({ top, worst, reasonSolutions, barSolutions, groupOf: Object.fromEntries(Object.entries(SOLUTIONS).map(([id, s]) => [id, s.group])) }) })
+          setScreen('plan')
+        }} />
+      )
+    case 'plan': return <Plan top={plan.top} plan={plan.plan} onSave={() => { setSaved(plan); setScreen('celebrate') }} {...common} />
+    default: return <Celebrate onReplay={replay} />
   }
 }

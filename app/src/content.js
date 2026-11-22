@@ -119,5 +119,151 @@ export const content = {
     },
     disclaimer: 'Đây không phải chẩn đoán y khoa.',
     replay: 'CHƠI LẠI',
+    toLevel2: 'SANG MÀN 2',
   },
 }
+
+export const REASON_LABELS = {
+  content: 'Nội dung quá cuốn',
+  habit: 'Thói quen',
+  fomo: 'Sợ bỏ lỡ (FOMO)',
+  friends: 'Bạn bè đều dùng',
+  stress: 'Giải tỏa căng thẳng',
+  selfControl: 'Khó tự kiểm soát',
+}
+
+export const REASON_INFO = {
+  content: 'Video và nội dung được chọn riêng cho bạn nên rất khó dừng lại.',
+  habit: 'Tay tự cầm máy lên, nhiều khi bạn còn chưa kịp nghĩ.',
+  fomo: 'Bạn lo mình bỏ lỡ tin nhắn hay chuyện vui của mọi người.',
+  friends: 'Cả nhóm cùng lướt nên bạn cũng dễ lướt theo.',
+  stress: 'Lướt điện thoại là cách bạn thư giãn sau những lúc mệt hay buồn.',
+  selfControl: 'Bạn biết nên dừng nhưng thường lướt lâu hơn dự định.',
+}
+
+export const GROUP_LABELS = { self: 'Bản thân', family: 'Gia đình', friends: 'Bạn bè', school: 'Nhà trường' }
+
+export const level2 = {
+  intro: { tag: 'MÀN 2 · VÌ SAO BẠN HAY LƯỚT?', title: 'Không có đúng sai. Chọn điều bạn thường làm nhất.', cta: 'SẴN SÀNG' },
+  scenario: { tag: 'Tình huống', aria: 'Tình huống', next: 'TIẾP TỤC' },
+  plan: {
+    title: 'Kế hoạch của bạn',
+    main: 'Lý do chính:',
+    second: 'Lý do thứ hai:',
+    save: 'LƯU KẾ HOẠCH',
+    ask: 'HỎI HẠT BẮP',
+    soon: 'Sắp có',
+  },
+  celebrate: { title: 'Kế hoạch đã sẵn sàng!', sub: 'Mỗi ngày một việc nhỏ, bạn làm được.', cta: 'CHƠI LẠI' },
+}
+
+export const scenarios = [
+  {
+    id: 'buzz', icon: 'phone', title: 'Điện thoại rung',
+    text: 'Đang học bài thì điện thoại rung lên. Bạn sẽ…',
+    choices: [
+      { text: 'Xem ngay, sợ có chuyện gì quan trọng', w: { fomo: 2 } },
+      { text: 'Cầm lên theo phản xạ, chẳng nghĩ gì', w: { habit: 2 } },
+      { text: 'Úp máy xuống, học tiếp', w: {} },
+      { text: 'Xem một chút rồi lướt mãi không dừng', w: { content: 1, selfControl: 2 } },
+    ],
+  },
+  {
+    id: 'group', icon: 'group', title: 'Học nhóm',
+    text: 'Học nhóm với bạn, ai cũng có điện thoại trên bàn. Bạn sẽ…',
+    choices: [
+      { text: 'Lướt theo, vì cả nhóm đang lướt', w: { friends: 2 } },
+      { text: 'Cùng cất máy vào túi, học xong mới xem', w: {} },
+      { text: 'Lướt một chút cho đỡ căng thẳng giữa giờ', w: { stress: 1, habit: 1 } },
+      { text: 'Liếc nhóm chat, sợ bỏ lỡ tin mới', w: { fomo: 1, friends: 1 } },
+    ],
+  },
+  {
+    id: 'dinner', icon: 'dinner', title: 'Bữa cơm tối',
+    text: 'Bữa cơm tối cùng gia đình, điện thoại để ngay cạnh bát. Bạn sẽ…',
+    choices: [
+      { text: 'Vừa ăn vừa xem video, ăn xong lúc nào không hay', w: { content: 2, habit: 1 } },
+      { text: 'Thỉnh thoảng lại liếc xem máy', w: { habit: 2 } },
+      { text: 'Nhắn tin với bạn, sợ lỡ chuyện vui', w: { fomo: 1, friends: 1 } },
+      { text: 'Cất máy đi, trò chuyện với cả nhà', w: {} },
+    ],
+  },
+  {
+    id: 'bored', icon: 'moon', title: 'Buồn chán 10 giờ tối',
+    text: 'Đã 10 giờ tối, bạn thấy buồn chán và chưa buồn ngủ. Bạn sẽ…',
+    choices: [
+      { text: 'Nghe nhạc hoặc đọc vài trang sách', w: {} },
+      { text: 'Mở video ngắn, xem cho đã', w: { content: 2 } },
+      { text: 'Lướt cho quên bớt mệt mỏi trong ngày', w: { stress: 2 } },
+      { text: 'Lướt hoài, muốn dừng mà không dừng được', w: { selfControl: 2 } },
+    ],
+  },
+  {
+    id: 'badtest', icon: 'paper', title: 'Điểm kiểm tra kém',
+    text: 'Bạn vừa nhận điểm kiểm tra kém hơn mong đợi. Bạn sẽ…',
+    choices: [
+      { text: 'Lướt mạng cho bớt buồn', w: { stress: 2 } },
+      { text: 'Nhắn bạn bè xem mọi người được mấy điểm', w: { friends: 1, fomo: 1 } },
+      { text: 'Xem video hài để quên chuyện này', w: { content: 1, stress: 1 } },
+      { text: 'Đi dạo một lát, rồi nói chuyện với bố mẹ hoặc thầy cô', w: {} },
+    ],
+  },
+  {
+    id: 'trend', icon: 'spark', title: 'Trend mới',
+    text: 'Cả lớp đang bàn về một trend mới. Bạn sẽ…',
+    choices: [
+      { text: 'Xem ngay để không bị lạc lõng', w: { fomo: 2, friends: 1 } },
+      { text: 'Thử trend đó cùng bạn bè', w: { friends: 2 } },
+      { text: 'Xem sơ qua rồi quay lại việc của mình', w: {} },
+      { text: 'Xem hết các video về trend đó, hay quá', w: { content: 2 } },
+    ],
+  },
+  {
+    id: 'sleep', icon: 'bed', title: 'Trước khi ngủ',
+    text: 'Đã đến giờ đi ngủ, điện thoại vẫn trong tay. Bạn sẽ…',
+    choices: [
+      { text: 'Đặt máy ra xa, tắt đèn đi ngủ', w: {} },
+      { text: 'Lướt thêm chút, ngủ muộn lúc nào không hay', w: { selfControl: 2, content: 1 } },
+      { text: 'Cầm máy lên như mọi tối, quen rồi', w: { habit: 2 } },
+      { text: 'Kiểm tra lần cuối xem có tin gì không', w: { fomo: 1, habit: 1 } },
+    ],
+  },
+  {
+    id: 'weekend', icon: 'sun', title: 'Cuối tuần rảnh rỗi',
+    text: 'Cuối tuần rảnh rỗi, chưa có kế hoạch gì. Bạn sẽ…',
+    choices: [
+      { text: 'Nằm xem video cả buổi', w: { content: 2, selfControl: 1 } },
+      { text: 'Mở máy lúc nào không hay, hết cả buổi sáng', w: { habit: 2, selfControl: 1 } },
+      { text: 'Nhắn nhóm bạn cả ngày, sợ không theo kịp chuyện chung', w: { friends: 1, fomo: 1 } },
+      { text: 'Rủ bạn đá cầu, đạp xe', w: {} },
+    ],
+  },
+]
+
+export const SOLUTIONS = {
+  notifOff: { group: 'self', title: 'Tắt thông báo khi học', detail: 'Không có tiếng rung thì bạn đỡ bị kéo ra khỏi bài.', task7: 'Tắt thông báo các app trong lúc học tối nay.' },
+  phoneFar: { group: 'self', title: 'Để điện thoại xa bàn học', detail: 'Máy ở xa tầm tay thì khó với tới hơn nhiều.', task7: 'Để điện thoại cách bàn học 2 mét trong 30 phút.' },
+  limitGradual: { group: 'self', title: 'Giảm dần thời gian dùng', detail: 'Hạ từ 2 giờ xuống 1 giờ 30 mỗi ngày, rồi giảm tiếp khi đã quen.', task7: 'Hôm nay dùng điện thoại giải trí tối đa 1 giờ 30.' },
+  fixedChecks: { group: 'self', title: 'Chỉ xem tin vào giờ cố định', detail: 'Chọn 3 lần xem tin trong ngày, các lúc khác cứ yên tâm bỏ qua.', task7: 'Chỉ xem tin nhắn lúc 12 giờ, 5 giờ và 9 giờ.' },
+  focus25: { group: 'self', title: 'Học 25 phút, nghỉ 5 phút', detail: 'Giờ nghỉ là lúc bạn được xem tin nhắn, nên học sẽ dễ tập trung hơn.', task7: 'Học đúng 1 lượt 25 phút, nghỉ 5 phút.' },
+  readPage: { group: 'self', title: 'Mỗi ngày đọc 1 trang sách giấy', detail: 'Đọc chậm một trang giúp bạn quen lại với việc tập trung lâu.', task7: 'Đọc 1 trang sách giấy, không cầm điện thoại.' },
+  roleModel: { group: 'family', title: 'Bố mẹ làm gương', detail: 'Cả nhà cùng giảm dùng điện thoại thì bạn sẽ dễ làm theo hơn.', task7: 'Nhờ bố mẹ cùng để máy xa tầm tay 30 phút buổi tối.' },
+  familyDinner: { group: 'family', title: 'Bữa cơm không điện thoại', detail: 'Cất máy khi ăn cơm, cả nhà có thêm thời gian trò chuyện.', task7: 'Cất điện thoại trong cả bữa cơm tối nay.' },
+  studyBag: { group: 'friends', title: 'Học nhóm, cất máy vào túi', detail: 'Cả nhóm cất máy, ai cầm lên trước thì mời mọi người một ly trà sữa.', task7: 'Rủ bạn học nhóm 30 phút với điện thoại trong túi.' },
+  weekendSport: { group: 'friends', title: 'Cuối tuần chơi thể thao cùng bạn', detail: 'Ra ngoài vận động cùng bạn vui hơn và cũng giải tỏa căng thẳng.', task7: 'Rủ một bạn đi dạo hoặc chơi thể thao 30 phút.' },
+  weeklyGoal: { group: 'friends', title: 'Cả nhóm đặt mục tiêu mỗi tuần', detail: 'Cùng nhau đặt mức dùng điện thoại và nhắc nhau, cuối tuần kể xem ai làm được.', task7: 'Nhắn nhóm bạn mục tiêu thời gian dùng máy của tuần này.' },
+  classBox: { group: 'school', title: 'Hộp để điện thoại trong lớp', detail: 'Cả lớp gửi máy vào hộp đầu giờ, học xong mới lấy lại.', task7: 'Hôm nay cất điện thoại trong cặp suốt giờ học.' },
+  presentations: { group: 'school', title: 'Thuyết trình nhóm trên lớp', detail: 'Làm việc nhóm giúp bạn có lý do để rời màn hình và trò chuyện thật.', task7: 'Cùng bạn bàn một ý tưởng bài thuyết trình, không dùng điện thoại.' },
+  clubs: { group: 'school', title: 'Tham gia câu lạc bộ ở trường', detail: 'Có việc thú vị để làm cùng bạn bè thì điện thoại bớt hấp dẫn.', task7: 'Tìm hiểu một câu lạc bộ ở trường bạn muốn thử.' },
+}
+
+export const reasonSolutions = {
+  content: ['limitGradual', 'weekendSport', 'readPage', 'clubs'],
+  habit: ['notifOff', 'phoneFar', 'classBox', 'fixedChecks'],
+  fomo: ['notifOff', 'fixedChecks', 'studyBag', 'weeklyGoal'],
+  friends: ['studyBag', 'weeklyGoal', 'weekendSport', 'presentations'],
+  stress: ['weekendSport', 'familyDinner', 'clubs', 'presentations'],
+  selfControl: ['limitGradual', 'roleModel', 'weeklyGoal', 'phoneFar'],
+}
+
+export const barSolutions = { focus: 'focus25', patience: 'readPage', switchUrge: 'fixedChecks', phone: 'phoneFar' }

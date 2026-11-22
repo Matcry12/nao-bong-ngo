@@ -3,8 +3,8 @@ import Mascot from '../components/Mascot.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import { content } from '../content.js'
 
-export default function GameIntro({ index = 0, progress = 10, onNext, onClose }) {
-  const c = content.intros[index]
+export default function GameIntro({ index = 0, progress = 10, data, onNext, onClose }) {
+  const c = data ?? content.intros[index]
   return (
     <div className="screen">
       <ProgressBar value={progress} onClose={onClose} />

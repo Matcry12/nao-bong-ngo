@@ -1,7 +1,7 @@
 import Button from '../components/Button.jsx'
 import { content } from '../content.js'
 
-export default function Result2({ bars, onReplay, onBack }) {
+export default function Result2({ bars, onNext, onBack }) {
   const c = content.result2
   const top = Object.keys(bars).reduce((a, k) => (bars[k] > bars[a] ? k : a), 'focus')
   return (
@@ -27,7 +27,7 @@ export default function Result2({ bars, onReplay, onBack }) {
         <p className="small" style={{ textAlign: 'left' }}>{c.disclaimer}</p>
       </div>
       <div className="screen__foot screen__foot--line">
-        <Button onClick={onReplay}>{c.replay}</Button>
+        <Button onClick={onNext}>{c.toLevel2}</Button>
       </div>
     </div>
   )
