@@ -223,3 +223,36 @@ h1, p { margin: 0; }
   .scenario-art svg { max-height: 240px; }
   .screen__body > .scenario-art { max-width: var(--col); }
 }
+
+/* Coach chat */
+.coach__head { gap: 8px; }
+.coach__av { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; }
+.coach__name { display: block; font-size: 17px; font-weight: 800; line-height: 1.2; }
+.coach__sub { display: block; text-align: left; }
+.chat { display: flex; flex-direction: column; gap: 12px; padding-top: 12px; }
+.bub { max-width: 86%; padding: 12px 16px; border: 2px solid var(--line); border-radius: 16px; font-size: 17px; line-height: 1.4; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 8px; }
+.bub--m { align-self: flex-start; border-top-left-radius: 4px; background: #fff; }
+.bub--u { align-self: flex-end; border-top-right-radius: 4px; background: var(--bg-soft); }
+.coach__call { align-self: flex-start; padding: 8px 16px; border-radius: 999px; background: var(--info-tint); color: var(--info-dark); font-weight: 800; text-decoration: none; }
+.typing { flex-direction: row; gap: 6px; width: fit-content; }
+.typing i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); animation: blink 1s ease-in-out infinite; }
+.typing i:nth-child(2) { animation-delay: 150ms; }
+.typing i:nth-child(3) { animation-delay: 300ms; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.coach__inner { width: 100%; max-width: var(--col, 390px); margin: 0 auto; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip { padding: 8px 14px; border: 2px solid var(--line); border-radius: 999px; font-size: 15px; font-weight: 800; background: #fff; color: var(--text); cursor: pointer; }
+.chip:disabled { opacity: .5; cursor: default; }
+.inp { display: flex; gap: 8px; align-items: center; }
+.inp .field { flex: 1; min-width: 0; height: 52px; padding: 0 16px; border: 2px solid var(--line); border-radius: 16px; font: inherit; font-size: 17px; color: var(--text); background: #fff; }
+.inp .field:focus { outline: none; border-color: var(--info); }
+.inp .send { flex: none; width: 52px; height: 52px; margin-bottom: 4px; border: 0; border-radius: 16px; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-lip); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.inp .send:active { transform: translateY(4px); box-shadow: none; }
+.inp .send:disabled { opacity: .5; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .typing i { animation: none; opacity: .6; } }
+@media (min-width: 768px) {
+  .coach__inner { max-width: var(--col); }
+  .screen__body > .chat { max-width: var(--col); }
+  .coach__head { padding-left: max(8px, calc((100% - var(--col)) / 2)); padding-right: max(20px, calc((100% - var(--col)) / 2 + 20px)); }
+  .screen__foot .coach__inner { align-self: center; }
+}

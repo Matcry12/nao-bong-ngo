@@ -11,9 +11,10 @@ import Result1 from './screens/Result1.jsx'
 import Result2 from './screens/Result2.jsx'
 import Scenario from './screens/Scenario.jsx'
 import Plan from './screens/Plan.jsx'
+import Coach from './screens/Coach.jsx'
 import Celebrate from './screens/Celebrate.jsx'
-import { content, level2, scenarios, reasonSolutions, barSolutions, SOLUTIONS } from './content.js'
-import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan } from './scoring.js'
+import { content, level2, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
+import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan, levelFor } from './scoring.js'
 
 const QCOUNT = content.read.questions.length
 const NSELF = content.self.items.length
@@ -43,6 +44,18 @@ export default function App() {
   const home = () => setScreen('start')
   const merge = (patch, next) => { setRec((r) => ({ ...r, ...patch })); setScreen(next) }
   const replay = () => { setRec(EMPTY); setChoices([]); setPlan(null); setSaved(null); setIdx(0); setRun((r) => r + 1); setScreen('start') }
+
+  const coachContext = () => {
+    const r = results(rec)
+    return {
+      score: r.total,
+      level: levelFor(r.total).label,
+      bars: r.bars,
+      reasons: plan.top.map((k) => REASON_LABELS[k]),
+      plan: plan.plan.map((id) => ({ title: SOLUTIONS[id].title, group: GROUP_LABELS[SOLUTIONS[id].group] })),
+      challengeDay: null,
+    }
+  }
 
   const common = { onClose: home }
   switch (screen) {
@@ -87,7 +100,8 @@ export default function App() {
           setScreen('plan')
         }} />
       )
-    case 'plan': return <Plan top={plan.top} plan={plan.plan} onSave={() => { setSaved(plan); setScreen('celebrate') }} {...common} />
+    case 'plan': return <Plan top={plan.top} plan={plan.plan} onSave={() => { setSaved(plan); setScreen('celebrate') }} onAsk={() => setScreen('coach')} {...common} />
+    case 'coach': return <Coach context={coachContext()} onClose={() => setScreen('plan')} />
     default: return <Celebrate onReplay={replay} />
   }
 }

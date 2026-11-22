@@ -58,6 +58,16 @@ const faces = {
       <path d="M138 18l4 10 10 4-10 4-4 10-4-10-10-4 10-4Z" fill={PALE} />
     </>
   )],
+  talk: ['Hạt Bắp đang nói chuyện', () => (
+    <>
+      <Body />
+      <circle cx="64" cy="82" r="6" fill={INK} />
+      <circle cx="96" cy="82" r="6" fill={INK} />
+      <ellipse cx="80" cy="106" rx="9" ry="10" fill={INK} />
+      <circle cx="50" cy="100" r="7" fill={LIP} />
+      <circle cx="110" cy="100" r="7" fill={LIP} />
+    </>
+  )],
   worried: ['Hạt Bắp lo lắng', () => (
     <>
       <Body />

@@ -152,7 +152,6 @@ export const level2 = {
     second: 'Lý do thứ hai:',
     save: 'LƯU KẾ HOẠCH',
     ask: 'HỎI HẠT BẮP',
-    soon: 'Sắp có',
   },
   celebrate: { title: 'Kế hoạch đã sẵn sàng!', sub: 'Mỗi ngày một việc nhỏ, bạn làm được.', cta: 'CHƠI LẠI' },
 }
@@ -267,3 +266,45 @@ export const reasonSolutions = {
 }
 
 export const barSolutions = { focus: 'focus25', patience: 'readPage', switchUrge: 'fixedChecks', phone: 'phoneFar' }
+
+const CHIP_TIME = 'Mình hay học buổi tối thì sao?'
+const CHIP_NOTIF = 'Tắt thông báo khó quá!'
+const CHIP_SCORE = 'Giải thích điểm của mình'
+
+export const coach = {
+  name: 'Hạt Bắp',
+  subtitle: 'Bạn đồng hành của bạn',
+  close: 'Quay lại kế hoạch',
+  placeholder: 'Nhắn cho Hạt Bắp…',
+  send: 'Gửi',
+  typing: 'Hạt Bắp đang gõ',
+  note: 'Hạt Bắp là AI, có thể sai. Thông tin gửi đi ẩn danh.',
+  chips: [CHIP_TIME, CHIP_NOTIF, CHIP_SCORE],
+  remaining: (n) => `Hôm nay bạn còn ${n} tin nhắn.`,
+  limitReached: 'Hôm nay bạn đã hỏi đủ 20 tin rồi. Mai mình trò chuyện tiếp nhé! Giờ bạn thử một việc nhỏ trong kế hoạch xem sao.',
+  openingPrompt: 'Hãy giải thích ngắn gọn kết quả của mình và gợi ý việc đầu tiên nên làm.',
+  hotline: { label: 'Gọi 111 (miễn phí, 24/7)', href: 'tel:111' },
+  crisis: [
+    'Mình rất tiếc khi nghe bạn đang thấy nặng nề như vậy. Bạn không phải một mình đâu.',
+    'Bạn hãy nói chuyện ngay với một người lớn bạn tin, như bố mẹ, thầy cô hoặc cán bộ tư vấn ở trường nhé. Nếu cần, gọi 111 (Tổng đài quốc gia bảo vệ trẻ em, miễn phí 24/7).',
+    'Khi bạn thấy ổn hơn, mình vẫn ở đây để cùng bạn tập trung học và dùng điện thoại nhẹ nhàng hơn.',
+  ],
+  fallback: {
+    opening: ({ score, level, reasons, plan }) => {
+      const out = []
+      if (typeof score === 'number') {
+        out.push(`Điểm “nổ” của bạn là ${Math.round(score)}/100${level ? `, mức ${level.toLowerCase()}` : ''}. Đây chỉ là cách gọi vui, không phải chẩn đoán. Ai cũng có lúc bị điện thoại kéo đi!`)
+      } else {
+        out.push('Chào bạn, mình là Hạt Bắp! Mình ở đây để cùng bạn tập trung hơn.')
+      }
+      if (reasons?.length) out.push(`Lý do chính của bạn là: ${reasons[0].toLowerCase()}. Việc nhỏ đầu tiên: ${plan?.[0]?.title ? plan[0].title.toLowerCase() : 'đặt điện thoại xa bàn học 30 phút'}.`)
+      return out
+    },
+    replies: {
+      [CHIP_TIME]: 'Buổi tối là lúc tin nhắn và video hay “réo” nhất. Thử học 25 phút rồi nghỉ 5 phút, để điện thoại ở xa bàn và chỉ xem tin trong giờ nghỉ. Làm được vài tối là quen dần đó!',
+      [CHIP_NOTIF]: 'Khó là chuyện bình thường! Bạn đừng tắt hết một lần. Hôm nay chỉ tắt thông báo của 1 ứng dụng hay làm bạn xao nhãng nhất, trong lúc học thôi. Quen rồi mình tắt thêm nhé.',
+      [CHIP_SCORE]: 'Điểm càng cao nghĩa là bạn càng dễ bị điện thoại làm xao nhãng khi học. Bốn thanh chỉ số cho thấy bạn “nổ” nhiều ở đâu, và kế hoạch của bạn nhắm đúng vào chỗ đó. Bắt đầu từ một việc nhỏ là đủ rồi!',
+    },
+    generic: 'Mình đang ngoại tuyến nên chưa trả lời kỹ được. Bạn thử một việc nhỏ trong kế hoạch hôm nay nhé: để điện thoại xa bàn học 30 phút. Hoặc bấm một câu hỏi gợi ý ở trên!',
+  },
+}

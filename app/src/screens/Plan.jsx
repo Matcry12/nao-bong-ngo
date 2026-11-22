@@ -1,11 +1,9 @@
-import { useState } from 'react'
 import Button from '../components/Button.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import { GROUP_LABELS, REASON_INFO, REASON_LABELS, SOLUTIONS, level2 } from '../content.js'
 
-export default function Plan({ top, plan, onSave, onClose }) {
+export default function Plan({ top, plan, onSave, onAsk, onClose }) {
   const c = level2.plan
-  const [hint, setHint] = useState(false)
   return (
     <div className="screen">
       <ProgressBar value={100} onClose={onClose} />
@@ -33,8 +31,7 @@ export default function Plan({ top, plan, onSave, onClose }) {
       </div>
       <div className="screen__foot screen__foot--line">
         <Button onClick={onSave}>{c.save}</Button>
-        <Button variant="secondary" onClick={() => setHint(true)}>{c.ask}</Button>
-        {hint && <p className="small" role="status">{c.soon}</p>}
+        <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
       </div>
     </div>
   )
