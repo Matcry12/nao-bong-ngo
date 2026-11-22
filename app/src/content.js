@@ -388,3 +388,87 @@ export const coach = {
     generic: 'Mình đang ngoại tuyến nên chưa trả lời kỹ được. Bạn thử một việc nhỏ trong kế hoạch hôm nay nhé: để điện thoại xa bàn học 30 phút. Hoặc bấm một câu hỏi gợi ý ở trên!',
   },
 }
+
+export const SCHOOLS = [
+  'THPT Chuyên Tuyên Quang',
+  'THPT Lâm Bình',
+  'THPT Nguyễn Văn Huyên',
+  'PT DTNT THPT tỉnh Tuyên Quang',
+  'THPT Tân Trào',
+  'THPT Thái Hòa',
+  'THPT Ỷ La',
+]
+
+export const info = {
+  title: 'Kể chút về bạn nhé',
+  sub: 'Không bắt buộc. Chỉ để so sánh với bạn cùng lứa.',
+  school: 'Trường',
+  schoolPlaceholder: 'Chọn trường',
+  schoolOther: 'Khác',
+  grade: 'Lớp',
+  gradePlaceholder: 'Chọn lớp',
+  grades: ['10', '11', '12'],
+  gradeLabel: (g) => `Lớp ${g}`,
+  gender: 'Giới tính',
+  genders: ['Nam', 'Nữ', 'Không nói'],
+  consent: 'Đóng góp kết quả ẩn danh cho nghiên cứu',
+  consentNote: 'Không ghi tên. Chỉ gửi điểm số và 3 thông tin trên.',
+  next: 'TIẾP TỤC',
+  skip: 'BỎ QUA',
+  save: 'LƯU',
+  shareOn: 'Chia sẻ dữ liệu nghiên cứu: Đang bật',
+  shareOff: 'Chia sẻ dữ liệu nghiên cứu: Đang tắt',
+}
+
+export const demo = {
+  title: 'Demo · Nhảy tới màn',
+  secret: 'Chế độ demo',
+  close: 'ĐÓNG DEMO',
+  closeAria: 'Đóng demo',
+  jumpsAria: 'Các màn',
+  jumps: [
+    ['start', 'Bắt đầu'],
+    ['read', 'Trò 1 · Đọc'],
+    ['patience', 'Trò 2 · Kiên nhẫn'],
+    ['skip', 'Trò 3 · Bỏ qua'],
+    ['phone', 'Trò 4 · Đặt máy'],
+    ['self', 'Tự đánh giá'],
+    ['result1', 'Kết quả 1'],
+    ['result2', 'Kết quả 2'],
+    ['scenario', 'Tình huống 1'],
+    ['plan', 'Kế hoạch'],
+    ['coach', 'Hạt Bắp'],
+    ['challenge', 'Thử thách 7 ngày'],
+    ['compare', 'So sánh ngày 1/7'],
+  ],
+  sample: 'dữ liệu mẫu',
+  surveyTitle: 'Khảo sát 450 học sinh',
+  awareness: {
+    title: 'Biết đến “Não bỏng ngô”',
+    items: [['Chưa từng nghe', 66.67], ['Nghe nhưng chưa hiểu', 28.89], ['Hiểu rõ', 4.44]],
+  },
+  freq: {
+    title: 'Xem video ngắn mỗi ngày',
+    items: [['2–4 giờ/ngày', 57.1], ['Trên 4 giờ/ngày', 33.3]],
+  },
+  symptoms: {
+    title: 'Dấu hiệu thường gặp',
+    total: 450,
+    items: [
+      ['Sốt ruột khi không cầm điện thoại', 267],
+      ['Khó tập trung quá 15 phút', 157],
+      ['Mệt mỏi, thiếu kiên nhẫn', 153],
+      ['Bất lực khi đọc trang sách dài', 62],
+    ],
+  },
+  appData: {
+    title: 'Dữ liệu từ ứng dụng',
+    loading: 'Đang tải…',
+    none: 'Chưa kết nối Google Sheet',
+    count: 'Lượt gửi',
+    avg1: 'Điểm TB ngày 1',
+    avg7: 'Điểm TB ngày 7',
+    pairs: 'Cặp ngày 1 và 7',
+    delta: 'Giảm trung bình',
+  },
+}

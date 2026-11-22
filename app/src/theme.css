@@ -281,3 +281,37 @@ h1, p { margin: 0; }
   .foot-row { justify-content: flex-end; }
   .screen__foot .callout { align-self: stretch; }
 }
+
+/* Info + Demo (slice 6) */
+.fld { display: flex; flex-direction: column; gap: 8px; }
+.fld > label, .fld > legend { padding: 0; margin-bottom: 8px; font-size: 15px; font-weight: 800; }
+.fld > label { margin-bottom: 0; }
+.select { height: 56px; padding: 0 16px; border: 2px solid var(--line); border-radius: 16px; background: #fff; font: inherit; font-size: 17px; color: var(--text); }
+.select:focus { outline: none; border-color: var(--info); }
+.opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.opt { min-height: 52px; padding: 4px 6px; border: 2px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 2px 0 var(--line); font: inherit; font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; }
+.opt[aria-pressed="true"] { border-color: var(--info); box-shadow: 0 2px 0 var(--info); background: var(--info-tint); color: var(--info-dark); font-weight: 800; }
+.check { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border: 2px solid var(--line); border-radius: 16px; font-size: 17px; line-height: 1.4; cursor: pointer; }
+.check input { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--info); }
+.check b { font-weight: 800; }
+.textbtn { height: 48px; border: 0; background: none; color: var(--info-link); font: inherit; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer; }
+.demo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.demo-jump { display: flex; align-items: center; min-height: 44px; padding: 0 12px; border: 2px solid var(--line); border-radius: 12px; background: #fff; font: inherit; font-size: 15px; color: var(--text); text-align: left; cursor: pointer; }
+.demo-sec { display: flex; flex-direction: column; gap: 12px; }
+.demo-sec h2 { margin: 0; font-size: 17px; font-weight: 800; }
+.demo-sec h2 span, .demo-sec h3 span { font-weight: 600; color: var(--muted); font-size: 14px; }
+.demo-sec h3 { margin: 0; font-size: 15px; font-weight: 800; }
+.hbar__row { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
+.hbar__row span:last-child { color: var(--muted); white-space: nowrap; }
+.hbar { margin-bottom: 8px; }
+.hbar .bar__track { margin-top: 6px; }
+.kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.kv .stat__num { font-size: 24px; }
+@media (min-width: 768px) {
+  .demo-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .opts { grid-template-columns: repeat(3, 1fr); }
+  .screen__body > .fld, .screen__body > .check { max-width: var(--col); }
+  .screen__foot .textbtn { align-self: flex-end; }
+}
+.textbtn--small { height: 40px; font-size: 15px; letter-spacing: 0; text-decoration: underline; font-weight: 600; }
+@media (min-width: 768px) { .screen__foot .textbtn--small { align-self: center; } }

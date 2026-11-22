@@ -17,6 +17,9 @@ import Challenge from './screens/Challenge.jsx'
 import DayTask from './screens/DayTask.jsx'
 import Retest from './screens/Retest.jsx'
 import Compare from './screens/Compare.jsx'
+import Info from './screens/Info.jsx'
+import Demo from './screens/Demo.jsx'
+import { getClientId, loadConsent, saveConsent, buildRow, sendRow } from './research.js'
 import { SPEED } from './speed.js'
 import { toDateKey, createChallenge, tasksFor, nextDay, completeDay, recordRetest, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
 import { content, level2, challengeEnd, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
@@ -39,6 +42,9 @@ function results(rec) {
 }
 
 const store = () => { try { return window.localStorage } catch { return null } }
+const SHEET_URL = import.meta.env.VITE_SHEET_URL || ''
+const SEEN_KEY = 'nbn:info:seen'
+const DEMO = typeof location !== 'undefined' && new URLSearchParams(location.search).get('demo') === '1'
 const FAST = SPEED > 1 // ?fast=1 lets testers play several days in one sitting
 
 export default function App() {
@@ -47,13 +53,32 @@ export default function App() {
   const [coachBack, setCoachBack] = useState('plan')
   const [coachDay, setCoachDay] = useState(null)
   const [day, setDay] = useState(1)
-  const [screen, setScreen] = useState('start')
+  const [screen, setScreen] = useState(DEMO ? 'demo' : 'start')
   const [idx, setIdx] = useState(0) // question / self-report index
   const [run, setRun] = useState(0) // remount key for replays
   const [rec, setRec] = useState(EMPTY)
   const [choices, setChoices] = useState([]) // level 2 weight objects
   const [plan, setPlan] = useState(null) // { top, plan }
   const [, setSaved] = useState(null)
+
+  // Opt-in upload: fire-and-forget, only with consent + sheet URL
+  const upload = (dayNo, r, top, planIds) => {
+    const st = store()
+    if (!SHEET_URL || !st) return
+    const { consent, info } = loadConsent(st)
+    if (!consent) return
+    sendRow(SHEET_URL, buildRow({
+      clientId: getClientId(st), day: dayNo, info, total: r.total, level: levelFor(r.total).label, bars: r.bars,
+      reasons: top.map((k) => REASON_LABELS[k]), plan: planIds.map((id) => SOLUTIONS[id].title),
+    }))
+  }
+  const beginRun = () => {
+    const st = store()
+    let seen = false
+    try { seen = !!st && st.getItem(SEEN_KEY) === '1' } catch { /* ignore */ }
+    setMode('first'); setRec(EMPTY); setRun((r) => r + 1); setScreen(seen ? 'intro1' : 'info')
+  }
+  const markSeen = () => { try { store()?.setItem(SEEN_KEY, '1') } catch { /* ignore */ } }
 
   const opts = { allowSameDay: FAST }
   const persist = (next) => { setCh(next); const st = store(); if (st) saveChallenge(st, next) }
@@ -84,10 +109,25 @@ export default function App() {
       return (
         <Start
           saved={ch ? (finished ? 'finished' : 'active') : null}
-          onNext={() => { setMode('first'); setRec(EMPTY); setRun((r) => r + 1); setScreen('intro1') }}
+          onNext={beginRun}
+          onSecret={() => setScreen('demo')}
+          consentOn={(() => { const st = store(); return st ? loadConsent(st).consent : false })()}
+          onSettings={() => setScreen('settings')}
           onResume={() => setScreen(finished ? 'compare' : 'challenge')}
-          onRestart={() => { const st = store(); if (st) clearChallenge(st); setCh(null); setScreen('intro1'); setMode('first'); setRec(EMPTY); setRun((r) => r + 1) }}
+          onRestart={() => { const st = store(); if (st) clearChallenge(st); setCh(null); beginRun() }}
         />
+      )
+    case 'demo': return <Demo onClose={() => setScreen('start')} />
+    case 'settings':
+      return (
+        <Info settings initial={(() => { const st = store(); return st ? loadConsent(st) : null })()} onClose={() => setScreen('start')}
+          onDone={(v) => { const st = store(); if (st) saveConsent(st, v); markSeen(); setScreen('start') }} />
+      )
+    case 'info':
+      return (
+        <Info initial={(() => { const st = store(); return st ? loadConsent(st) : null })()} onClose={() => setScreen('start')}
+          onSkip={() => { markSeen(); setScreen('intro1') }}
+          onDone={(v) => { const st = store(); if (st) saveConsent(st, v); markSeen(); setScreen('intro1') }} />
       )
     case 'intro1': return <GameIntro index={0} progress={4} onNext={() => setScreen('read')} {...common} />
     case 'read':
@@ -113,7 +153,9 @@ export default function App() {
           if (idx + 1 < NSELF) setIdx(idx + 1)
           else if (mode === 'retest') {
             const r = results({ ...rec, selfAnswers: [...rec.selfAnswers, a] })
-            persist(recordRetest(ch, { score: r.total, bars: r.bars }, toDateKey(), opts))
+            const next = recordRetest(ch, { score: r.total, bars: r.bars }, toDateKey(), opts)
+            persist(next)
+            if (next.day7) upload(7, r, ch.top, ch.plan)
             setScreen('compare')
           } else setScreen('result1')
         }} />
@@ -138,6 +180,7 @@ export default function App() {
         const r = results(rec)
         setSaved(plan)
         setMode('first')
+        upload(1, r, plan.top, plan.plan)
         persist(createChallenge({ plan: plan.plan, top: plan.top, score: r.total, bars: r.bars, today: toDateKey() }))
         setScreen('celebrate')
       }} />
