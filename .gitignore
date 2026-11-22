@@ -3,3 +3,8 @@ dist/
 .env*
 !.env.example
 .vercel/
+# source materials kept local (not public)
+*.pdf
+!docs/**/*.pdf
+*.zip
+docs/design/_runtime/
