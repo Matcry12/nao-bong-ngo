@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Mascot from '../components/Mascot.jsx'
+import RichText from '../components/RichText.jsx'
 import { coach } from '../content.js'
 import { askCoach } from '../coach.js'
 import { createLimiter } from '../coachSafety.js'
@@ -80,7 +81,7 @@ export default function Coach({ context, onClose }) {
                   {coach.crisis.map((p) => <p key={p}>{p}</p>)}
                   <a className="coach__call" href={coach.hotline.href}>{coach.hotline.label}</a>
                 </>
-              ) : m.content}
+              ) : m.role === 'assistant' ? <RichText text={m.content} /> : m.content}
             </div>
           ))}
           {busy && <div className="bub bub--m typing" role="status" aria-label={coach.typing}><i /><i /><i /></div>}

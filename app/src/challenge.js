@@ -66,6 +66,14 @@ export function nextDay(state) {
   return null
 }
 
+// True when the player skipped at least one full day since their last activity.
+export function streakAtRisk(state, today) {
+  if (!isPlainObject(state) || nextDay(state) === null) return false
+  const done = Array.isArray(state.done) ? state.done : []
+  const last = done.length ? done[done.length - 1].date : state.startDate
+  return daysBetween(last, today) >= 2
+}
+
 export function canPlay(state, today, { allowSameDay = false } = {}) {
   const next = nextDay(state)
   if (next === null) return { ok: false, reason: 'finished' }

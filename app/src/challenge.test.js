@@ -300,3 +300,17 @@ describe('storage', () => {
   })
 })
 
+
+import { streakAtRisk } from './challenge.js'
+describe('streakAtRisk', () => {
+  const base = { startDate: '2026-11-01', done: [] }
+  it('same or next day is fine', () => {
+    expect(streakAtRisk(base, '2026-11-01')).toBe(false)
+    expect(streakAtRisk(base, '2026-11-02')).toBe(false)
+  })
+  it('skipped a day is at risk', () => {
+    expect(streakAtRisk(base, '2026-11-03')).toBe(true)
+    expect(streakAtRisk({ ...base, done: [{ day: 1, date: '2026-11-05' }] }, '2026-11-07')).toBe(true)
+    expect(streakAtRisk({ ...base, done: [{ day: 1, date: '2026-11-05' }] }, '2026-11-06')).toBe(false)
+  })
+})

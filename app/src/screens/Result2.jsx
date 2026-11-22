@@ -15,10 +15,10 @@ export default function Result2({ bars, onNext, onBack }) {
       <div className="screen__body" style={{ gap: 24, padding: '16px 20px' }}>
         <h1 className="h2" style={{ lineHeight: 'normal' }}>{c.title}</h1>
         <div className="bars">
-          {['focus', 'patience', 'switchUrge', 'phone'].map((k) => (
+          {['focus', 'patience', 'switchUrge', 'phone'].map((k, i) => (
             <div key={k}>
               <div className="bar__row"><b>{c.bars[k]}</b><span>{bars[k]}/100</span></div>
-              <div className="bar__track"><div className="bar__fill" style={{ width: bars[k] + '%', background: bars[k] >= 70 ? 'var(--danger)' : undefined }} /></div>
+              <div className="bar__track"><div className="bar__fill bar__fill--grow" style={{ '--i': i, width: bars[k] + '%', background: bars[k] >= 70 ? 'var(--danger)' : undefined }} /></div>
             </div>
           ))}
         </div>

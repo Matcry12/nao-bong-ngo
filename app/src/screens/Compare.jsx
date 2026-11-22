@@ -17,11 +17,12 @@ export default function Compare({ state, onDone }) {
   return (
     <div className="screen">
       <div className="topbar">
-        <div className="eyebrow" style={{ flex: 1, textAlign: 'center', marginLeft: 44 }}>{c.eyebrow}</div>
+        <div style={{ width: 44, height: 44 }} aria-hidden="true" />
+        <div className="eyebrow" style={{ flex: 1, textAlign: 'center', marginRight: 44 }}>{c.eyebrow}</div>
       </div>
       <div className="screen__body" style={{ gap: 24, padding: '8px 20px 16px' }}>
         <div className="cmp-top">
-          <Mascot mood={kind === 'worse' ? 'calm' : 'proud'} size={96} />
+          <Mascot mood={kind === 'worse' ? 'worried' : 'proud'} size={96} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <h1 className="h2" style={{ lineHeight: 1.3 }} data-kind={kind}>{head}</h1>
             <p className="sub" style={{ fontSize: 15 }}>{sub}</p>

@@ -35,7 +35,7 @@ export default function Skip({ progress, onFinish, onClose }) {
         <div className="eyebrow">{c.tag}</div>
         <h1 className="h2">{c.title}</h1>
         <div className="scene">
-          <svg viewBox="0 0 350 360" preserveAspectRatio="xMidYMax slice" role="img" aria-label={c.sceneLabel}>
+          <svg viewBox="0 0 350 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label={c.sceneLabel}>
             <circle className="breathe" cx="250" cy="120" r="44" fill="#FFD08A" />
             <g className="cloud"><ellipse cx="40" cy="80" rx="36" ry="14" fill="#FFFFFF" /><ellipse cx="60" cy="70" rx="22" ry="14" fill="#FFFFFF" /></g>
             <path d="M0 250C70 200 140 210 210 240C270 266 310 250 350 230V360H0Z" fill="#B9E3C8" />

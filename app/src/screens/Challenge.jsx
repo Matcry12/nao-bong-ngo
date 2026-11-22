@@ -3,7 +3,7 @@ import Button from '../components/Button.jsx'
 import { challenge as c, SOLUTIONS } from '../content.js'
 import { tasksFor, nextDay, canPlay } from '../challenge.js'
 
-const SHIFT = [0, 56, 84, 56, 0, -56, -84]
+const SHIFT = [0, 40, 60, 40, 0, -40, -60]
 
 export default function Challenge({ state, today, allowSameDay, onStart, onAsk, onPlan, onResult, onClose }) {
   const next = nextDay(state)
@@ -19,15 +19,15 @@ export default function Challenge({ state, today, allowSameDay, onStart, onAsk, 
     const big = st === 'today'
     const fill = st === 'done' ? 'var(--correct)' : st === 'today' ? 'var(--primary)' : 'var(--line)'
     const lip = st === 'done' ? 'var(--correct-lip)' : st === 'today' ? 'var(--primary-lip)' : '#CFCFCF'
-    const size = big ? 76 : 60
+    const size = big ? 64 : 48
     return (
-      <div key={day} ref={big ? nowRef : null} data-day={day} data-state={st} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, transform: `translateX(${x}px)` }}>
+      <div key={day} ref={big ? nowRef : null} data-day={day} data-state={st} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, transform: `translateX(${x}px)` }}>
         {big && <div className="node__tag">{c.today}</div>}
         <div role="img" aria-label={c.nodeAria(day, st)} className={big ? 'node node--now' : 'node'} style={{ width: size, height: size, background: fill, boxShadow: `0 5px 0 ${lip}` }}>
-          {st === 'done' && <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0F3D24" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>}
-          {st === 'today' && <span style={{ fontSize: 28, fontWeight: 800, color: 'var(--on-primary)' }}>{day}</span>}
-          {st === 'locked' && day < 7 && <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>}
-          {day === 7 && st !== 'today' && st !== 'done' && <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5" /></svg>}
+          {st === 'done' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F3D24" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>}
+          {st === 'today' && <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--on-primary)' }}>{day}</span>}
+          {st === 'locked' && day < 7 && <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>}
+          {day === 7 && st !== 'today' && st !== 'done' && <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5" /></svg>}
           {day === 7 && st === 'done' && null}
         </div>
         {day === 7 && <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--muted)' }}>{c.retestLabel}</div>}
@@ -44,32 +44,34 @@ export default function Challenge({ state, today, allowSameDay, onStart, onAsk, 
         <h1 className="h2" style={{ flex: 1, lineHeight: 'normal' }}>{c.title}</h1>
         <div className="pill counter" aria-label={c.counterAria(doneCount)}>{c.counter(doneCount)}</div>
       </div>
-      <div className="screen__body" style={{ padding: '16px 20px' }}>
+      <div className="screen__body screen__body--tight" style={{ padding: '8px 20px' }}>
         <div className="path">{nodes}</div>
       </div>
-      <div className="screen__foot screen__foot--line" style={{ gap: 12 }}>
+      <div className="screen__foot screen__foot--line chfoot" style={{ gap: 12 }}>
         {can.reason === 'finished' ? (
           <>
-            <div style={{ fontSize: 17 }}>{c.finished}</div>
-            <Button onClick={onResult}>{c.seeResult}</Button>
+            <div className="chfoot__task" style={{ fontSize: 17 }}>{c.finished}</div>
+            <div className="chfoot__row">
+              <button type="button" className="linkbtn chfoot__plan" onClick={onPlan}>{c.viewPlan}</button>
+              <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
+              <Button onClick={onResult}>{c.seeResult}</Button>
+            </div>
           </>
         ) : (
           <>
-            <div style={{ fontSize: 17 }}><b style={{ fontWeight: 800 }}>{c.todayTask}</b> {task}</div>
-            {can.ok ? (
-              <Button onClick={onStart}>{next === 7 ? c.startRetest : c.start}</Button>
-            ) : (
-              <>
-                <p className="callout" role="status">{c.tomorrow}</p>
+            <div className="chfoot__task" style={{ fontSize: 17 }}><b style={{ fontWeight: 800 }}>{c.todayTask}</b> {task}</div>
+            {!can.ok && <p className="callout" role="status">{c.tomorrow}</p>}
+            <div className="chfoot__row">
+              <button type="button" className="linkbtn chfoot__plan" onClick={onPlan}>{c.viewPlan}</button>
+              <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
+              {can.ok ? (
+                <Button onClick={onStart}>{next === 7 ? c.startRetest : c.start}</Button>
+              ) : (
                 <button type="button" className="btn btn--disabled" disabled>{c.tomorrowBtn}</button>
-              </>
-            )}
+              )}
+            </div>
           </>
         )}
-        <div className="foot-row">
-          <Button variant="secondary" onClick={onAsk}>{c.ask}</Button>
-          <button type="button" className="linkbtn" onClick={onPlan}>{c.viewPlan}</button>
-        </div>
       </div>
     </div>
   )

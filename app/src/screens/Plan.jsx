@@ -29,7 +29,7 @@ export default function Plan({ top, plan, onSave, onAsk, onClose, readOnly, onBa
           })}
         </div>
       </div>
-      <div className="screen__foot screen__foot--line">
+      <div className={`screen__foot screen__foot--line ${readOnly ? '' : 'screen__foot--row'}`}>
         {readOnly ? <Button onClick={onBack}>{c.back}</Button> : (
           <>
             <Button onClick={onSave}>{c.save}</Button>

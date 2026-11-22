@@ -22,7 +22,7 @@ export default function Start({ onNext, saved, onResume, onRestart, onSecret, co
           <p className="sub">{c.sub}</p>
         </div>
       </div>
-      <div className="screen__foot">
+      <div className="screen__foot screen__foot--center">
         {saved === 'active' ? (
           ask ? (
             <>

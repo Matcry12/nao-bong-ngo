@@ -3,7 +3,7 @@ import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
 import { dayTask as c } from '../content.js'
 
-export default function DayTask({ day, text, onDone, onNotYet, onTell, onBack }) {
+export default function DayTask({ day, text, atRisk = false, onDone, onNotYet, onTell, onBack }) {
   const [celebrate, setCelebrate] = useState(false)
   if (celebrate) {
     return (
@@ -28,7 +28,7 @@ export default function DayTask({ day, text, onDone, onNotYet, onTell, onBack })
         <div className="eyebrow" style={{ flex: 1, textAlign: 'center', marginRight: 44 }}>{c.eyebrow(day)}</div>
       </div>
       <div className="screen__body screen__body--center" style={{ padding: '16px 20px' }}>
-        <Mascot mood="calm" size={140} />
+        <Mascot mood={atRisk ? 'worried' : 'calm'} size={140} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div className="eyebrow">{c.title}</div>
           <h1 className="title" style={{ lineHeight: 1.3 }}>{text}</h1>

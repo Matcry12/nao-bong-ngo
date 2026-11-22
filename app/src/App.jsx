@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import Start from './screens/Start.jsx'
 import GameIntro from './screens/GameIntro.jsx'
 import ReadGame from './screens/ReadGame.jsx'
@@ -21,7 +21,7 @@ import Info from './screens/Info.jsx'
 import Demo from './screens/Demo.jsx'
 import { getClientId, loadConsent, saveConsent, buildRow, sendRow } from './research.js'
 import { SPEED } from './speed.js'
-import { toDateKey, createChallenge, tasksFor, nextDay, completeDay, recordRetest, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
+import { toDateKey, createChallenge, tasksFor, nextDay, streakAtRisk, completeDay, recordRetest, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
 import { content, level2, challengeEnd, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
 import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan, levelFor } from './scoring.js'
 
@@ -104,6 +104,9 @@ export default function App() {
   const finished = ch ? nextDay(ch) === null : false
 
   const common = { onClose: home }
+  return <Fragment key={screen}>{renderScreen()}</Fragment>
+
+  function renderScreen() {
   switch (screen) {
     case 'start':
       return (
@@ -194,7 +197,7 @@ export default function App() {
       )
     case 'daytask':
       return (
-        <DayTask day={day} text={tasksFor(ch.plan, SOLUTIONS)[day - 1].text}
+        <DayTask day={day} text={tasksFor(ch.plan, SOLUTIONS)[day - 1].text} atRisk={streakAtRisk(ch, toDateKey())}
           onBack={() => setScreen('challenge')} onNotYet={() => setScreen('challenge')}
           onTell={() => askCoachFrom('daytask', day)}
           onDone={() => { persist(completeDay(ch, day, toDateKey(), opts)); setScreen('challenge') }} />
@@ -204,5 +207,6 @@ export default function App() {
     case 'compare': return <Compare state={ch} onDone={() => { setScreen(mode === 'retest' ? 'end' : 'start'); setMode('first') }} />
     case 'end': return <Celebrate data={challengeEnd} onNext={() => setScreen('start')} />
     default: return <Celebrate onNext={() => setScreen('challenge')} />
+  }
   }
 }

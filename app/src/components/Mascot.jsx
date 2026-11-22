@@ -27,7 +27,7 @@ const faces = {
     <>
       <path d="M14 68Q4 86 14 104" fill="none" stroke={LIP} strokeWidth="5" strokeLinecap="round" />
       <path d="M146 68Q156 86 146 104" fill="none" stroke={LIP} strokeWidth="5" strokeLinecap="round" />
-      <g transform="rotate(-8 80 144)">
+      <g>
         <Body />
         <circle cx="64" cy="86" r="8" fill={INK} />
         <circle cx="96" cy="86" r="8" fill={INK} />
@@ -83,7 +83,7 @@ const faces = {
 export default function Mascot({ mood = 'calm', size = 160 }) {
   const [label, Face] = faces[mood] ?? faces.calm
   return (
-    <svg viewBox="0 0 160 160" width={size} height={size} role="img" aria-label={label}>
+    <svg key={mood} className="mascot" viewBox="0 0 160 160" width={size} height={size} role="img" aria-label={label}>
       <Face />
     </svg>
   )

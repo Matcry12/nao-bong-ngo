@@ -31,7 +31,7 @@ export default function Info({ initial, settings, onDone, onSkip, onClose }) {
             {c.grades.map((g) => <option key={g} value={g}>{c.gradeLabel(g)}</option>)}
           </select>
         </div>
-        <fieldset className="fld" style={{ border: 0, margin: 0, padding: 0 }}>
+        <fieldset className="fld" style={{ border: 0, padding: 0, minWidth: 0 }}>
           <legend>{c.gender}</legend>
           <div className="opts">
             {c.genders.map((g) => (
