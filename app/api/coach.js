@@ -1,6 +1,6 @@
 // Vercel serverless proxy for the AI coach. The key only lives in process.env.
 import { detectCrisis } from '../src/coachSafety.js'
-import { SYSTEM_PROMPT } from './coachPrompt.js'
+import { SYSTEM_PROMPT } from './_coachPrompt.js'
 
 const MAX_MESSAGES = 12
 const MAX_CHARS = 500
