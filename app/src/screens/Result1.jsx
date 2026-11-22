@@ -5,7 +5,7 @@ import { levelFor } from '../scoring.js'
 
 const COLORS = { low: 'var(--correct-dark)', medium: 'var(--warn-dark)', high: 'var(--danger-dark)' }
 
-export default function Result1({ score, onReplay, onClose }) {
+export default function Result1({ score, onNext, onClose }) {
   const c = content.result
   const lv = levelFor(score)
   const n = { low: 1, medium: 2, high: 3 }[lv.key]
@@ -41,7 +41,7 @@ export default function Result1({ score, onReplay, onClose }) {
         </div>
       </div>
       <div className="screen__foot">
-        <Button onClick={onReplay}>{c.replay}</Button>
+        <Button onClick={onNext}>{c.next}</Button>
       </div>
     </div>
   )

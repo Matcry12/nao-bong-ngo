@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import Button from '../components/Button.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import { content } from '../content.js'
+import { SPEED } from '../speed.js'
 
 const MAX_SECONDS = 60
-const NOTIF_VISIBLE = 4
+const NOTIF_VISIBLE = Math.max(4, 1.5 * SPEED) // game-seconds
 const VIDEO_MS = 3000
 
 export default function ReadGame({ onFinish, onClose }) {
@@ -23,7 +24,7 @@ export default function ReadGame({ onFinish, onClose }) {
   }
 
   useEffect(() => {
-    const id = setInterval(() => setElapsed((Date.now() - start.current) / 1000), 250)
+    const id = setInterval(() => setElapsed(((Date.now() - start.current) / 1000) * SPEED), 250)
     return () => clearInterval(id)
   }, [])
 
@@ -45,7 +46,7 @@ export default function ReadGame({ onFinish, onClose }) {
 
   return (
     <div className="screen">
-      <ProgressBar value={Math.min(100, 18 + (elapsed / MAX_SECONDS) * 7)} onClose={onClose} />
+      <ProgressBar value={Math.min(100, 6 + (elapsed / MAX_SECONDS) * 6)} onClose={onClose} />
       <div className="screen__body" style={{ gap: 16, padding: '8px 20px 16px' }}>
         <h1 className="h2" style={{ lineHeight: 'normal' }}>{c.title}</h1>
         <div className="passage">
@@ -67,7 +68,7 @@ export default function ReadGame({ onFinish, onClose }) {
         </button>
       )}
       <div className="screen__foot screen__foot--line">
-        <Button onClick={() => finish((Date.now() - start.current) / 1000)}>{c.done}</Button>
+        <Button onClick={() => finish(((Date.now() - start.current) / 1000) * SPEED)}>{c.done}</Button>
       </div>
       {video && (
         <div className="video" role="status">

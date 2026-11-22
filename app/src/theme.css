@@ -139,6 +139,32 @@ h1, p { margin: 0; }
 .video { position: absolute; inset: 0; z-index: 10; background: var(--text); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 20px; }
 .video__play { width: 96px; height: 96px; border-radius: 999px; background: var(--primary); display: flex; align-items: center; justify-content: center; }
 
+/* Games 2-4 + self report */
+.btn--ghost { background: none; box-shadow: none; border: 0; color: var(--muted); }
+.btn--ghost:active { transform: none; }
+.dot { width: 240px; height: 240px; border-radius: 999px; border: 0; padding: 0; background: var(--line); cursor: pointer; transition: background 150ms ease-out; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; font-weight: 800; }
+.dot--go { background: var(--correct); }
+.shake { animation: shake 300ms ease-in-out; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+.scene { flex: none; border-radius: 16px; overflow: hidden; background: var(--bg-soft); }
+.scene svg { display: block; width: 100%; height: auto; }
+.cloud { animation: drift 20s linear infinite; }
+@keyframes drift { from { transform: translateX(-40px); } to { transform: translateX(360px); } }
+.breathe { animation: breathe 8s ease-in-out infinite; transform-origin: 250px 120px; }
+@keyframes breathe { 0%,100% { transform: scale(0.85); } 50% { transform: scale(1.15); } }
+.clock { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 22px; font-weight: 800; }
+.buzz { animation: buzz 900ms ease-in-out infinite; transform-origin: 150px 150px; }
+@keyframes buzz { 0%,60%,100% { transform: rotate(0); } 10% { transform: rotate(-4deg); } 20% { transform: rotate(4deg); } 30% { transform: rotate(-3deg); } 40% { transform: rotate(3deg); } }
+.phone-wrap { cursor: pointer; touch-action: manipulation; }
+.phone-wrap svg { display: block; width: 100%; max-width: 300px; height: auto; margin: 0 auto; }
+.bars { display: flex; flex-direction: column; gap: 20px; }
+.bar__row { display: flex; justify-content: space-between; gap: 12px; font-size: 17px; }
+.bar__row b { font-weight: 800; }
+.bar__row span { color: var(--muted); white-space: nowrap; }
+.bar__track { height: 16px; border-radius: 8px; background: var(--line); overflow: hidden; margin-top: 8px; }
+.bar__fill { height: 100%; border-radius: 8px; background: var(--primary); }
+.callout { padding: 16px; border-radius: 16px; background: var(--bg-soft); font-size: 17px; line-height: 1.5; }
+
 /* Result */
 .stats { display: flex; gap: 16px; width: 100%; }
 .stat { flex: 1; padding: 16px; border: 2px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; }
@@ -149,7 +175,8 @@ h1, p { margin: 0; }
 .seg { flex: 1; height: 12px; border-radius: 6px; background: var(--line); }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn, .progress__fill { transition: none; }
+  .btn, .progress__fill, .dot { transition: none; }
+  .cloud, .breathe, .buzz, .shake { animation: none; }
   .banner, .notif { animation: none; }
 }
 
@@ -174,6 +201,8 @@ h1, p { margin: 0; }
   }
   .screen__foot { border-top: 2px solid var(--line); align-items: flex-end; }
   .screen__foot .small { align-self: stretch; }
+  .phone-wrap { max-width: 300px; }
+  .scene svg { height: 340px; }
   .btn { width: auto; min-width: 200px; padding: 0 24px; }
 
   .banner { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }

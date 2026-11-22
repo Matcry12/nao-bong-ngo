@@ -3,11 +3,11 @@ import Mascot from '../components/Mascot.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import { content } from '../content.js'
 
-export default function GameIntro({ onNext, onClose }) {
-  const c = content.intro1
+export default function GameIntro({ index = 0, progress = 10, onNext, onClose }) {
+  const c = content.intros[index]
   return (
     <div className="screen">
-      <ProgressBar value={10} onClose={onClose} />
+      <ProgressBar value={progress} onClose={onClose} />
       <div className="screen__body screen__body--center">
         <div className="pill">{c.tag}</div>
         <Mascot mood="calm" size={168} />

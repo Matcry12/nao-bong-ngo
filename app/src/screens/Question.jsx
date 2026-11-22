@@ -11,7 +11,7 @@ export default function Question({ index, onAnswer, onClose }) {
   const [picked, setPicked] = useState(null)
   const [checked, setChecked] = useState(false)
   const right = picked === q.correct
-  const progress = 25 + (index / questions.length) * 35
+  const progress = 14 + index * 4
 
   return (
     <div className="screen">
