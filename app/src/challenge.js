@@ -1,7 +1,10 @@
-export const STORAGE_KEY = 'nbn:challenge:v1'
+export const STORAGE_KEY = 'nbn:challenge:v2'
+export const LEGACY_KEY = 'nbn:challenge:v1'
+export const TOTAL_DAYS = 21
+export const TASK_DAYS = TOTAL_DAYS - 1
 
 const BAR_KEYS = ['focus', 'patience', 'switchUrge', 'phone']
-const VERSION = 1
+const VERSION = 2
 
 const isPlainObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value)
 
@@ -39,21 +42,27 @@ export function createChallenge({ plan = [], top = [], score = 0, bars = {}, tod
     top: Array.isArray(top) ? [...top] : [],
     day1: { score: num(score), bars: { ...bars } },
     done: [],
-    day7: null,
+    final: null,
   }
 }
+
+/** Week (1-3) a challenge day belongs to. */
+export const weekOf = (day) => Math.min(3, Math.max(1, Math.ceil(day / 7)))
 
 export function tasksFor(plan, solutions) {
   const list = Array.isArray(plan) ? plan : []
   const map = isPlainObject(solutions) ? solutions : {}
   const tasks = []
-  for (let day = 1; day <= 6; day += 1) {
+  for (let day = 1; day <= TASK_DAYS; day += 1) {
+    const week = weekOf(day)
     const solutionId = list.length ? list[(day - 1) % list.length] : null
     const solution = solutionId !== null && isPlainObject(map[solutionId]) ? map[solutionId] : null
+    const lines = solution && Array.isArray(solution.tasks) ? solution.tasks : []
     tasks.push({
       day,
+      week,
       solutionId,
-      text: solution && typeof solution.task7 === 'string' ? solution.task7 : '',
+      text: typeof lines[week - 1] === 'string' ? lines[week - 1] : '',
     })
   }
   return tasks
@@ -61,8 +70,8 @@ export function tasksFor(plan, solutions) {
 
 export function nextDay(state) {
   const done = isPlainObject(state) && Array.isArray(state.done) ? state.done : []
-  if (done.length < 6) return done.length + 1
-  if (done.length === 6 && state.day7 == null) return 7
+  if (done.length < TASK_DAYS) return done.length + 1
+  if (done.length === TASK_DAYS && state.final == null) return TOTAL_DAYS
   return null
 }
 
@@ -82,8 +91,8 @@ export function canPlay(state, today, { allowSameDay = false } = {}) {
   if (!allowSameDay) {
     const last = done[done.length - 1]
     if (last && last.date === today) return { ok: false, reason: 'tomorrow' }
-    if (next === 7) {
-      // Day 7 needs the sixth task finished on an earlier calendar day.
+    if (next === TOTAL_DAYS) {
+      // The retest needs the last task finished on an earlier calendar day.
       if (!last || !(daysBetween(last.date, today) > 0)) {
         return { ok: false, reason: 'tomorrow' }
       }
@@ -95,29 +104,29 @@ export function canPlay(state, today, { allowSameDay = false } = {}) {
 
 export function completeDay(state, day, today, opts = {}) {
   const next = nextDay(state)
-  if (day !== next || day > 6) return state
+  if (day !== next || day > TASK_DAYS) return state
   if (!canPlay(state, today, opts).ok) return state
   return { ...state, done: [...state.done, { day, date: today }] }
 }
 
 export function recordRetest(state, { score, bars } = {}, today, opts = {}) {
-  if (nextDay(state) !== 7) return state
+  if (nextDay(state) !== TOTAL_DAYS) return state
   if (!canPlay(state, today, opts).ok) return state
-  return { ...state, day7: { score: num(score), bars: { ...bars }, date: today } }
+  return { ...state, final: { score: num(score), bars: { ...bars }, date: today } }
 }
 
 export function compare(state) {
-  if (!isPlainObject(state) || !isPlainObject(state.day7)) return null
+  if (!isPlainObject(state) || !isPlainObject(state.final)) return null
   const day1 = isPlainObject(state.day1) ? state.day1 : {}
-  const day7 = state.day7
+  const last = state.final
   const before = num(day1.score)
-  const after = num(day7.score)
+  const after = num(last.score)
   const delta = before - after
   const bars = {}
   for (const key of BAR_KEYS) {
     const first = isPlainObject(day1.bars) ? num(day1.bars[key]) : 0
-    const last = isPlainObject(day7.bars) ? num(day7.bars[key]) : 0
-    bars[key] = first - last
+    const end = isPlainObject(last.bars) ? num(last.bars[key]) : 0
+    bars[key] = first - end
   }
   return { before, after, delta, improved: delta > 0, bars }
 }
@@ -129,17 +138,43 @@ function isValidState(data) {
   if (!Array.isArray(data.plan) || !Array.isArray(data.top)) return false
   if (!isPlainObject(data.day1) || typeof data.day1.score !== 'number' || !isPlainObject(data.day1.bars)) return false
   if (!Array.isArray(data.done)) return false
-  if (!(data.day7 === null || isPlainObject(data.day7))) return false
+  if (!(data.final === null || isPlainObject(data.final))) return false
   return true
+}
+
+function migrateV1(data) {
+  if (!isPlainObject(data) || data.version !== 1) return null
+  const next = {
+    version: VERSION,
+    startDate: data.startDate,
+    plan: data.plan,
+    top: data.top,
+    day1: data.day1,
+    done: Array.isArray(data.done) ? data.done.slice(0, TASK_DAYS) : data.done,
+    final: isPlainObject(data.day7) ? data.day7 : null,
+  }
+  // A v1 player who finished day 7 is finished: fill the days they never saw.
+  if (next.final && Array.isArray(next.done)) {
+    const date = next.final.date ?? next.startDate
+    for (let day = next.done.length + 1; day <= TASK_DAYS; day += 1) next.done.push({ day, date })
+  }
+  return isValidState(next) ? next : null
 }
 
 export function loadChallenge(storage) {
   try {
     const raw = storage.getItem(STORAGE_KEY)
-    if (raw == null) return null
-    const data = JSON.parse(raw)
-    if (!isValidState(data)) return null
-    return data
+    if (raw != null) {
+      const data = JSON.parse(raw)
+      return isValidState(data) ? data : null
+    }
+    const old = storage.getItem(LEGACY_KEY)
+    if (old == null) return null
+    const migrated = migrateV1(JSON.parse(old))
+    if (!migrated) return null
+    storage.setItem(STORAGE_KEY, JSON.stringify(migrated))
+    storage.removeItem(LEGACY_KEY)
+    return migrated
   } catch {
     return null
   }

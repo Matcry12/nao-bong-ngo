@@ -34,6 +34,12 @@ export function sanitizeContext(raw) {
   }
 }
 
+const WEEKS = ['Làm quen', 'Giữ nhịp', 'Thành thói quen']
+const weekName = (d) => {
+  const w = Math.min(3, Math.max(1, Math.ceil(d / 7)))
+  return ` (tuần ${w}: ${WEEKS[w - 1]})`
+}
+
 export function contextText(c) {
   const lines = ['Kết quả của người chơi (ẩn danh):']
   if (c.score !== null) lines.push(`- Điểm "nổ": ${Math.round(c.score)}/100${c.level ? ` (mức ${c.level})` : ''}`)
@@ -42,7 +48,7 @@ export function contextText(c) {
   if (bars.length) lines.push(`- 4 chỉ số (càng cao càng "nổ"): ${bars.join('; ')}`)
   if (c.reasons.length) lines.push(`- Lý do hay lướt điện thoại: ${c.reasons.join('; ')}`)
   if (c.plan.length) lines.push(`- Kế hoạch: ${c.plan.map((p) => `${p.title}${p.group ? ` (${p.group})` : ''}`).join('; ')}`)
-  if (c.challengeDay !== null) lines.push(`- Đang ở ngày ${c.challengeDay}/7 của thử thách`)
+  if (c.challengeDay !== null) lines.push(`- Đang ở ngày ${c.challengeDay}/21 của thử thách${weekName(c.challengeDay)}`)
   return lines.join('\n')
 }
 

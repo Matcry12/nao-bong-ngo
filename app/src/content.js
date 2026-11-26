@@ -158,11 +158,19 @@ export const level2 = {
 }
 
 export const challenge = {
-  title: 'Thử thách 7 ngày',
-  counter: (n) => `${n}/7 ngày`,
-  counterAria: (n) => `Đã xong ${n} trên 7 ngày`,
+  title: 'Thử thách 21 ngày',
+  counter: (n) => `${n}/21 ngày`,
+  counterAria: (n) => `Đã xong ${n} trên 21 ngày`,
+  weeks: [
+    { name: 'Làm quen' },
+    { name: 'Giữ nhịp' },
+    { name: 'Thành thói quen' },
+  ],
+  weekHeader: (w) => `Tuần ${w} · ${challenge.weeks[w - 1].name}`,
+  weekAria: (w) => `Tuần ${w}`,
+  milestoneAria: 'Mốc xong tuần',
   today: 'HÔM NAY',
-  retestLabel: 'Ngày 7 · Kiểm tra lại',
+  retestLabel: 'Ngày 21 · Kiểm tra lại',
   nodeAria: (day, state) => `Ngày ${day}${state === 'done' ? ', đã xong' : state === 'today' ? ', hôm nay' : ', chưa mở'}`,
   todayTask: 'Nhiệm vụ:',
   retestTask: 'Chơi lại Cấp 1 để xem bạn đã tiến bộ thế nào.',
@@ -170,7 +178,7 @@ export const challenge = {
   startRetest: 'KIỂM TRA LẠI',
   tomorrow: 'Quay lại vào ngày mai nhé!',
   tomorrowBtn: 'HẸN NGÀY MAI',
-  finished: 'Bạn đã đi hết 7 ngày. Giỏi lắm!',
+  finished: 'Bạn đã đi hết 21 ngày. Giỏi lắm!',
   seeResult: 'XEM KẾT QUẢ',
   ask: 'HỎI HẠT BẮP',
   viewPlan: 'Xem kế hoạch',
@@ -178,7 +186,8 @@ export const challenge = {
 }
 
 export const dayTask = {
-  eyebrow: (d) => `NGÀY ${d}/7`,
+  eyebrow: (d) => `NGÀY ${d}/21`,
+  weekLabel: (w) => `TUẦN ${w} · ${challenge.weeks[w - 1].name.toUpperCase()}`,
   title: 'Nhiệm vụ hôm nay',
   questions: [
     'Hôm nay bạn đã làm được chưa?',
@@ -186,33 +195,37 @@ export const dayTask = {
     'Hôm nay mình làm được việc này chưa nhỉ?',
     'Bạn có làm được việc nhỏ hôm nay không?',
     'Gần xong rồi, hôm nay bạn làm được chưa?',
-    'Hôm nay là ngày cuối cùng của nhiệm vụ. Bạn làm được chưa?',
   ],
+  lastOfWeek: 'Hôm nay là ngày cuối của tuần. Bạn làm được chưa?',
   yes: 'ĐÃ LÀM ĐƯỢC',
   no: 'CHƯA, MAI MÌNH THỬ LẠI',
   tell: 'Kể cho Hạt Bắp',
   noNote: 'Không sao cả, mai thử lại cũng được.',
   done: { title: 'Giỏi lắm!', sub: 'Bạn vừa hoàn thành thêm một ngày.', cta: 'TIẾP TỤC' },
+  weekDone: {
+    1: { title: 'Xong tuần 1!', sub: 'Bạn đã làm quen xong rồi đó. Tuần 2 mình giữ nhịp: việc nhỏ như cũ nhưng dài hơn một chút.', cta: 'TIẾP TỤC' },
+    2: { title: 'Xong tuần 2!', sub: 'Bạn giữ nhịp rất tốt. Tuần cuối là thành thói quen, rồi mình kiểm tra lại ở ngày 21.', cta: 'TIẾP TỤC' },
+  },
   back: 'Quay lại',
 }
 
 export const retest = {
-  eyebrow: 'NGÀY 7 · KIỂM TRA LẠI',
+  eyebrow: 'NGÀY 21 · KIỂM TRA LẠI',
   title: 'Chơi lại 4 trò nhỏ để xem bạn tiến bộ chưa nhé.',
   sub: 'Không có đúng sai. Cứ chơi như lần đầu.',
   cta: 'SẴN SÀNG',
 }
 
 export const compare = {
-  eyebrow: 'SO SÁNH NGÀY 1 VÀ NGÀY 7',
+  eyebrow: 'SO SÁNH NGÀY 1 VÀ NGÀY 21',
   title: 'Bạn đã đi một chặng dài',
   before: 'NGÀY 1',
-  after: 'NGÀY 7',
+  after: 'NGÀY 21',
   scoreSuffix: '/100',
   better: (n) => `Bạn đã giảm ${n} điểm!`,
   betterSub: 'Điểm càng thấp thì não càng ít “nổ”. Chúc mừng bạn!',
   same: 'Điểm của bạn vẫn giữ nguyên.',
-  sameSub: 'Thay đổi thói quen cần thời gian. Bạn đã kiên trì 7 ngày, thế là rất tuyệt rồi.',
+  sameSub: 'Thay đổi thói quen cần thời gian. Bạn đã kiên trì 21 ngày, thế là rất tuyệt rồi.',
   worse: 'Lần này điểm cao hơn một chút.',
   worseSub: 'Điều đó rất bình thường, mỗi ngày mỗi khác. Bạn đã thử, và mình có thể thử tiếp cùng nhau.',
   barsTitle: 'Từng chỉ số',
@@ -222,7 +235,7 @@ export const compare = {
 }
 
 export const challengeEnd = {
-  title: 'Bạn đã hoàn thành 7 ngày!',
+  title: 'Bạn đã hoàn thành 21 ngày!',
   sub: 'Mỗi việc nhỏ đều đáng tự hào. Hạt Bắp rất vui vì được đồng hành cùng bạn.',
   cta: 'VỀ MÀN HÌNH CHÍNH',
 }
@@ -233,7 +246,7 @@ export const resume = {
   confirm: 'Chơi lại từ đầu sẽ xóa tiến độ thử thách. Bạn chắc chứ?',
   yes: 'XÓA VÀ CHƠI LẠI',
   no: 'GIỮ LẠI',
-  seeResult: 'XEM KẾT QUẢ 7 NGÀY',
+  seeResult: 'XEM KẾT QUẢ 21 NGÀY',
 }
 
 export const scenarios = [
@@ -320,20 +333,20 @@ export const scenarios = [
 ]
 
 export const SOLUTIONS = {
-  notifOff: { group: 'self', title: 'Tắt thông báo khi học', detail: 'Không có tiếng rung thì bạn đỡ bị kéo ra khỏi bài.', task7: 'Tắt thông báo các app trong lúc học tối nay.' },
-  phoneFar: { group: 'self', title: 'Để điện thoại xa bàn học', detail: 'Máy ở xa tầm tay thì khó với tới hơn nhiều.', task7: 'Để điện thoại cách bàn học 2 mét trong 30 phút.' },
-  limitGradual: { group: 'self', title: 'Giảm dần thời gian dùng', detail: 'Hạ từ 2 giờ xuống 1 giờ 30 mỗi ngày, rồi giảm tiếp khi đã quen.', task7: 'Hôm nay dùng điện thoại giải trí tối đa 1 giờ 30.' },
-  fixedChecks: { group: 'self', title: 'Chỉ xem tin vào giờ cố định', detail: 'Chọn 3 lần xem tin trong ngày, các lúc khác cứ yên tâm bỏ qua.', task7: 'Chỉ xem tin nhắn lúc 12 giờ, 5 giờ và 9 giờ.' },
-  focus25: { group: 'self', title: 'Học 25 phút, nghỉ 5 phút', detail: 'Giờ nghỉ là lúc bạn được xem tin nhắn, nên học sẽ dễ tập trung hơn.', task7: 'Học đúng 1 lượt 25 phút, nghỉ 5 phút.' },
-  readPage: { group: 'self', title: 'Mỗi ngày đọc 1 trang sách giấy', detail: 'Đọc chậm một trang giúp bạn quen lại với việc tập trung lâu.', task7: 'Đọc 1 trang sách giấy, không cầm điện thoại.' },
-  roleModel: { group: 'family', title: 'Bố mẹ làm gương', detail: 'Cả nhà cùng giảm dùng điện thoại thì bạn sẽ dễ làm theo hơn.', task7: 'Nhờ bố mẹ cùng để máy xa tầm tay 30 phút buổi tối.' },
-  familyDinner: { group: 'family', title: 'Bữa cơm không điện thoại', detail: 'Cất máy khi ăn cơm, cả nhà có thêm thời gian trò chuyện.', task7: 'Cất điện thoại trong cả bữa cơm tối nay.' },
-  studyBag: { group: 'friends', title: 'Học nhóm, cất máy vào túi', detail: 'Cả nhóm cất máy, ai cầm lên trước thì mời mọi người một ly trà sữa.', task7: 'Rủ bạn học nhóm 30 phút với điện thoại trong túi.' },
-  weekendSport: { group: 'friends', title: 'Cuối tuần chơi thể thao cùng bạn', detail: 'Ra ngoài vận động cùng bạn vui hơn và cũng giải tỏa căng thẳng.', task7: 'Rủ một bạn đi dạo hoặc chơi thể thao 30 phút.' },
-  weeklyGoal: { group: 'friends', title: 'Cả nhóm đặt mục tiêu mỗi tuần', detail: 'Cùng nhau đặt mức dùng điện thoại và nhắc nhau, cuối tuần kể xem ai làm được.', task7: 'Nhắn nhóm bạn mục tiêu thời gian dùng máy của tuần này.' },
-  classBox: { group: 'school', title: 'Hộp để điện thoại trong lớp', detail: 'Cả lớp gửi máy vào hộp đầu giờ, học xong mới lấy lại.', task7: 'Hôm nay cất điện thoại trong cặp suốt giờ học.' },
-  presentations: { group: 'school', title: 'Thuyết trình nhóm trên lớp', detail: 'Làm việc nhóm giúp bạn có lý do để rời màn hình và trò chuyện thật.', task7: 'Cùng bạn bàn một ý tưởng bài thuyết trình, không dùng điện thoại.' },
-  clubs: { group: 'school', title: 'Tham gia câu lạc bộ ở trường', detail: 'Có việc thú vị để làm cùng bạn bè thì điện thoại bớt hấp dẫn.', task7: 'Tìm hiểu một câu lạc bộ ở trường bạn muốn thử.' },
+  notifOff: { group: 'self', title: 'Tắt thông báo khi học', detail: 'Không có tiếng rung thì bạn đỡ bị kéo ra khỏi bài.', tasks: ['Tắt thông báo các app trong lúc học tối nay.', 'Tắt thông báo các app trong cả buổi học hôm nay.', 'Tắt thông báo cả ngày, chỉ bật lại sau giờ ăn tối.'] },
+  phoneFar: { group: 'self', title: 'Để điện thoại xa bàn học', detail: 'Máy ở xa tầm tay thì khó với tới hơn nhiều.', tasks: ['Để điện thoại cách bàn học 2 mét trong 30 phút.', 'Để điện thoại ở phòng khác trong 1 giờ học.', 'Để điện thoại ở phòng khác suốt buổi học tối nay.'] },
+  limitGradual: { group: 'self', title: 'Giảm dần thời gian dùng', detail: 'Hạ từ 2 giờ xuống 1 giờ 30 mỗi ngày, rồi giảm tiếp khi đã quen.', tasks: ['Hôm nay dùng điện thoại giải trí tối đa 1 giờ 30.', 'Hôm nay dùng điện thoại giải trí tối đa 1 giờ 15.', 'Hôm nay dùng điện thoại giải trí tối đa 1 giờ.'] },
+  fixedChecks: { group: 'self', title: 'Chỉ xem tin vào giờ cố định', detail: 'Chọn 3 lần xem tin trong ngày, các lúc khác cứ yên tâm bỏ qua.', tasks: ['Chỉ xem tin nhắn lúc 12 giờ, 5 giờ và 9 giờ.', 'Chỉ xem tin nhắn 3 lần hôm nay, kể cả lúc đi chơi.', 'Chỉ xem tin nhắn 2 lần hôm nay, rồi báo bạn bè biết.'] },
+  focus25: { group: 'self', title: 'Học 25 phút, nghỉ 5 phút', detail: 'Giờ nghỉ là lúc bạn được xem tin nhắn, nên học sẽ dễ tập trung hơn.', tasks: ['Học đúng 1 lượt 25 phút, nghỉ 5 phút.', 'Học 2 lượt 25 phút, nghỉ 5 phút giữa hai lượt.', 'Học 3 lượt 25 phút, giờ nghỉ chỉ để vươn vai, uống nước.'] },
+  readPage: { group: 'self', title: 'Mỗi ngày đọc 1 trang sách giấy', detail: 'Đọc chậm một trang giúp bạn quen lại với việc tập trung lâu.', tasks: ['Đọc 1 trang sách giấy, không cầm điện thoại.', 'Đọc 5 trang sách giấy, không cầm điện thoại.', 'Đọc 1 chương sách giấy hoặc 15 phút, rồi kể lại 1 ý.'] },
+  roleModel: { group: 'family', title: 'Bố mẹ làm gương', detail: 'Cả nhà cùng giảm dùng điện thoại thì bạn sẽ dễ làm theo hơn.', tasks: ['Nhờ bố mẹ cùng để máy xa tầm tay 30 phút buổi tối.', 'Cùng bố mẹ cất điện thoại 1 giờ buổi tối, nói chuyện với nhau.', 'Cùng cả nhà đặt 1 giờ không điện thoại mỗi tối, rồi chia sẻ cảm nhận.'] },
+  familyDinner: { group: 'family', title: 'Bữa cơm không điện thoại', detail: 'Cất máy khi ăn cơm, cả nhà có thêm thời gian trò chuyện.', tasks: ['Cất điện thoại trong cả bữa cơm tối nay.', 'Cất điện thoại cả bữa cơm và 15 phút sau đó.', 'Cất điện thoại cả bữa cơm, rồi kể cho nhà nghe 1 chuyện trong ngày.'] },
+  studyBag: { group: 'friends', title: 'Học nhóm, cất máy vào túi', detail: 'Cả nhóm cất máy, ai cầm lên trước thì mời mọi người một ly trà sữa.', tasks: ['Rủ bạn học nhóm 30 phút với điện thoại trong túi.', 'Rủ bạn học nhóm 1 giờ với điện thoại trong túi.', 'Rủ nhóm bạn cùng cất máy khi học, nhắc nhau nếu ai lỡ cầm lên.'] },
+  weekendSport: { group: 'friends', title: 'Cuối tuần chơi thể thao cùng bạn', detail: 'Ra ngoài vận động cùng bạn vui hơn và cũng giải tỏa căng thẳng.', tasks: ['Rủ một bạn đi dạo hoặc chơi thể thao 30 phút.', 'Rủ bạn chơi thể thao hoặc đi dạo 1 giờ, cất điện thoại.', 'Rủ bạn chơi thể thao 1 giờ và cùng thử một trò mới.'] },
+  weeklyGoal: { group: 'friends', title: 'Cả nhóm đặt mục tiêu mỗi tuần', detail: 'Cùng nhau đặt mức dùng điện thoại và nhắc nhau, cuối tuần kể xem ai làm được.', tasks: ['Nhắn nhóm bạn mục tiêu thời gian dùng máy của tuần này.', 'Nhắn nhóm bạn kết quả dùng máy hôm nay và nhắc nhau.', 'Cùng nhóm bạn xem lại cả tuần và đặt mục tiêu mới cho tuần tới.'] },
+  classBox: { group: 'school', title: 'Hộp để điện thoại trong lớp', detail: 'Cả lớp gửi máy vào hộp đầu giờ, học xong mới lấy lại.', tasks: ['Hôm nay cất điện thoại trong cặp suốt giờ học.', 'Cất điện thoại trong cặp suốt cả buổi ở trường.', 'Cất điện thoại trong cặp cả ngày ở trường, kể cả giờ ra chơi.'] },
+  presentations: { group: 'school', title: 'Thuyết trình nhóm trên lớp', detail: 'Làm việc nhóm giúp bạn có lý do để rời màn hình và trò chuyện thật.', tasks: ['Cùng bạn bàn một ý tưởng bài thuyết trình, không dùng điện thoại.', 'Cùng bạn chuẩn bị 1 phần thuyết trình, không dùng điện thoại.', 'Cùng bạn tập nói thử phần thuyết trình trước một người khác.'] },
+  clubs: { group: 'school', title: 'Tham gia câu lạc bộ ở trường', detail: 'Có việc thú vị để làm cùng bạn bè thì điện thoại bớt hấp dẫn.', tasks: ['Tìm hiểu một câu lạc bộ ở trường bạn muốn thử.', 'Hỏi thầy cô hoặc bạn về câu lạc bộ bạn muốn thử.', 'Đến thử 1 buổi câu lạc bộ ở trường, hoặc đăng ký tham gia.'] },
 }
 
 export const reasonSolutions = {
@@ -438,8 +451,8 @@ export const demo = {
     ['scenario', 'Tình huống 1'],
     ['plan', 'Kế hoạch'],
     ['coach', 'Hạt Bắp'],
-    ['challenge', 'Thử thách 7 ngày'],
-    ['compare', 'So sánh ngày 1/7'],
+    ['challenge', 'Thử thách 21 ngày'],
+    ['compare', 'So sánh ngày 1/21'],
   ],
   sample: 'dữ liệu mẫu',
   surveyTitle: 'Khảo sát 450 học sinh',
@@ -467,8 +480,8 @@ export const demo = {
     none: 'Chưa kết nối Google Sheet',
     count: 'Lượt gửi',
     avg1: 'Điểm TB ngày 1',
-    avg7: 'Điểm TB ngày 7',
-    pairs: 'Cặp ngày 1 và 7',
+    avg7: 'Điểm TB ngày 21',
+    pairs: 'Cặp ngày 1 và 21',
     delta: 'Giảm trung bình',
   },
 }

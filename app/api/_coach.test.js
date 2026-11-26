@@ -24,7 +24,7 @@ describe('sanitizeContext', () => {
   it('drops unknown/bad fields', () => {
     const c = sanitizeContext({ score: '9', level: 5, bars: { focus: 10, x: 1, phone: NaN }, reasons: ['a', 3], plan: [{ title: 't', group: 'g', evil: 1 }, 7], challengeDay: 3, name: 'Bob' })
     expect(c).toEqual({ score: null, level: '', bars: { focus: 10 }, reasons: ['a'], plan: [{ title: 't', group: 'g' }], challengeDay: 3 })
-    expect(contextText(c)).toContain('ngày 3/7')
+    expect(contextText(c)).toContain('ngày 3/21 của thử thách (tuần 1: Làm quen)')
   })
   it('handles garbage', () => { expect(sanitizeContext(null).plan).toEqual([]) })
 })

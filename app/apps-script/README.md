@@ -47,6 +47,6 @@ Làm theo đúng thứ tự sau. Không cần biết lập trình, chỉ cần l
 
 ## 6. Những điều cần biết
 
-- Dữ liệu gửi lên **hoàn toàn ẩn danh**: chỉ có mã ẩn danh ngẫu nhiên, ngày, khối lớp, giới tính và điểm — không có tên, email hay số điện thoại. Học sinh không đồng ý thì ứng dụng không gửi gì cả.
+- Dữ liệu gửi lên **hoàn toàn ẩn danh**: chỉ có mã ẩn danh ngẫu nhiên, ngày, khối lớp, giới tính và điểm — không có tên, email hay số điện thoại. Ngày 1 là bài kiểm tra đầu, ngày 21 là bài kiểm tra cuối (dòng ngày 7 của bản cũ vẫn được tính là bài cuối). Học sinh không đồng ý thì ứng dụng không gửi gì cả.
 - Khi sửa mã trong Apps Script, phải triển khai lại: **Deploy** > **Manage deployments** > chọn bản đang dùng > bấm bút chì > **Version: New version** > **Deploy**. Nếu chỉ bấm Save mà không tạo version mới, thay đổi sẽ không có tác dụng với đường dẫn `/exec` đang dùng.
 - Nếu đổi sang một bản triển khai mới hoàn toàn, nhớ cập nhật lại `VITE_SHEET_URL` trong `app/.env.local` và trong biến môi trường của Vercel.

@@ -17,7 +17,7 @@ import Compare from './Compare.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import Button from '../components/Button.jsx'
 import { demo as c, content, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from '../content.js'
-import { createChallenge, completeDay, nextDay, tasksFor, toDateKey } from '../challenge.js'
+import { createChallenge, completeDay, nextDay, tasksFor, toDateKey, TOTAL_DAYS } from '../challenge.js'
 import { levelFor } from '../scoring.js'
 import { fetchSummary } from '../research.js'
 
@@ -29,7 +29,7 @@ const SAMPLE = {
   top: ['habit', 'fomo'],
   plan: ['notifOff', 'fixedChecks', 'studyBag'],
   day1: { score: 62, bars: { focus: 72, patience: 55, switchUrge: 64, phone: 48 } },
-  day7: { score: 44, bars: { focus: 50, patience: 42, switchUrge: 45, phone: 38 } },
+  final: { score: 44, bars: { focus: 50, patience: 42, switchUrge: 45, phone: 38 } },
 }
 const sampleChallenge = () => {
   const today = toDateKey()
@@ -77,7 +77,7 @@ function AppData() {
           <div className="stat"><div className="stat__label">{a.count}</div><div className="stat__num">{data.count ?? 0}</div></div>
           <div className="stat"><div className="stat__label">{a.pairs}</div><div className="stat__num">{data.pairs ?? 0}</div></div>
           <div className="stat"><div className="stat__label">{a.avg1}</div><div className="stat__num">{fmt(data.avgDay1)}</div></div>
-          <div className="stat"><div className="stat__label">{a.avg7}</div><div className="stat__num">{fmt(data.avgDay7)}</div></div>
+          <div className="stat"><div className="stat__label">{a.avg7}</div><div className="stat__num">{fmt(data.avgFinal ?? data.avgDay7)}</div></div>
           <div className="stat" style={{ gridColumn: '1 / -1' }}><div className="stat__label">{a.delta}</div><div className="stat__num">{fmt(data.avgDelta)}</div></div>
         </div>
       )}
@@ -117,9 +117,9 @@ export default function Demo({ onClose }) {
     case 'challenge':
       return (
         <Challenge state={ch} today={today} allowSameDay onClose={menu}
-          onAsk={() => { setCoachBack('challenge'); setCoachDay(nextDay(ch) ?? 7); go('coach') }}
+          onAsk={() => { setCoachBack('challenge'); setCoachDay(nextDay(ch) ?? 21); go('coach') }}
           onPlan={() => go('plan')} onResult={() => go('compare')}
-          onStart={() => { const n = nextDay(ch); if (n === 7) go('compare'); else { setDayN(n); go('daytask') } }} />
+          onStart={() => { const n = nextDay(ch); if (n === TOTAL_DAYS) go('compare'); else { setDayN(n); go('daytask') } }} />
       )
     case 'daytask':
       return (
@@ -128,7 +128,7 @@ export default function Demo({ onClose }) {
           onTell={() => { setCoachBack('daytask'); setCoachDay(dayN); go('coach') }}
           onDone={() => { setCh(completeDay(ch, dayN, today, { allowSameDay: true })); go('challenge') }} />
       )
-    case 'compare': return <Compare state={{ ...ch, day1: SAMPLE.day1, day7: SAMPLE.day7 }} onDone={menu} />
+    case 'compare': return <Compare state={{ ...ch, day1: SAMPLE.day1, final: SAMPLE.final }} onDone={menu} />
     default: break
   }
 

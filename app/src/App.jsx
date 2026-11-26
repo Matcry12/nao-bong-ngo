@@ -21,7 +21,7 @@ import Info from './screens/Info.jsx'
 import Demo from './screens/Demo.jsx'
 import { getClientId, loadConsent, saveConsent, buildRow, sendRow } from './research.js'
 import { SPEED } from './speed.js'
-import { toDateKey, createChallenge, tasksFor, nextDay, streakAtRisk, completeDay, recordRetest, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
+import { toDateKey, createChallenge, tasksFor, nextDay, streakAtRisk, completeDay, recordRetest, TOTAL_DAYS, loadChallenge, saveChallenge, clearChallenge } from './challenge.js'
 import { content, level2, challengeEnd, scenarios, reasonSolutions, barSolutions, SOLUTIONS, REASON_LABELS, GROUP_LABELS } from './content.js'
 import { readGameRisk, patienceRisk, skipRisk, phoneDownRisk, selfReportScore, totalScore, breakdown, tallyReasons, topReasons, worstBar, buildPlan, levelFor } from './scoring.js'
 
@@ -158,7 +158,7 @@ export default function App() {
             const r = results({ ...rec, selfAnswers: [...rec.selfAnswers, a] })
             const next = recordRetest(ch, { score: r.total, bars: r.bars }, toDateKey(), opts)
             persist(next)
-            if (next.day7) upload(7, r, ch.top, ch.plan)
+            if (next.final) upload(TOTAL_DAYS, r, ch.top, ch.plan)
             setScreen('compare')
           } else setScreen('result1')
         }} />
@@ -192,8 +192,8 @@ export default function App() {
     case 'challenge':
       return (
         <Challenge state={ch} today={toDateKey()} allowSameDay={FAST} onClose={() => setScreen('start')}
-          onAsk={() => askCoachFrom('challenge', nextDay(ch) ?? 7)} onPlan={() => setScreen('planview')} onResult={() => setScreen('compare')}
-          onStart={() => { const n = nextDay(ch); setDay(n); setMode('first'); setScreen(n === 7 ? 'retestIntro' : 'daytask') }} />
+          onAsk={() => askCoachFrom('challenge', nextDay(ch) ?? TOTAL_DAYS)} onPlan={() => setScreen('planview')} onResult={() => setScreen('compare')}
+          onStart={() => { const n = nextDay(ch); setDay(n); setMode('first'); setScreen(n === TOTAL_DAYS ? 'retestIntro' : 'daytask') }} />
       )
     case 'daytask':
       return (

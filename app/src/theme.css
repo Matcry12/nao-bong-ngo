@@ -274,7 +274,13 @@ h1, p { margin: 0; }
 
 /* Challenge */
 .path { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 0 8px; }
-.node { border-radius: 999px; display: flex; align-items: center; justify-content: center; }
+.node { position: relative; border-radius: 999px; display: flex; align-items: center; justify-content: center; }
+.week { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+.week + .week { margin-top: 18px; }
+.week__head { align-self: stretch; display: flex; align-items: center; gap: 12px; margin: 10px 0 4px; font-size: 14px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.week__head::before, .week__head::after { content: ''; flex: 1; height: 2px; background: var(--line); border-radius: 2px; }
+.node__star { position: absolute; top: 50%; right: -34px; transform: translateY(-50%); width: 26px; height: 26px; fill: #fff; stroke: #CFCFCF; stroke-width: 2; stroke-linejoin: round; }
+.node__star[data-done='1'] { fill: #FFC800; stroke: #E5A800; }
 .node--now { animation: nodepulse 1800ms ease-in-out infinite; }
 @keyframes nodepulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 .node__tag { padding: 4px 12px; border: 2px solid var(--line); border-radius: 12px; background: #fff; color: var(--warn-dark); font-size: 14px; font-weight: 800; letter-spacing: 0.04em; }

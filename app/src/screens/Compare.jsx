@@ -8,7 +8,7 @@ const KEYS = ['focus', 'patience', 'switchUrge', 'phone']
 export default function Compare({ state, onDone }) {
   const { before, after, delta } = compareState(state)
   const bars = {}
-  KEYS.forEach((k) => { bars[k] = { before: state.day1.bars[k] ?? 0, after: state.day7.bars[k] ?? 0 } })
+  KEYS.forEach((k) => { bars[k] = { before: state.day1.bars[k] ?? 0, after: state.final.bars[k] ?? 0 } })
   const drop = Math.abs(Math.round(delta))
   const kind = Math.round(delta) > 0 ? 'better' : Math.round(delta) < 0 ? 'worse' : 'same'
   const head = kind === 'better' ? c.better(drop) : c[kind]

@@ -74,30 +74,35 @@ function buildSummary() {
   const day1Rows = records.filter(function (record) {
     return toNumber(record.day) === 1
   })
-  const day7Rows = records.filter(function (record) {
-    return toNumber(record.day) === 7
+  // Bài kiểm tra cuối = ngày 21. Dòng cũ của thử thách 7 ngày (day 7) vẫn được tính là "final".
+  const isFinalDay = function (day) {
+    const d = toNumber(day)
+    return d === 21 || d === 7
+  }
+  const finalRows = records.filter(function (record) {
+    return isFinalDay(record.day)
   })
 
   const day1Scores = scoresOf(day1Rows)
-  const day7Scores = scoresOf(day7Rows)
+  const finalScores = scoresOf(finalRows)
 
   // Mỗi học sinh: lấy điểm ở dòng day 1 và day 7 mới nhất.
   const latestDay1 = latestScores(records, 1)
-  const latestDay7 = latestScores(records, 7)
+  const latestFinal = latestFinalScores(records)
 
   const deltas = []
   Object.keys(latestDay1).forEach(function (clientId) {
-    if (latestDay7[clientId]) {
-      deltas.push(latestDay1[clientId].score - latestDay7[clientId].score)
+    if (latestFinal[clientId]) {
+      deltas.push(latestDay1[clientId].score - latestFinal[clientId].score)
     }
   })
 
   return {
     count: records.length,
     day1Count: day1Rows.length,
-    day7Count: day7Rows.length,
+    finalCount: finalRows.length,
     avgDay1: meanRounded(day1Scores),
-    avgDay7: meanRounded(day7Scores),
+    avgFinal: meanRounded(finalScores),
     pairs: deltas.length,
     avgDelta: meanRounded(deltas),
   }
@@ -139,10 +144,15 @@ function readRecords() {
   return records
 }
 
-function latestScores(records, day) {
+function latestFinalScores(records) {
+  return latestScores(records, function (day) { return day === 21 || day === 7 })
+}
+
+function latestScores(records, match) {
   const latest = {}
   records.forEach(function (record, order) {
-    if (toNumber(record.day) !== day) return
+    const dayNo = toNumber(record.day)
+    if (typeof match === 'function' ? !match(dayNo) : dayNo !== match) return
 
     const clientId = record.clientId === null || record.clientId === undefined
       ? ''

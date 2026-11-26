@@ -94,14 +94,14 @@ Self score = average / 4 × 100.
 - Plan screen: main reason + 3 solution cards (tagged Bản thân / Gia đình / Bạn bè / Nhà trường) → LƯU KẾ HOẠCH.
 - "HỎI HẠT BẮP": the chat opens with the coach explaining your result, plus 3 quick-reply chips. It knows only your scores, reasons and plan.
 
-### 4. 7-day challenge (retention)
-- Vertical path of 7 nodes. Each day = 1 small task taken from your 3 solutions (e.g. "Để điện thoại cách bàn học 2 mét trong 30 phút").
-- Each day: the coach asks a check-in question → tick done → streak +1.
-- **Day 7 = replay Level 1** → compare Day 1 vs Day 7 score ("Bạn đã giảm 18 điểm!") → celebration.
-- If opted in: Day 1 and Day 7 rows go to the Sheet = before/after evidence for the report.
+### 4. 21-day challenge (retention)
+- Vertical path of 21 nodes in 3 weeks: Tuần 1 "Làm quen", Tuần 2 "Giữ nhịp", Tuần 3 "Thành thói quen". Days 1-20 = 1 small task from your 3 solutions, cycled; each solution has 3 lines (one per week, progressively harder, e.g. week 1 "Để điện thoại cách bàn học 2 mét trong 30 phút").
+- Each day: the coach asks a check-in question → tick done → streak +1. Finishing day 7 and day 14 shows a "Xong tuần N!" celebration (no retest).
+- **Day 21 = replay Level 1** → compare Day 1 vs Day 21 score ("Bạn đã giảm 18 điểm!") → celebration.
+- If opted in: Day 1 and Day 21 rows go to the Sheet = before/after evidence for the report.
 
 ### 5. Demo mode (judges)
-Hidden button (e.g. tap the logo 5 times): jump to any game or scenario, sample result, survey charts, and the Day 1 vs Day 7 summary from the Sheet.
+Hidden button (e.g. tap the logo 5 times): jump to any game or scenario, sample result, survey charts, and the Day 1 vs Day 21 summary from the Sheet.
 
 ---
 
@@ -110,7 +110,7 @@ Hidden button (e.g. tap the logo 5 times): jump to any game or scenario, sample 
 2. Games 2–4 + self-report + `scoring.js` (with tests) + Result 1/2.
 3. Level 2 scenarios + Plan.
 4. AI coach (proxy + chat + fallback).
-5. 7-day challenge + Day 7 re-test.
+5. 21-day challenge + Day 21 re-test.
 6. Sheet upload, demo mode, PWA, polish.
 
 ## What the team must prepare

@@ -14,8 +14,8 @@ Deadline: < 1 week. Language: Vietnamese only.
 - All text in one file `src/content.js` (team edits wording there, no code changes).
 
 ## 3. Flow
-Start → (optional info: school, grade, gender) → Level 1 (4 games + 5 items, ~4 min) → Result → Level 2 (8 scenarios, ~4 min) → Plan card + 7-day challenge → (opt-in upload).
-Day 7: re-test button (replays Level 1, compares with Day 1).
+Start → (optional info: school, grade, gender) → Level 1 (4 games + 5 items, ~4 min) → Result → Level 2 (8 scenarios, ~4 min) → Plan card + 21-day challenge → (opt-in upload).
+Day 21: re-test button (replays Level 1, compares with Day 1).
 
 ## 4. Level 1 — Assessment
 | # | Game | Report evidence | Measures |
@@ -50,11 +50,11 @@ Score: 60% games + 40% self-report → 0–100.
 | ⏳ Weak self-control | Gradual daily limit (G1), parents as role model (G2), group tracking (G3) |
 
 +1 focus solution from Level 1's weakest bar.
-Output: plan card (3 solutions) + 7-day challenge (1 small task/day, check-off).
+Output: plan card (3 solutions) + 21-day challenge in 3 weeks (days 1-20: 1 small task/day, harder each week, check-off; week-done celebration at days 7 and 14; day 21 = re-test).
 
 ## 6b. AI coach "Hạt Bắp" (chatbot)
 - Role: personal coach after Level 2. Knows the player's result: score, 4 bars, top reasons, plan, challenge day.
-- Where: (1) Plan screen: opens with a short explanation of the result + 3 suggested-question chips; (2) each 7-day challenge day: one check-in question, adapts the next task. **Never during Level 1 games.**
+- Where: (1) Plan screen: opens with a short explanation of the result + 3 suggested-question chips; (2) each 21-day challenge day: one check-in question, adapts the next task. **Never during Level 1 games.**
 - Scope: focus, phone habits, the plan, study tips, using a summary of the report. Off-topic → friendly redirect. Never medical, never diagnoses.
 - Provider: DeepSeek API (team's existing key, prepaid balance = spend cap), called via a Vercel serverless proxy. **Key never in the browser.**
 - Privacy: send only anonymous data (scores, reasons, chat text). No names/school. Tell users the AI service is external.
@@ -64,19 +64,19 @@ Output: plan card (3 solutions) + 7-day challenge (1 small task/day, check-off).
 
 ## 7. Data
 - localStorage: results, Day 1 score, challenge progress. No login.
-- Opt-in checkbox "Đóng góp kết quả cho nghiên cứu" → Google Sheet via Apps Script: score, breakdown, reasons, school, grade, gender, day (1/7). No names.
+- Opt-in checkbox "Đóng góp kết quả cho nghiên cứu" → Google Sheet via Apps Script: score, breakdown, reasons, school, grade, gender, day (1/21). No names.
 
 ## 8. Look & feel
 Playful popcorn theme: warm yellow / red / cream, corn-kernel mascot, rounded cards, big buttons, light animations.
 
 ## 9. Demo mode (judges)
-Hidden button: jump to any game/scenario, sample results, survey charts (450 students), Day 1 vs Day 7 data from the Sheet.
+Hidden button: jump to any game/scenario, sample results, survey charts (450 students), Day 1 vs Day 21 data from the Sheet.
 
 ## 10. Scope order (vertical slices)
 1. Skeleton: start → 1 game → result (runnable, deployed).
 2. Remaining 3 games + self-report + scoring + result screen.
 3. Level 2 scenarios + plan card.
-4. 7-day challenge + Day 7 re-test.
+4. 21-day challenge + Day 21 re-test.
 5. AI coach: proxy + plan-screen chat + scripted fallback, then daily check-ins.
 6. Sheet upload, demo mode, PWA.
 7. Theme polish, mascot animation.
