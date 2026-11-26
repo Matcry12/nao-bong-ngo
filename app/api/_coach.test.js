@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import handler, { sanitizeContext, sanitizeMessages, contextText } from './coach.js'
+import handler, { sanitizeContext, sanitizeMessages, sanitizeImage, contextText } from './coach.js'
 
 function call(req) {
   const out = { code: 200, body: null }
@@ -27,6 +27,14 @@ describe('sanitizeContext', () => {
     expect(contextText(c)).toContain('ngày 3/21 của thử thách (tuần 1: Làm quen)')
   })
   it('handles garbage', () => { expect(sanitizeContext(null).plan).toEqual([]) })
+})
+
+describe('sanitizeImage', () => {
+  it('accepts valid jpeg', () => { const u = 'data:image/jpeg;base64,/9j/4AAQ=='; expect(sanitizeImage(u)).toBe(u) })
+  it('rejects wrong mime', () => { expect(sanitizeImage('data:image/gif;base64,AAAA')).toBeNull() })
+  it('rejects non-base64', () => { expect(sanitizeImage('data:image/png;base64,<script>')).toBeNull() })
+  it('rejects oversize', () => { expect(sanitizeImage('data:image/png;base64,' + 'A'.repeat(1_600_000))).toBeNull() })
+  it('rejects non-strings', () => { expect(sanitizeImage(5)).toBeNull(); expect(sanitizeImage(null)).toBeNull() })
 })
 
 describe('handler', () => {
@@ -62,5 +70,23 @@ describe('handler', () => {
     expect(r).toEqual({ code: 503, body: { error: 'unavailable' } })
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('secret boom')))
     expect(JSON.stringify(await call({ method: 'POST', body: { messages: [{ role: 'user', content: 'chào' }] } }))).not.toContain('secret')
+  })
+  it('builds multimodal content for the last user message only', async () => {
+    process.env.DEEPSEEK_API_KEY = 'secret'
+    const f = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ choices: [{ message: { content: 'ok' } }] }) })
+    vi.stubGlobal('fetch', f)
+    const image = 'data:image/jpeg;base64,/9j/4AAQ=='
+    await call({ method: 'POST', body: { image, messages: [{ role: 'user', content: 'một' }, { role: 'assistant', content: 'hai' }, { role: 'user', content: 'ba' }] } })
+    const m = JSON.parse(f.mock.calls[0][1].body).messages
+    expect(m[2].content).toBe('một')
+    expect(m[4].content).toEqual([{ type: 'text', text: 'ba' }, { type: 'image_url', image_url: { url: image } }])
+    expect(m[3].content).toBe('hai')
+  })
+  it('drops a bad image silently', async () => {
+    process.env.DEEPSEEK_API_KEY = 'secret'
+    const f = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ choices: [{ message: { content: 'ok' } }] }) })
+    vi.stubGlobal('fetch', f)
+    await call({ method: 'POST', body: { image: 'data:text/html;base64,AAAA', messages: [{ role: 'user', content: 'ba' }] } })
+    expect(JSON.parse(f.mock.calls[0][1].body).messages[2].content).toBe('ba')
   })
 })

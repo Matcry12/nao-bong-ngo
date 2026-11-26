@@ -3,6 +3,7 @@ import Mascot from '../components/Mascot.jsx'
 import RichText from '../components/RichText.jsx'
 import { coach } from '../content.js'
 import { askCoach } from '../coach.js'
+import { prepareImage } from '../coachImage.js'
 import { createLimiter } from '../coachSafety.js'
 
 function makeLimiter() {
@@ -13,6 +14,9 @@ export default function Coach({ context, onClose }) {
   const [msgs, setMsgs] = useState([]) // { role, content, crisis?, local? }
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
+  const [img, setImg] = useState(null) // data URL, memory only
+  const [imgErr, setImgErr] = useState(false)
+  const fileRef = useRef(null)
   const limiter = useRef(null)
   if (limiter.current === null) limiter.current = makeLimiter() ?? false
   const [left, setLeft] = useState(() => (limiter.current ? limiter.current.remaining() : 20))
@@ -41,17 +45,32 @@ export default function Coach({ context, onClose }) {
     })
   }, [context])
 
+  async function pick(e) {
+    const f = e.target.files?.[0]
+    e.target.value = ''
+    if (!f) return
+    setImgErr(false)
+    const url = await prepareImage(f)
+    if (!alive.current) return
+    if (url) setImg(url)
+    else { setImg(null); setImgErr(true) }
+  }
+
   async function send(raw) {
-    const content = raw.trim().slice(0, 500)
+    const typed = raw.trim().slice(0, 500)
+    const image = img
+    const content = typed || (image ? coach.imageOnlyText : '')
     if (!content || busy || left <= 0) return
     setText('')
-    const next = [...msgs, { role: 'user', content }]
+    setImg(null)
+    setImgErr(false)
+    const next = [...msgs, { role: 'user', content, image }]
     setMsgs(next)
     if (limiter.current) { limiter.current.consume(); setLeft(limiter.current.remaining()) }
     else setLeft((n) => n - 1)
     setBusy(true)
     const history = next.filter((m) => !m.local && !m.crisis).map(({ role, content: c }) => ({ role, content: c }))
-    const r = await askCoach({ messages: history, context })
+    const r = await askCoach({ messages: history, context, image })
     if (!alive.current) return
     if (r.crisis) push({ role: 'assistant', crisis: true, local: true })
     else if (r.reply) push({ role: 'assistant', content: r.reply })
@@ -81,7 +100,12 @@ export default function Coach({ context, onClose }) {
                   {coach.crisis.map((p) => <p key={p}>{p}</p>)}
                   <a className="coach__call" href={coach.hotline.href}>{coach.hotline.label}</a>
                 </>
-              ) : m.role === 'assistant' ? <RichText text={m.content} /> : m.content}
+              ) : m.role === 'assistant' ? <RichText text={m.content} /> : (
+                <>
+                  {m.image && <img className="bub__img" src={m.image} alt={coach.imageSentAlt} />}
+                  {!(m.image && m.content === coach.imageOnlyText) && m.content}
+                </>
+              )}
             </div>
           ))}
           {busy && <div className="bub bub--m typing" role="status" aria-label={coach.typing}><i /><i /><i /></div>}
@@ -100,12 +124,26 @@ export default function Coach({ context, onClose }) {
             <p className="callout" role="status">{coach.limitReached}</p>
           ) : (
             <>
+              {img && (
+                <div className="imgprev">
+                  <img src={img} alt={coach.imagePreviewAlt} />
+                  <button type="button" className="imgprev__x" aria-label={coach.removeImage} onClick={() => setImg(null)}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                  </button>
+                </div>
+              )}
               <form className="inp" onSubmit={(e) => { e.preventDefault(); send(text) }}>
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={pick} />
+                <button type="button" className="attach" aria-label={coach.attach} disabled={busy} onClick={() => fileRef.current?.click()}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" /><circle cx="9" cy="10" r="1.6" /><path d="M21 16l-5-5-8 8" /></svg>
+                </button>
                 <input className="field" value={text} maxLength={500} placeholder={coach.placeholder} aria-label={coach.placeholder} onChange={(e) => setText(e.target.value)} />
-                <button type="submit" className="send" aria-label={coach.send} disabled={busy || !text.trim()}>
+                <button type="submit" className="send" aria-label={coach.send} disabled={busy || (!text.trim() && !img)}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.5 20.5L22 12 2.5 3.5v6.3L14 12 2.5 14.2z" /></svg>
                 </button>
               </form>
+              {img && <p className="small" style={{ marginTop: 8 }}>{coach.imageNote}</p>}
+              {imgErr && <p className="small" role="status" style={{ marginTop: 8, color: 'var(--danger-dark)' }}>{coach.imageError}</p>}
               {left <= 5 && <p className="small" role="status" style={{ marginTop: 8 }}>{coach.remaining(left)}</p>}
             </>
           )}

@@ -17,6 +17,14 @@ export function sanitizeMessages(raw) {
     .slice(-MAX_MESSAGES)
 }
 
+const IMAGE_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/
+const MAX_IMAGE = 1_600_000
+
+export function sanitizeImage(raw) {
+  if (typeof raw !== 'string' || raw.length > MAX_IMAGE) return null
+  return IMAGE_RE.test(raw) ? raw : null
+}
+
 export function sanitizeContext(raw) {
   const c = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {}
   const bars = {}
@@ -70,11 +78,19 @@ export default async function handler(req, res) {
   const last = [...messages].reverse().find((m) => m.role === 'user')
   if (last && detectCrisis(last.content)) return res.status(200).json({ crisis: true })
 
+  const image = sanitizeImage(body?.image)
+  const lastIdx = messages.map((m) => m.role).lastIndexOf('user')
+  const outMessages = image && lastIdx >= 0
+    ? messages.map((m, i) => (i === lastIdx
+      ? { role: 'user', content: [{ type: 'text', text: m.content }, { type: 'image_url', image_url: { url: image } }] }
+      : m))
+    : messages
+
   const key = process.env.DEEPSEEK_API_KEY
   if (!key) return res.status(503).json({ error: 'unavailable' })
 
   const ctrl = new AbortController()
-  const timer = setTimeout(() => ctrl.abort(), 15000)
+  const timer = setTimeout(() => ctrl.abort(), image ? 25000 : 15000)
   try {
     const r = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
@@ -84,7 +100,7 @@ export default async function handler(req, res) {
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'system', content: contextText(sanitizeContext(body?.context)) },
-          ...messages,
+          ...outMessages,
         ],
         max_tokens: 350,
         temperature: 0.7,
