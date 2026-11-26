@@ -14,6 +14,7 @@ export default function Coach({ context, onClose }) {
   const [msgs, setMsgs] = useState([]) // { role, content, crisis?, local? }
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
+  const [live, setLive] = useState('') // partial assistant text while streaming
   const [img, setImg] = useState(null) // data URL, memory only
   const [imgErr, setImgErr] = useState(false)
   const fileRef = useRef(null)
@@ -29,16 +30,18 @@ export default function Coach({ context, onClose }) {
   useEffect(() => {
     const el = bodyRef.current
     if (el) el.scrollTop = el.scrollHeight
-  }, [msgs, busy])
+  }, [msgs, busy, live])
 
+  const onLive = (t) => { if (alive.current) setLive(t) }
   const push = (m) => setMsgs((a) => [...a, m])
 
   useEffect(() => {
     if (started.current) return
     started.current = true
     setBusy(true)
-    askCoach({ messages: [{ role: 'user', content: coach.openingPrompt }], context }).then((r) => {
+    askCoach({ messages: [{ role: 'user', content: coach.openingPrompt }], context, onDelta: onLive }).then((r) => {
       if (!alive.current) return
+      setLive('')
       if (r.reply) setMsgs([{ role: 'assistant', content: r.reply }])
       else setMsgs(coach.fallback.opening(context).map((content) => ({ role: 'assistant', content, local: true })))
       setBusy(false)
@@ -70,11 +73,12 @@ export default function Coach({ context, onClose }) {
     else setLeft((n) => n - 1)
     setBusy(true)
     const history = next.filter((m) => !m.local && !m.crisis).map(({ role, content: c }) => ({ role, content: c }))
-    const r = await askCoach({ messages: history, context, image })
+    const r = await askCoach({ messages: history, context, image, onDelta: onLive })
     if (!alive.current) return
+    setLive('')
     if (r.crisis) push({ role: 'assistant', crisis: true, local: true })
     else if (r.reply) push({ role: 'assistant', content: r.reply })
-    else push({ role: 'assistant', content: coach.fallback.replies[content] ?? coach.fallback.generic, local: true })
+    else push({ role: 'assistant', content: r.rateLimited ? coach.rateLimited : (coach.fallback.replies[content] ?? coach.fallback.generic), local: true })
     setBusy(false)
   }
 
@@ -108,7 +112,8 @@ export default function Coach({ context, onClose }) {
               )}
             </div>
           ))}
-          {busy && <div className="bub bub--m typing" role="status" aria-label={coach.typing}><i /><i /><i /></div>}
+          {live && <div className="bub bub--m"><RichText text={live} /></div>}
+          {busy && !live && <div className="bub bub--m typing" role="status" aria-label={coach.typing}><i /><i /><i /></div>}
         </div>
       </div>
       <div className="screen__foot screen__foot--line" style={{ gap: 12, paddingTop: 12 }}>

@@ -381,6 +381,7 @@ export const coach = {
   note: 'Hạt Bắp là AI, có thể sai. Thông tin gửi đi ẩn danh.',
   chips: [CHIP_TIME, CHIP_NOTIF, CHIP_SCORE],
   remaining: (n) => `Hôm nay bạn còn ${n} tin nhắn.`,
+  rateLimited: 'Hạt Bắp đang bận quá, bạn thử lại sau ít phút nhé.',
   limitReached: 'Hôm nay bạn đã hỏi đủ 20 tin rồi. Mai mình trò chuyện tiếp nhé! Giờ bạn thử một việc nhỏ trong kế hoạch xem sao.',
   openingPrompt: 'Hãy giải thích ngắn gọn kết quả của mình và gợi ý việc đầu tiên nên làm.',
   hotline: { label: 'Gọi 111 (miễn phí, 24/7)', href: 'tel:111' },

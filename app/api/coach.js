@@ -2,6 +2,7 @@
 import { detectCrisis } from '../src/coachSafety.js'
 import { SYSTEM_PROMPT } from './_coachPrompt.js'
 
+const CRISIS_MARK = '[[CRISIS]]'
 const MAX_MESSAGES = 12
 const MAX_CHARS = 500
 const BAR_KEYS = ['focus', 'patience', 'switchUrge', 'phone']
@@ -60,13 +61,81 @@ export function contextText(c) {
   return lines.join('\n')
 }
 
+// Incremental SSE parser: push(chunk) -> text deltas. Buffers partial lines.
+export function createSseParser() {
+  let buf = ''
+  const line = (l) => {
+    if (!l.startsWith('data:')) return null
+    const d = l.slice(5).trim()
+    if (!d || d === '[DONE]') return null
+    try {
+      const c = JSON.parse(d)?.choices?.[0]?.delta?.content
+      return typeof c === 'string' && c ? c : null
+    } catch { return null }
+  }
+  return {
+    push(chunk) {
+      buf += chunk
+      const lines = buf.split('\n')
+      buf = lines.pop()
+      return lines.map((l) => line(l.replace(/\r$/, ''))).filter(Boolean)
+    },
+    flush() {
+      const l = line(buf.replace(/\r$/, ''))
+      buf = ''
+      return l ? [l] : []
+    },
+  }
+}
+
 async function readBody(req) {
   const b = req.body
   if (typeof b === 'string') { try { return JSON.parse(b) } catch { return null } }
   return b && typeof b === 'object' ? b : null
 }
 
-export default async function handler(req, res) {
+// Best-effort in-memory rate limiter (per warm instance). Fixed windows.
+export function createRateLimiter({
+  now = Date.now, ipMax = 20, ipWindowMs = 600000, globalMax = 300, globalWindowMs = 3600000, maxKeys = 5000,
+} = {}) {
+  const ips = new Map() // ip -> { start, count }
+  let g = { start: -Infinity, count: 0 }
+  const prune = (t) => {
+    for (const [k, v] of ips) if (t - v.start >= ipWindowMs) ips.delete(k)
+    while (ips.size >= maxKeys) ips.delete(ips.keys().next().value)
+  }
+  return {
+    allow(ip) {
+      const t = now()
+      if (t - g.start >= globalWindowMs) g = { start: t, count: 0 }
+      if (g.count >= globalMax) return false
+      let e = ips.get(ip)
+      if (!e || t - e.start >= ipWindowMs) {
+        if (ips.size >= maxKeys) prune(t)
+        e = { start: t, count: 0 }
+      }
+      if (e.count >= ipMax) return false
+      e.count++
+      g.count++
+      ips.delete(ip) // refresh insertion order so the oldest are evicted first
+      ips.set(ip, e)
+      return true
+    },
+    size: () => ips.size,
+  }
+}
+
+const limiter = createRateLimiter()
+
+function clientIp(req) {
+  const h = req.headers || {}
+  const xff = h['x-forwarded-for']
+  const first = (Array.isArray(xff) ? xff[0] : xff)?.split(',')[0]?.trim()
+  const real = h['x-real-ip']
+  return first || (typeof real === 'string' && real.trim()) || 'unknown'
+}
+
+export default async function handler(req, res, rateLimiter = limiter) {
   if (req.method !== 'POST') {
     res.setHeader?.('Allow', 'POST')
     return res.status(405).json({ error: 'method' })
@@ -77,6 +146,8 @@ export default async function handler(req, res) {
 
   const last = [...messages].reverse().find((m) => m.role === 'user')
   if (last && detectCrisis(last.content)) return res.status(200).json({ crisis: true })
+
+  if (!rateLimiter.allow(clientIp(req))) return res.status(429).json({ error: 'rate_limited' })
 
   const image = sanitizeImage(body?.image)
   const lastIdx = messages.map((m) => m.role).lastIndexOf('user')
@@ -90,7 +161,9 @@ export default async function handler(req, res) {
   if (!key) return res.status(503).json({ error: 'unavailable' })
 
   const ctrl = new AbortController()
-  const timer = setTimeout(() => ctrl.abort(), image ? 25000 : 15000)
+  // Timeout covers time to first token; once text flows, allow 30s total.
+  let timer = setTimeout(() => ctrl.abort(), image ? 25000 : 15000)
+  let started = false
   try {
     const r = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
@@ -104,15 +177,53 @@ export default async function handler(req, res) {
         ],
         max_tokens: 350,
         temperature: 0.7,
+        stream: true,
       }),
       signal: ctrl.signal,
     })
-    if (!r.ok) return res.status(503).json({ error: 'unavailable' })
-    const data = await r.json()
-    const reply = data?.choices?.[0]?.message?.content
-    if (typeof reply !== 'string' || !reply.trim()) return res.status(503).json({ error: 'unavailable' })
-    return res.status(200).json({ reply: reply.trim() })
+    if (!r.ok || !r.body) return res.status(503).json({ error: 'unavailable' })
+    const reader = r.body.getReader()
+    const crisis = () => { ctrl.abort(); reader.cancel().catch(() => {}); return res.status(200).json({ crisis: true }) }
+    const decoder = new TextDecoder()
+    const sse = createSseParser()
+    let pending = ''
+    let decided = false
+    // Hold output until we can tell whether the model answered with the crisis marker.
+    const emit = (text) => {
+      if (!text) return
+      if (!decided) {
+        pending += text
+        if (pending.trimStart().length < CRISIS_MARK.length) return
+        decided = true
+        if (pending.trimStart().startsWith(CRISIS_MARK)) return 'crisis'
+        text = pending
+      }
+      if (!started) {
+        started = true
+        clearTimeout(timer)
+        timer = setTimeout(() => ctrl.abort(), 30000)
+        res.status(200)
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+        res.setHeader('Cache-Control', 'no-cache, no-transform')
+        res.flushHeaders?.()
+      }
+      res.write(text)
+    }
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) break
+      for (const t of sse.push(decoder.decode(value, { stream: true }))) if (emit(t) === 'crisis') return crisis()
+    }
+    for (const t of [...sse.push(decoder.decode()), ...sse.flush()]) if (emit(t) === 'crisis') return crisis()
+    if (!decided && pending.trim()) {
+      decided = true
+      if (pending.trimStart().startsWith(CRISIS_MARK)) return crisis()
+      emit(pending)
+    }
+    if (!started) return res.status(503).json({ error: 'unavailable' })
+    return res.end()
   } catch {
+    if (started) return res.end()
     return res.status(503).json({ error: 'unavailable' })
   } finally {
     clearTimeout(timer)
