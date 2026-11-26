@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
+import PopcornBg from '../components/PopcornBg.jsx'
 import { content, resume, info } from '../content.js'
 
 // saved: null | 'active' | 'finished'
@@ -15,6 +16,7 @@ export default function Start({ onNext, saved, onResume, onRestart, onSecret, co
   }
   return (
     <div className="screen">
+      <PopcornBg />
       <div className="screen__body screen__body--center">
         <div onClick={tap} style={{ display: 'flex', justifyContent: 'center', cursor: 'default' }} data-secret="logo"><Mascot mood="calm" size={200} /></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

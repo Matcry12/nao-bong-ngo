@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
+import PopcornBg from '../components/PopcornBg.jsx'
 import { dayTask as c } from '../content.js'
 import { weekOf } from '../challenge.js'
 
@@ -11,6 +12,7 @@ export default function DayTask({ day, text, atRisk = false, onDone, onNotYet, o
   if (celebrate) {
     return (
       <div className="screen" style={{ background: 'var(--bg-soft)' }}>
+      <PopcornBg />
         <div className="screen__body screen__body--center">
           <div className="pop"><Mascot mood="proud" size={done === c.done ? 180 : 200} /></div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -24,6 +26,7 @@ export default function DayTask({ day, text, atRisk = false, onDone, onNotYet, o
   }
   return (
     <div className="screen">
+      <PopcornBg />
       <div className="topbar">
         <button type="button" className="topbar__close" aria-label={c.back} onClick={onBack}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>

@@ -1,5 +1,6 @@
 import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
+import PopcornBg from '../components/PopcornBg.jsx'
 import { content } from '../content.js'
 import { levelFor } from '../scoring.js'
 
@@ -13,6 +14,7 @@ export default function Result1({ score, onNext, onClose }) {
   const text = c.levels[lv.key]
   return (
     <div className="screen">
+      <PopcornBg />
       <div className="topbar">
         <button type="button" className="topbar__close" aria-label={content.common.close} onClick={onClose}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>

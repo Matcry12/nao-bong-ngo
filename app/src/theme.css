@@ -359,3 +359,11 @@ h1, p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important; transition-duration: 0.01ms !important; }
 }
+
+/* Floating popcorn background (mascot screens) */
+.popbg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.popbg__k { position: absolute; bottom: -48px; opacity: .9; animation: poprise linear infinite; }
+@keyframes poprise { to { transform: translateY(-110dvh) rotate(160deg); } }
+.popbg ~ * { position: relative; z-index: 1; }
+.popbg ~ .screen__foot { background: inherit; }
+@media (prefers-reduced-motion: reduce) { .popbg { display: none; } }

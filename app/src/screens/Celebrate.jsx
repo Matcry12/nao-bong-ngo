@@ -1,11 +1,13 @@
 import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
+import PopcornBg from '../components/PopcornBg.jsx'
 import { level2 } from '../content.js'
 
 export default function Celebrate({ onNext, data }) {
   const c = data ?? level2.celebrate
   return (
     <div className="screen" style={{ background: 'var(--bg-soft)' }}>
+      <PopcornBg />
       <div className="screen__body screen__body--center">
         <div className="pop"><Mascot mood="proud" size={220} /></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
